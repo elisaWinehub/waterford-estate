@@ -385,6 +385,10 @@
       "pagination": "Pagination",
       "previous": "Previous page",
       "next": "Next page"
+    },
+    "product": {
+      "breadcrumb": "Breadcrumb",
+      "variant": "Variant"
     }
   }
 }

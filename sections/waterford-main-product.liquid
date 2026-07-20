@@ -1,0 +1,719 @@
+{%- comment -%}
+  Waterford Estate default product section — block-based info column.
+  Subscription UI: Path B (gated). When enable_purchase_options is on AND
+  product.selling_plan_groups exist, options wire to real selling plans.
+{%- endcomment -%}
+
+{{ 'waterford-product.css' | asset_url | stylesheet_tag }}
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'waterford-product.js' | asset_url }}" defer></script>
+<script src="{{ 'waterford-collection.js' | asset_url }}" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign has_selling_plans = false
+  if product.selling_plan_groups.size > 0
+    assign has_selling_plans = true
+  endif
+-%}
+
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
+
+<div class="wf-pdp" data-wf-pdp {{ section.shopify_attributes }}>
+  <div class="wf-pdp-wrap">
+    <nav class="wf-pdp-breadcrumb" aria-label="{{ 'waterford.product.breadcrumb' | t }}">
+      <a href="{{ routes.root_url }}">{{ 'waterford.collection.home' | t }}</a>
+      &nbsp;&rsaquo;&nbsp;
+      <a href="{{ routes.all_products_collection_url }}">{{ 'waterford.collection.shop' | t }}</a>
+      {%- if product.collections.first -%}
+        &nbsp;&rsaquo;&nbsp;
+        <a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a>
+      {%- endif -%}
+      &nbsp;&rsaquo;&nbsp;
+      <span class="wf-pdp-breadcrumb__current">{{ product.title }}</span>
+    </nav>
+
+    <div class="wf-pdp-top">
+      {%- comment -%} Left: gallery block(s) {%- endcomment -%}
+      <div class="wf-pdp-media-col">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'gallery' -%}
+            {% render 'wf-pdp-gallery', product: product, block: block %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Right: info blocks {%- endcomment -%}
+      <div class="wf-pdp-info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'gallery' -%}
+              {%- comment -%} rendered in left column {%- endcomment -%}
+
+            {%- when 'title' -%}
+              <h1 class="serif wf-pdp-title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+            {%- when 'tagline' -%}
+              {%- liquid
+                assign tagline = product.metafields.custom.tagline.value | default: product.metafields.custom.tagline
+                if tagline == blank
+                  assign tagline = block.settings.fallback_text
+                endif
+              -%}
+              {%- if tagline != blank -%}
+                <p class="wf-pdp-tagline" {{ block.shopify_attributes }}>{{ tagline }}</p>
+              {%- endif -%}
+
+            {%- when 'awards' -%}
+              {%- liquid
+                assign awards = product.metafields.custom.awards.value
+              -%}
+              {%- if awards != blank or block.settings.award_1 != blank -%}
+                <div class="wf-medals-row" {{ block.shopify_attributes }}>
+                  {%- if awards != blank -%}
+                    {%- for award in awards -%}
+                      {%- if award.image != blank -%}
+                        {%- assign award_alt = award.alt | default: award.image.alt | default: 'Award' -%}
+                        {{ award.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: award_alt, height: 58 }}
+                      {%- elsif award != blank and award.preview_image != blank -%}
+                        {{ award | image_url: width: 200 | image_tag: loading: 'lazy', alt: award.alt | default: 'Award', height: 58 }}
+                      {%- elsif award.url != blank -%}
+                        <img src="{{ award | image_url: width: 200 }}" alt="{{ award.alt | default: 'Award' | escape }}" height="58" loading="lazy" width="auto">
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- else -%}
+                    {%- if block.settings.award_1 != blank -%}
+                      {{ block.settings.award_1 | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.award_1_alt | default: 'Award', height: 58 }}
+                    {%- endif -%}
+                    {%- if block.settings.award_2 != blank -%}
+                      {{ block.settings.award_2 | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.award_2_alt | default: 'Award', height: 58 }}
+                    {%- endif -%}
+                    {%- if block.settings.award_3 != blank -%}
+                      {{ block.settings.award_3 | image_url: width: 200 | image_tag: loading: 'lazy', alt: block.settings.award_3_alt | default: 'Award', height: 58 }}
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'price' -%}
+              <div class="wf-price-box" {{ block.shopify_attributes }} data-wf-price>
+                <div class="wf-price">
+                  {%- if current_variant.compare_at_price > current_variant.price -%}
+                    <s>{{ current_variant.compare_at_price | money }}</s>
+                  {%- endif -%}
+                  <span data-wf-price-value>{{ current_variant.price | money }}</span>
+                  {%- if block.settings.unit_label != blank -%}
+                    <span class="wf-price-unit">{{ block.settings.unit_label }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+
+            {%- when 'purchase_option' -%}
+              {%- comment -%}
+                Path B: off by default. Path A wiring when enabled + selling plans exist.
+                Never show fake discount percentages.
+              {%- endcomment -%}
+              {%- if block.settings.enable_purchase_options and has_selling_plans -%}
+                <div class="wf-po-wrap" data-wf-po {{ block.shopify_attributes }}>
+                  <label class="wf-po-card is-selected" data-wf-po-card>
+                    <div class="wf-po-card__row">
+                      <input
+                        type="radio"
+                        name="purchase_option"
+                        value="one_time"
+                        data-po-type="onetime"
+                        data-selling-plan=""
+                        checked
+                      >
+                      <span class="wf-po-card__label">{{ block.settings.onetime_label }}</span>
+                      <span class="wf-po-card__price">{{ current_variant.price | money }}</span>
+                    </div>
+                  </label>
+
+                  {%- for group in product.selling_plan_groups -%}
+                    <label class="wf-po-card" data-wf-po-card>
+                      <div class="wf-po-card__row">
+                        <input
+                          type="radio"
+                          name="purchase_option"
+                          value="subscribe"
+                          data-po-type="subscribe"
+                          data-selling-plan=""
+                        >
+                        <span class="wf-po-card__label">{{ block.settings.subscribe_label | default: group.name }}</span>
+                      </div>
+                      <div class="wf-po-frequency">
+                        {%- for plan in group.selling_plans -%}
+                          <label class="wf-po-freq-row">
+                            <input
+                              type="radio"
+                              name="purchase_option"
+                              value="plan-{{ plan.id }}"
+                              data-po-type="subscribe"
+                              data-selling-plan="{{ plan.id }}"
+                            >
+                            <span>{{ plan.name }}</span>
+                            <span>
+                              {%- if plan.price_adjustments.size > 0 -%}
+                                {%- assign adj = plan.price_adjustments.first -%}
+                                {%- if adj.value_type == 'percentage' -%}
+                                  {%- assign factor = 100 | minus: adj.value | divided_by: 100.0 -%}
+                                  {{ current_variant.price | times: factor | money }}
+                                {%- elsif adj.value_type == 'price' -%}
+                                  {{ adj.value | money }}
+                                {%- else -%}
+                                  {{ current_variant.price | minus: adj.value | money }}
+                                {%- endif -%}
+                              {%- else -%}
+                                {{ current_variant.price | money }}
+                              {%- endif -%}
+                            </span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    </label>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'buy_buttons' -%}
+              <form class="wf-buy-actions" data-wf-buy-form {{ block.shopify_attributes }}>
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+                <input type="hidden" name="selling_plan" value="">
+
+                {%- unless product.has_only_default_variant -%}
+                  <select class="wf-variant-select" data-wf-variant-select aria-label="{{ 'waterford.product.variant' | t }}">
+                    {%- for variant in product.variants -%}
+                      <option
+                        value="{{ variant.id }}"
+                        data-available="{{ variant.available }}"
+                        {% if variant == current_variant %}selected{% endif %}
+                      >
+                        {{ variant.title }} — {{ variant.price | money }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                {%- endunless -%}
+
+                {%- if current_variant.available -%}
+                  <div class="wf-pdp-qty" data-wf-qty>
+                    <button type="button" data-qty-dec aria-label="{{ 'accessibility.decrease_quantity' | t }}">−</button>
+                    <span data-qty-value aria-live="polite">1</span>
+                    <button type="button" data-qty-inc aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+                  </div>
+                  <button
+                    type="submit"
+                    class="wf-buy-btn"
+                    data-wf-buy-submit
+                    data-label-add="{{ 'products.product.add_to_cart' | t | escape }}"
+                    data-label-adding="{{ 'products.product.adding_to_cart' | t | escape }}"
+                    data-label-added="{{ 'products.product.added_to_cart' | t | escape }}"
+                    data-label-error="{{ 'products.product.add_to_cart_error' | t | escape }}"
+                    data-label-sold="{{ 'products.product.sold_out' | t | escape }}"
+                  >
+                    {{ 'products.product.add_to_cart' | t }}
+                  </button>
+                {%- else -%}
+                  <button type="button" class="wf-buy-btn" disabled>{{ 'products.product.sold_out' | t }}</button>
+                {%- endif -%}
+              </form>
+
+            {%- when 'shipping_note' -%}
+              {%- liquid
+                assign note = product.metafields.custom.shipping_note.value | default: product.metafields.custom.shipping_note
+                if note == blank
+                  assign note = block.settings.text
+                endif
+              -%}
+              {%- if note != blank -%}
+                <div class="wf-ship-note" {{ block.shopify_attributes }}>{{ note }}</div>
+              {%- endif -%}
+
+            {%- when 'quick_facts' -%}
+              {%- liquid
+                assign f1_label = block.settings.fact_1_label
+                assign f1_value = product.metafields.custom.fact_1.value | default: product.metafields.custom.vintage.value | default: block.settings.fact_1_value
+                assign f2_label = block.settings.fact_2_label
+                assign f2_value = product.metafields.custom.fact_2.value | default: product.metafields.custom.alcohol.value | default: block.settings.fact_2_value
+                assign f3_label = block.settings.fact_3_label
+                assign f3_value = product.metafields.custom.fact_3.value | default: product.metafields.custom.blend.value | default: block.settings.fact_3_value
+                assign f4_label = block.settings.fact_4_label
+                assign f4_value = product.metafields.custom.fact_4.value | default: product.metafields.custom.oak.value | default: block.settings.fact_4_value
+                assign has_facts = false
+                if f1_value != blank or f2_value != blank or f3_value != blank or f4_value != blank
+                  assign has_facts = true
+                endif
+              -%}
+              {%- if has_facts -%}
+                <div class="wf-quickfacts" {{ block.shopify_attributes }}>
+                  {%- if f1_value != blank -%}<div class="wf-qf"><b>{{ f1_value }}</b><span>{{ f1_label }}</span></div>{%- endif -%}
+                  {%- if f2_value != blank -%}<div class="wf-qf"><b>{{ f2_value }}</b><span>{{ f2_label }}</span></div>{%- endif -%}
+                  {%- if f3_value != blank -%}<div class="wf-qf"><b>{{ f3_value }}</b><span>{{ f3_label }}</span></div>{%- endif -%}
+                  {%- if f4_value != blank -%}<div class="wf-qf"><b>{{ f4_value }}</b><span>{{ f4_label }}</span></div>{%- endif -%}
+                </div>
+              {%- endif -%}
+
+            {%- when 'details_heading' -%}
+              <div {{ block.shopify_attributes }}>
+                <div class="wf-divider"></div>
+                <h2 class="serif wf-section-title">{{ block.settings.heading }}</h2>
+              </div>
+
+            {%- when 'accordion_tasting' -%}
+              {%- liquid
+                assign appearance = product.metafields.custom.appearance.value | default: block.settings.appearance
+                assign nose = product.metafields.custom.nose.value | default: block.settings.nose
+                assign palate = product.metafields.custom.palate.value | default: block.settings.palate
+              -%}
+              {%- if appearance != blank or nose != blank or palate != blank -%}
+                {%- capture acc_body -%}
+                  <div class="wf-tasting-grid">
+                    {%- if appearance != blank -%}<div><h4>{{ block.settings.label_appearance }}</h4><p>{{ appearance }}</p></div>{%- endif -%}
+                    {%- if nose != blank -%}<div><h4>{{ block.settings.label_nose }}</h4><p>{{ nose }}</p></div>{%- endif -%}
+                    {%- if palate != blank -%}<div><h4>{{ block.settings.label_palate }}</h4><p>{{ palate }}</p></div>{%- endif -%}
+                  </div>
+                {%- endcapture -%}
+                {% render 'wf-pdp-accordion-item',
+                  block: block,
+                  heading: block.settings.heading,
+                  open: block.settings.open_by_default,
+                  body: acc_body
+                %}
+              {%- endif -%}
+
+            {%- when 'accordion_wine_details' -%}
+              {%- liquid
+                assign region = product.metafields.custom.region.value | default: block.settings.region
+                assign release = product.metafields.custom.release_date.value | default: block.settings.release_date
+                assign cases = product.metafields.custom.cases_produced.value | default: block.settings.cases_produced
+                assign closure = product.metafields.custom.closure.value | default: block.settings.closure
+                assign blend_html = product.metafields.custom.blend_composition.value | default: block.settings.blend_html
+                assign analysis_html = product.metafields.custom.technical_analysis.value | default: block.settings.analysis_html
+                assign has_content = false
+                if region != blank or release != blank or cases != blank or closure != blank or blend_html != blank or analysis_html != blank
+                  assign has_content = true
+                endif
+              -%}
+              {%- if has_content -%}
+                {%- capture acc_body -%}
+                  {%- if region != blank or release != blank or cases != blank or closure != blank -%}
+                    <div class="wf-acc-sub">{{ block.settings.sub_glance }}</div>
+                    <div class="wf-stat-grid">
+                      {%- if region != blank -%}<div class="wf-stat"><b>{{ region }}</b><span>{{ block.settings.label_region }}</span></div>{%- endif -%}
+                      {%- if release != blank -%}<div class="wf-stat"><b>{{ release }}</b><span>{{ block.settings.label_release }}</span></div>{%- endif -%}
+                      {%- if cases != blank -%}<div class="wf-stat"><b>{{ cases }}</b><span>{{ block.settings.label_cases }}</span></div>{%- endif -%}
+                      {%- if closure != blank -%}<div class="wf-stat"><b>{{ closure }}</b><span>{{ block.settings.label_closure }}</span></div>{%- endif -%}
+                    </div>
+                  {%- endif -%}
+                  {%- if blend_html != blank -%}
+                    <div class="wf-acc-sub">{{ block.settings.sub_blend }}</div>
+                    {{ blend_html }}
+                  {%- endif -%}
+                  {%- if analysis_html != blank -%}
+                    <div class="wf-acc-sub">{{ block.settings.sub_analysis }}</div>
+                    {{ analysis_html }}
+                  {%- endif -%}
+                {%- endcapture -%}
+                {% render 'wf-pdp-accordion-item',
+                  block: block,
+                  heading: block.settings.heading,
+                  open: block.settings.open_by_default,
+                  body: acc_body
+                %}
+              {%- endif -%}
+
+            {%- when 'accordion_vineyard' -%}
+              {%- liquid
+                assign vineyard_html = product.metafields.custom.vineyard_winemaking.value | default: block.settings.body_html
+              -%}
+              {%- if vineyard_html != blank -%}
+                {%- capture acc_body -%}{{ vineyard_html }}{%- endcapture -%}
+                {% render 'wf-pdp-accordion-item',
+                  block: block,
+                  heading: block.settings.heading,
+                  open: block.settings.open_by_default,
+                  body: acc_body
+                %}
+              {%- endif -%}
+
+            {%- when 'accordion_ageing' -%}
+              {%- liquid
+                assign ageing_html = product.metafields.custom.ageing_shipping.value | default: block.settings.body_html
+              -%}
+              {%- if ageing_html != blank -%}
+                {%- capture acc_body -%}{{ ageing_html }}{%- endcapture -%}
+                {% render 'wf-pdp-accordion-item',
+                  block: block,
+                  heading: block.settings.heading,
+                  open: block.settings.open_by_default,
+                  body: acc_body
+                %}
+              {%- endif -%}
+
+            {%- when 'utility_line' -%}
+              <div class="wf-utility-line" {{ block.shopify_attributes }}>
+                {{ block.settings.prefix }}
+                {%- if block.settings.ask_url != blank -%}
+                  <a href="{{ block.settings.ask_url }}">{{ block.settings.ask_label }}</a>
+                {%- endif -%}
+                {%- if block.settings.review_url != blank -%}
+                  <span class="sep">·</span>
+                  <a href="{{ block.settings.review_url }}">{{ block.settings.review_label }}</a>
+                {%- endif -%}
+              </div>
+
+            {%- when 'media_cards' -%}
+              {%- comment -%} rendered below columns {%- endcomment -%}
+
+            {%- when '@app' -%}
+              <div {{ block.shopify_attributes }}>
+                {% render block %}
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'media_cards' -%}
+        <div {{ block.shopify_attributes }}>
+          {%- if block.settings.heading != blank -%}
+            <div class="wf-media-head">
+              <h2 class="serif">{{ block.settings.heading }}</h2>
+              {%- if block.settings.subheading != blank -%}
+                <p>{{ block.settings.subheading }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <div class="wf-media-grid">
+            {%- comment -%} Video card {%- endcomment -%}
+            {%- liquid
+              assign video_url = product.metafields.custom.video_url.value | default: block.settings.video_url
+              assign video_title = product.metafields.custom.video_title.value | default: block.settings.video_title
+            -%}
+            {%- if video_url != blank or block.settings.video_title != blank -%}
+              <a class="wf-media-card" href="{{ video_url | default: '#' }}" {% if video_url != blank %}target="_blank" rel="noopener"{% endif %}>
+                <div class="wf-media-thumb">
+                  {%- if block.settings.video_image != blank -%}
+                    {{ block.settings.video_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: video_title }}
+                  {%- endif -%}
+                  <div class="wf-play-btn" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </div>
+                <div class="wf-media-body">
+                  <div class="wf-media-eyebrow">{{ block.settings.video_eyebrow }}</div>
+                  <h3 class="wf-media-title">{{ video_title }}</h3>
+                  {%- if block.settings.video_desc != blank -%}<p class="wf-media-desc">{{ block.settings.video_desc }}</p>{%- endif -%}
+                  <span class="wf-media-cta">{{ block.settings.video_cta }}</span>
+                </div>
+              </a>
+            {%- endif -%}
+
+            {%- comment -%} Journal card {%- endcomment -%}
+            {%- liquid
+              assign journal = product.metafields.custom.journal_article.value
+              assign journal_url = block.settings.journal_url
+              assign journal_title = block.settings.journal_title
+              if journal != blank
+                assign journal_url = journal.url
+                assign journal_title = journal.title
+              endif
+            -%}
+            {%- if journal_url != blank or journal_title != blank -%}
+              <a class="wf-media-card" href="{{ journal_url | default: '#' }}">
+                <div class="wf-media-thumb">
+                  {%- if journal.image != blank -%}
+                    {{ journal.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
+                  {%- elsif block.settings.journal_image != blank -%}
+                    {{ block.settings.journal_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
+                  {%- endif -%}
+                </div>
+                <div class="wf-media-body">
+                  <div class="wf-media-eyebrow">{{ block.settings.journal_eyebrow }}</div>
+                  <h3 class="wf-media-title">{{ journal_title }}</h3>
+                  {%- if block.settings.journal_desc != blank -%}<p class="wf-media-desc">{{ block.settings.journal_desc }}</p>{%- endif -%}
+                  <span class="wf-media-cta">{{ block.settings.journal_cta }}</span>
+                </div>
+              </a>
+            {%- endif -%}
+
+            {%- comment -%} Distributors card {%- endcomment -%}
+            {%- if block.settings.dist_title != blank -%}
+              <a class="wf-media-card" href="{{ block.settings.dist_url | default: '#' }}">
+                <div class="wf-media-thumb">
+                  <div class="wf-flag-row">
+                    {%- assign flags = block.settings.dist_flags | split: ',' -%}
+                    {%- for flag in flags -%}
+                      <span class="wf-flag-pill">{{ flag | strip }}</span>
+                    {%- endfor -%}
+                  </div>
+                </div>
+                <div class="wf-media-body">
+                  <div class="wf-media-eyebrow">{{ block.settings.dist_eyebrow }}</div>
+                  <h3 class="wf-media-title">{{ block.settings.dist_title }}</h3>
+                  {%- if block.settings.dist_desc != blank -%}<p class="wf-media-desc">{{ block.settings.dist_desc }}</p>{%- endif -%}
+                  <span class="wf-media-cta">{{ block.settings.dist_cta }}</span>
+                </div>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "WF Product main",
+  "tag": "section",
+  "class": "section-waterford-main-product",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [],
+  "blocks": [
+    {
+      "type": "gallery",
+      "name": "Gallery",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "tagline",
+      "name": "Tagline",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "fallback_text",
+          "label": "Fallback tagline",
+          "info": "Used when product metafield custom.tagline is empty",
+          "default": "A signature wine from Waterford Estate — crafted with precision, built to age gracefully."
+        }
+      ]
+    },
+    {
+      "type": "awards",
+      "name": "Awards",
+      "settings": [
+        { "type": "paragraph", "content": "Prefers product metafield custom.awards (list). Theme images are fallbacks." },
+        { "type": "image_picker", "id": "award_1", "label": "Award image 1" },
+        { "type": "text", "id": "award_1_alt", "label": "Award 1 alt text" },
+        { "type": "image_picker", "id": "award_2", "label": "Award image 2" },
+        { "type": "text", "id": "award_2_alt", "label": "Award 2 alt text" },
+        { "type": "image_picker", "id": "award_3", "label": "Award image 3" },
+        { "type": "text", "id": "award_3_alt", "label": "Award 3 alt text" }
+      ]
+    },
+    {
+      "type": "price",
+      "name": "Price",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "unit_label",
+          "label": "Unit label",
+          "default": "/ 750 ml"
+        }
+      ]
+    },
+    {
+      "type": "purchase_option",
+      "name": "Purchase option",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_purchase_options",
+          "label": "Enable purchase options (requires subscriptions app)",
+          "default": false,
+          "info": "Off by default. Only renders when the product has real selling plans — no fake discounts."
+        },
+        {
+          "type": "text",
+          "id": "onetime_label",
+          "label": "One-time label",
+          "default": "One-time purchase"
+        },
+        {
+          "type": "text",
+          "id": "subscribe_label",
+          "label": "Subscribe label",
+          "default": "Subscribe & Save"
+        }
+      ]
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Quantity + Add to cart",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "shipping_note",
+      "name": "Shipping note",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Note",
+          "default": "Ships within South Africa in 3–5 days · international distributors listed below"
+        }
+      ]
+    },
+    {
+      "type": "quick_facts",
+      "name": "Quick facts",
+      "settings": [
+        { "type": "text", "id": "fact_1_label", "label": "Fact 1 label", "default": "Vintage" },
+        { "type": "text", "id": "fact_1_value", "label": "Fact 1 fallback value" },
+        { "type": "text", "id": "fact_2_label", "label": "Fact 2 label", "default": "Alcohol" },
+        { "type": "text", "id": "fact_2_value", "label": "Fact 2 fallback value" },
+        { "type": "text", "id": "fact_3_label", "label": "Fact 3 label", "default": "Blend" },
+        { "type": "text", "id": "fact_3_value", "label": "Fact 3 fallback value" },
+        { "type": "text", "id": "fact_4_label", "label": "Fact 4 label", "default": "Oak" },
+        { "type": "text", "id": "fact_4_value", "label": "Fact 4 fallback value" }
+      ]
+    },
+    {
+      "type": "details_heading",
+      "name": "Details heading",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Details" }
+      ]
+    },
+    {
+      "type": "accordion_tasting",
+      "name": "Details — Tasting Notes",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Accordion heading", "default": "Tasting Notes" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false },
+        { "type": "text", "id": "label_appearance", "label": "Appearance label", "default": "Appearance" },
+        { "type": "textarea", "id": "appearance", "label": "Appearance fallback" },
+        { "type": "text", "id": "label_nose", "label": "Nose label", "default": "Nose" },
+        { "type": "textarea", "id": "nose", "label": "Nose fallback" },
+        { "type": "text", "id": "label_palate", "label": "Palate label", "default": "Palate" },
+        { "type": "textarea", "id": "palate", "label": "Palate fallback" }
+      ]
+    },
+    {
+      "type": "accordion_wine_details",
+      "name": "Details — Wine Details",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Accordion heading", "default": "Wine Details" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false },
+        { "type": "text", "id": "sub_glance", "label": "At a glance label", "default": "At a glance" },
+        { "type": "text", "id": "label_region", "label": "Region label", "default": "Region" },
+        { "type": "text", "id": "region", "label": "Region fallback" },
+        { "type": "text", "id": "label_release", "label": "Release label", "default": "Release date" },
+        { "type": "text", "id": "release_date", "label": "Release fallback" },
+        { "type": "text", "id": "label_cases", "label": "Cases label", "default": "Cases produced" },
+        { "type": "text", "id": "cases_produced", "label": "Cases fallback" },
+        { "type": "text", "id": "label_closure", "label": "Closure label", "default": "Closure" },
+        { "type": "text", "id": "closure", "label": "Closure fallback" },
+        { "type": "text", "id": "sub_blend", "label": "Blend label", "default": "The blend" },
+        { "type": "html", "id": "blend_html", "label": "Blend HTML fallback" },
+        { "type": "text", "id": "sub_analysis", "label": "Analysis label", "default": "Technical analysis" },
+        { "type": "html", "id": "analysis_html", "label": "Analysis HTML fallback" }
+      ]
+    },
+    {
+      "type": "accordion_vineyard",
+      "name": "Details — Vineyard & Winemaking",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Accordion heading", "default": "Vineyard & Winemaking" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false },
+        { "type": "html", "id": "body_html", "label": "Body HTML fallback", "info": "Prefer metafield custom.vineyard_winemaking" }
+      ]
+    },
+    {
+      "type": "accordion_ageing",
+      "name": "Details — Ageing & Shipping",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Accordion heading", "default": "Ageing & Shipping" },
+        { "type": "checkbox", "id": "open_by_default", "label": "Open by default", "default": false },
+        { "type": "html", "id": "body_html", "label": "Body HTML fallback", "info": "Prefer metafield custom.ageing_shipping" }
+      ]
+    },
+    {
+      "type": "utility_line",
+      "name": "Utility line",
+      "settings": [
+        { "type": "text", "id": "prefix", "label": "Prefix", "default": "Have a question about this wine?" },
+        { "type": "text", "id": "ask_label", "label": "Ask link label", "default": "Ask us" },
+        { "type": "url", "id": "ask_url", "label": "Ask link URL" },
+        { "type": "text", "id": "review_label", "label": "Review link label", "default": "Write a review" },
+        { "type": "url", "id": "review_url", "label": "Review link URL" }
+      ]
+    },
+    {
+      "type": "media_cards",
+      "name": "Video / Journal / Distributors",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Section heading", "default": "Watch, read and buy near you" },
+        { "type": "text", "id": "subheading", "label": "Section subheading", "default": "Every wine has a story, a video and a place to find it outside South Africa." },
+        { "type": "header", "content": "Video card" },
+        { "type": "text", "id": "video_eyebrow", "label": "Eyebrow", "default": "Cellarmaster insights" },
+        { "type": "text", "id": "video_title", "label": "Title", "default": "Behind the wine" },
+        { "type": "textarea", "id": "video_desc", "label": "Description" },
+        { "type": "url", "id": "video_url", "label": "Video URL" },
+        { "type": "image_picker", "id": "video_image", "label": "Thumbnail" },
+        { "type": "text", "id": "video_cta", "label": "CTA", "default": "Watch on YouTube →" },
+        { "type": "header", "content": "Journal card" },
+        { "type": "text", "id": "journal_eyebrow", "label": "Eyebrow", "default": "Waterford journal" },
+        { "type": "text", "id": "journal_title", "label": "Title fallback" },
+        { "type": "textarea", "id": "journal_desc", "label": "Description" },
+        { "type": "url", "id": "journal_url", "label": "Article URL fallback" },
+        { "type": "image_picker", "id": "journal_image", "label": "Image fallback" },
+        { "type": "text", "id": "journal_cta", "label": "CTA", "default": "Read the article →" },
+        { "type": "header", "content": "Distributors card" },
+        { "type": "text", "id": "dist_eyebrow", "label": "Eyebrow", "default": "International orders" },
+        { "type": "text", "id": "dist_title", "label": "Title", "default": "International Distributors" },
+        { "type": "textarea", "id": "dist_desc", "label": "Description", "default": "Available through select partners in the UK, USA and Europe. Other regions on request." },
+        { "type": "text", "id": "dist_flags", "label": "Flag pills (comma-separated)", "default": "UK, USA, Germany, Netherlands" },
+        { "type": "url", "id": "dist_url", "label": "Link URL" },
+        { "type": "text", "id": "dist_cta", "label": "CTA", "default": "View all distributors →" }
+      ]
+    },
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "WF Product main",
+      "blocks": [
+        { "type": "gallery" },
+        { "type": "title" },
+        { "type": "tagline" },
+        { "type": "awards" },
+        { "type": "price" },
+        { "type": "purchase_option" },
+        { "type": "buy_buttons" },
+        { "type": "shipping_note" },
+        { "type": "quick_facts" },
+        { "type": "details_heading" },
+        { "type": "accordion_tasting" },
+        { "type": "accordion_wine_details" },
+        { "type": "accordion_vineyard" },
+        { "type": "accordion_ageing" },
+        { "type": "utility_line" },
+        { "type": "media_cards" }
+      ]
+    }
+  ]
+}
+{% endschema %}
