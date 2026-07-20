@@ -369,5 +369,22 @@
       "default_title": "Default Title",
       "sticky_add_to_cart": "Quick add to cart bar"
     }
+  },
+  "waterford": {
+    "collection": {
+      "home": "Home",
+      "shop": "Shop",
+      "breadcrumb": "Breadcrumb",
+      "flagship": "Flagship",
+      "from": "From",
+      "view_options": "View options",
+      "view_toggle": "Product layout",
+      "grid_view": "Grid view",
+      "list_view": "List view",
+      "empty": "No products found. Try clearing your filters.",
+      "pagination": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page"
+    }
   }
 }

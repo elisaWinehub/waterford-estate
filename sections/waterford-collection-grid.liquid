@@ -1,0 +1,311 @@
+{%- comment -%}
+  Waterford Estate collection toolbar, product grid, and pagination.
+  Filters use collection.filters + Section Rendering API with form GET fallback.
+{%- endcomment -%}
+
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'waterford-collection.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page | default: 24
+  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  assign results_url = collection.url
+-%}
+
+<div
+  class="wf-collection"
+  data-wf-collection
+  data-section-id="{{ section.id }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="wf-wrap">
+    <nav class="wf-breadcrumb" aria-label="{{ 'waterford.collection.breadcrumb' | t }}">
+      <a href="{{ routes.root_url }}">{{ 'waterford.collection.home' | t }}</a>
+      &nbsp;&rsaquo;&nbsp;
+      <a href="{{ routes.all_products_collection_url }}">{{ 'waterford.collection.shop' | t }}</a>
+      &nbsp;&rsaquo;&nbsp;
+      <span class="wf-breadcrumb__current">{{ collection.title }}</span>
+    </nav>
+
+    {%- if collection.description != blank -%}
+      <div class="wf-page-head rte">
+        {{ collection.description }}
+      </div>
+    {%- endif -%}
+
+    <form
+      class="wf-facets-form"
+      data-wf-facets-form
+      action="{{ results_url }}"
+      method="get"
+    >
+      <div class="wf-toolbar">
+        <div class="wf-filter-set">
+          {%- for filter in collection.filters -%}
+            {%- liquid
+              assign active_count = 0
+              if filter.type == 'price_range'
+                if filter.min_value.value != blank or filter.max_value.value != blank
+                  assign active_count = 1
+                endif
+              else
+                assign active_count = filter.active_values.size
+              endif
+            -%}
+            <div
+              class="wf-filter-dd{% if active_count > 0 %} has-active{% endif %}"
+              data-wf-filter-dd
+            >
+              <button
+                type="button"
+                class="wf-filter-dd__trigger"
+                data-wf-filter-trigger
+                aria-expanded="false"
+                aria-controls="WF-Filter-{{ section.id }}-{{ forloop.index }}"
+                id="WF-Filter-Btn-{{ section.id }}-{{ forloop.index }}"
+              >
+                {{ filter.label }}
+                {%- if active_count > 0 -%}
+                  <span>({{ active_count }})</span>
+                {%- endif -%}
+                <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg>
+              </button>
+
+              <div
+                class="wf-filter-dd__panel"
+                data-wf-filter-panel
+                id="WF-Filter-{{ section.id }}-{{ forloop.index }}"
+                role="group"
+                aria-labelledby="WF-Filter-Btn-{{ section.id }}-{{ forloop.index }}"
+              >
+                {%- case filter.type -%}
+                  {%- when 'list', 'boolean' -%}
+                    <ul class="wf-filter-dd__list">
+                      {%- for value in filter.values -%}
+                        <li>
+                          <label class="wf-filter-dd__option{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}checked{% endif %}
+                              {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                            >
+                            <span>{{ value.label }}{% if section.settings.show_filter_counts %} ({{ value.count }}){% endif %}</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- when 'price_range' -%}
+                    <div class="wf-price-inputs">
+                      <label>
+                        {{ 'accessibility.price_filter_low' | t }}
+                        <input
+                          type="number"
+                          name="{{ filter.min_value.param_name }}"
+                          value="{{ filter.min_value.value }}"
+                          min="0"
+                          placeholder="0"
+                          inputmode="decimal"
+                        >
+                      </label>
+                      <span aria-hidden="true">–</span>
+                      <label>
+                        {{ 'accessibility.price_filter_high' | t }}
+                        <input
+                          type="number"
+                          name="{{ filter.max_value.param_name }}"
+                          value="{{ filter.max_value.value }}"
+                          min="0"
+                          placeholder="{{ filter.range_max | money_without_currency }}"
+                          inputmode="decimal"
+                        >
+                      </label>
+                    </div>
+                {%- endcase -%}
+
+                <div class="wf-filter-dd__actions">
+                  <button type="button" data-wf-clear-filter>{{ 'actions.clear' | t }}</button>
+                  <button type="button" class="wf-apply" data-wf-apply-filter>{{ 'actions.apply' | t }}</button>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div class="wf-toolbar-right">
+          <div class="wf-sort-set">
+            <label for="WF-Sort-{{ section.id }}">{{ 'actions.sort' | t }}</label>
+            <select
+              id="WF-Sort-{{ section.id }}"
+              name="sort_by"
+              data-wf-sort
+            >
+              {%- for option in collection.sort_options -%}
+                {%- comment -%} Skip non-native vintage sorts if present {%- endcomment -%}
+                {%- unless option.value contains 'vintage' -%}
+                  <option
+                    value="{{ option.value }}"
+                    {% if option.value == sort_by %}selected{% endif %}
+                  >
+                    {{ option.name }}
+                  </option>
+                {%- endunless -%}
+              {%- endfor -%}
+            </select>
+          </div>
+
+          <div class="wf-view-toggle" role="group" aria-label="{{ 'waterford.collection.view_toggle' | t }}">
+            <button
+              type="button"
+              class="wf-view-btn active"
+              data-wf-view="grid"
+              aria-label="{{ 'waterford.collection.grid_view' | t }}"
+              aria-pressed="true"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+            </button>
+            <button
+              type="button"
+              class="wf-view-btn"
+              data-wf-view="list"
+              aria-label="{{ 'waterford.collection.list_view' | t }}"
+              aria-pressed="false"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Active filters {%- endcomment -%}
+      {%- assign has_active_filters = false -%}
+      {%- for filter in collection.filters -%}
+        {%- if filter.type == 'price_range' -%}
+          {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+            {%- assign has_active_filters = true -%}
+          {%- endif -%}
+        {%- elsif filter.active_values.size > 0 -%}
+          {%- assign has_active_filters = true -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if has_active_filters -%}
+        <div class="wf-active-filters" aria-label="{{ 'accessibility.active_filters' | t }}">
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a
+                class="wf-active-chip"
+                href="{{ value.url_to_remove }}"
+                data-wf-remove-filter
+              >
+                {{ value.label }}
+                <span aria-hidden="true">×</span>
+                <span class="visually-hidden">{{ 'actions.remove' | t }}</span>
+              </a>
+            {%- endfor -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != blank or filter.max_value.value != blank -%}
+                <a
+                  class="wf-active-chip"
+                  href="{{ filter.url_to_remove }}"
+                  data-wf-remove-filter
+                >
+                  {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- endif -%}
+                  –
+                  {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- endif -%}
+                  <span aria-hidden="true">×</span>
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <a class="wf-clear-all" href="{{ results_url }}" data-wf-clear-all>
+            {{ 'actions.clear_all' | t }}
+          </a>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} noscript: allow native submit {%- endcomment -%}
+      <noscript>
+        <button type="submit">{{ 'actions.apply' | t }}</button>
+      </noscript>
+    </form>
+
+    {%- paginate collection.products by products_per_page -%}
+      {%- if collection.products.size == 0 -%}
+        <p class="wf-empty">{{ 'waterford.collection.empty' | t }}</p>
+      {%- else -%}
+        <ul class="wf-grid" id="ResultsList" data-wf-grid>
+          {%- for product in collection.products -%}
+            <li>
+              {% render 'waterford-product-card', product: product, index: forloop.index0 %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav aria-label="{{ 'waterford.collection.pagination' | t }}">
+          <ul class="wf-pagination" data-wf-pagination>
+            {%- if paginate.previous -%}
+              <li>
+                <a href="{{ paginate.previous.url }}" aria-label="{{ 'waterford.collection.previous' | t }}">‹</a>
+              </li>
+            {%- endif -%}
+
+            {%- for part in paginate.parts -%}
+              <li>
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}">{{ part.title }}</a>
+                {%- elsif part.title == '&hellip;' -%}
+                  <span>…</span>
+                {%- else -%}
+                  <span class="is-active" aria-current="page">{{ part.title }}</span>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+
+            {%- if paginate.next -%}
+              <li>
+                <a href="{{ paginate.next.url }}" aria-label="{{ 'waterford.collection.next' | t }}">›</a>
+              </li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "WF Collection grid",
+  "tag": "section",
+  "class": "section-waterford-collection-grid",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_counts",
+      "label": "Show filter value counts",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "WF Collection grid"
+    }
+  ]
+}
+{% endschema %}

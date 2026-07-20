@@ -1,0 +1,129 @@
+{%- doc -%}
+  Waterford Estate product card for collection grid/list and related products.
+
+  @param {object} product - Product object
+  @param {boolean} [lazy] - Lazy-load image (default true)
+  @param {number} [index] - Card index in grid (first row can eager-load)
+{%- enddoc -%}
+
+{%- liquid
+  assign lazy = lazy | default: true
+  assign index = index | default: 99
+  assign variant = product.selected_or_first_available_variant
+  assign featured = product.featured_image
+  if featured == blank and product.featured_media != blank
+    assign featured = product.featured_media.preview_image
+  endif
+
+  assign img_alt = featured.alt | default: product.title | escape
+
+  assign is_flagship = false
+  if product.tags contains 'flagship' or product.tags contains 'Flagship'
+    assign is_flagship = true
+  endif
+
+  assign range_label = product.metafields.custom.range.value | default: product.metafields.custom.range
+  if range_label == blank
+    assign range_label = product.vendor
+  endif
+  if range_label == blank and product.collections.size > 0
+    assign range_label = product.collections.first.title
+  endif
+
+  assign style_label = product.type
+  if style_label == blank and product.metafields.custom.style != blank
+    assign style_label = product.metafields.custom.style.value | default: product.metafields.custom.style
+  endif
+
+  assign price_varies = false
+  if product.price_varies
+    assign price_varies = true
+  endif
+
+  assign single_variant = false
+  if product.variants.size == 1
+    assign single_variant = true
+  endif
+
+  assign can_quick_add = false
+  if product.available and single_variant
+    assign can_quick_add = true
+  endif
+
+  assign loading_attr = 'lazy'
+  if lazy == false or index < 3
+    assign loading_attr = 'eager'
+  endif
+-%}
+
+<article class="wf-card" data-wf-card data-product-id="{{ product.id }}">
+  <div class="wf-card-photo">
+    {%- if is_flagship -%}
+      <span class="wf-card-flag">{{ 'waterford.collection.flagship' | t }}</span>
+    {%- endif -%}
+    <a href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      {%- if featured != blank -%}
+        {{
+          featured
+          | image_url: width: 800
+          | image_tag:
+            widths: '200, 300, 400, 600, 800',
+            sizes: '(min-width: 901px) 33vw, (min-width: 601px) 50vw, 100vw',
+            loading: loading_attr,
+            alt: img_alt
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </a>
+  </div>
+
+  <div class="wf-card-main">
+    <div class="wf-card-body">
+      {%- if range_label != blank -%}
+        <div class="wf-card-range">{{ range_label }}</div>
+      {%- endif -%}
+      <a class="wf-card-name" href="{{ product.url }}">{{ product.title }}</a>
+      {%- if style_label != blank -%}
+        <div class="wf-card-style">{{ style_label }}</div>
+      {%- endif -%}
+      <div class="wf-card-price">
+        {%- if price_varies -%}
+          {{ 'waterford.collection.from' | t }} {{ product.price_min | money }}
+        {%- else -%}
+          {{ variant.price | money }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="wf-card-controls">
+      {%- if product.available == false -%}
+        <button type="button" class="wf-add-btn is-sold-out" disabled>
+          {{ 'products.product.sold_out' | t }}
+        </button>
+      {%- elsif can_quick_add -%}
+        <div class="wf-qty" data-wf-qty>
+          <button type="button" data-qty-dec aria-label="{{ 'accessibility.decrease_quantity' | t }}">−</button>
+          <span data-qty-value aria-live="polite">1</span>
+          <button type="button" data-qty-inc aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+        </div>
+        <button
+          type="button"
+          class="wf-add-btn"
+          data-wf-add
+          data-variant-id="{{ variant.id }}"
+          data-label-default="{{ 'products.product.add_to_cart' | t | escape }}"
+          data-label-adding="{{ 'products.product.adding_to_cart' | t | escape }}"
+          data-label-added="{{ 'products.product.added_to_cart' | t | escape }}"
+          data-label-error="{{ 'products.product.add_to_cart_error' | t | escape }}"
+        >
+          {{ 'products.product.add_to_cart' | t }}
+        </button>
+      {%- else -%}
+        <a class="wf-add-btn" href="{{ product.url }}">
+          {{ 'waterford.collection.view_options' | t }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

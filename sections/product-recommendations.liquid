@@ -4,6 +4,8 @@
   type="module"
   fetchpriority="low"
 ></script>
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'waterford-collection.js' | asset_url }}" defer></script>
 
 {% liquid
   case section.settings.layout_type
@@ -95,12 +97,7 @@
       {% capture list_items %}
         {% for product in products limit: section.settings.max_products %}
           <div class="resource-list__item">
-            {% content_for 'block',
-              type: '_product-card',
-              id: 'static-product-card',
-              closest.product: product,
-              product_view_context: 'recommendation'
-            %}
+            {% render 'waterford-product-card', product: product, index: forloop.index0 %}
           </div>
           {% unless forloop.last %}
             <!--@list/split-->
