@@ -121,10 +121,11 @@
 
             {%- when 'price' -%}
               {%- liquid
-                assign unit_label = block.settings.unit_label
+                assign unit_label = block.settings.unit_label | strip
                 if current_variant.weight > 0
-                  assign unit_label = current_variant.weight | append: current_variant.weight_unit
+                  assign unit_label = current_variant.weight | append: ' ' | append: current_variant.weight_unit | strip
                 endif
+                assign unit_label = unit_label | remove_first: '/' | strip
               -%}
               <div class="price-box" {{ block.shopify_attributes }} data-wf-price>
                 <div class="price">

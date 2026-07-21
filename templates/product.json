@@ -30,7 +30,7 @@
         },
         "price": {
           "type": "price",
-          "settings": { "unit_label": "/ 750 ml" }
+          "settings": { "unit_label": "750 ml" }
         },
         "buy_buttons": { "type": "buy_buttons", "settings": {} },
         "shipping_note": {
