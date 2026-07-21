@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Jem — Waterford Estate (redesign concept)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0b0b0b;
+    --olive:#84754e;
+    --olive-dark:#6b5f40;
+    --olive-tint:#EDE8DC;
+    --cream:#FAF7F2;
+    --cream-2:#F2EEE4;
+    --ink:#1a1a1a;
+    --muted:#6b6b66;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',-apple-system,sans-serif;font-size:16px;line-height:1.6;color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased;}
+  a{text-decoration:none;color:inherit;}
+  .serif{font-family:'Cormorant Garamond',serif;}
+  img,svg{display:block;}
+
+  /* ---------- header (restyled) ---------- */
+  .navbar10_component{position:sticky;top:0;z-index:100;background:var(--black);}
+  .navbar10_container{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 32px;}
+  .navbar10_logo{height:34px;}
+  .navbar10_menu{display:flex;align-items:center;gap:34px;}
+  .navbar10_menu-left{display:flex;align-items:center;gap:26px;}
+  .navbar10_dropdown-link{color:var(--cream);font-size:14px;letter-spacing:.02em;}
+  .navbar10_dropdown-link:hover{color:var(--olive);}
+  .navbar10_menu-right{display:flex;align-items:center;gap:14px;}
+  .button{background:var(--olive);color:#fff;padding:10px 20px;font-size:14px;letter-spacing:.02em;border-radius:2px;border:none;cursor:pointer;font-family:'Inter',sans-serif;}
+  .button:hover{background:var(--olive-dark);}
+  ._wf-cart-btn{display:flex;align-items:center;gap:6px;border:1px solid rgba(250,247,242,.35);color:var(--cream);padding:8px 14px;border-radius:2px;font-size:14px;}
+  .icon-embed-xxsmall svg{width:16px;height:16px;}
+
+  /* ---------- body ---------- */
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+  .breadcrumb{font-size:13px;color:var(--muted);padding:20px 0 0;}
+  .breadcrumb span{color:var(--ink);}
+
+  .pdp-top{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;margin-top:24px;align-items:start;}
+  .gallery{position:sticky;top:96px;}
+  .pdp-photo{background:#fff;border:1px solid #eee2d0;display:flex;align-items:center;justify-content:center;padding:28px;aspect-ratio:4/5;}
+  .pdp-photo img{max-width:65%;max-height:100%;object-fit:contain;}
+  .thumb-row{display:flex;gap:10px;margin-top:10px;}
+  .thumb{width:64px;height:78px;padding:6px;background:#fff;border:1px solid #eee2d0;cursor:pointer;}
+  .thumb.active{border-color:var(--olive);}
+  .thumb img{width:100%;height:100%;object-fit:contain;}
+
+  .pdp-info{display:flex;flex-direction:column;gap:16px;}
+  .pdp-title{font-size:40px;margin:0;}
+  .pdp-tagline{font-size:16px;line-height:1.7;color:#3a3a37;max-width:58ch;margin:0;}
+
+  .medals-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
+  .medals-row img{height:58px;width:auto;}
+
+  .buy-box{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:4px;}
+  .price{font-size:24px;font-weight:600;}
+  .price small{font-size:14px;color:var(--muted);font-weight:400;}
+  .qty{display:flex;align-items:center;border:1px solid #ddd6c4;height:46px;}
+  .qty button{width:38px;height:100%;border:none;background:#fff;font-size:18px;cursor:pointer;color:#555;}
+  .qty span{width:26px;text-align:center;font-size:16px;}
+  .buy-btn{padding:13px 34px;}
+
+  .quickfacts{display:flex;border:1px solid #e6ddc9;margin-top:4px;}
+  .qf{flex:1;padding:12px 14px;border-right:1px solid #e6ddc9;}
+  .qf:last-child{border-right:none;}
+  .qf b{display:block;font-size:16px;font-weight:600;}
+  .qf span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
+
+  .ship-note{font-size:14px;color:var(--muted);}
+
+  .divider{border-top:1px solid #e6ddc9;margin:32px 0 20px;}
+  .section-title{font-size:26px;margin:0 0 4px;}
+
+  /* accordion — native details, matches the site's real interaction */
+  .accordion{border-top:1px solid #e6ddc9;}
+  .acc-item{border-bottom:1px solid #e6ddc9;}
+  .acc-item summary{list-style:none;display:flex;align-items:center;justify-content:space-between;padding:20px 2px;cursor:pointer;font-size:20px;font-weight:600;}
+  .acc-item summary::-webkit-details-marker{display:none;}
+  .acc-item summary svg{width:18px;height:18px;color:var(--olive-dark);transition:transform .15s;flex-shrink:0;}
+  .acc-item[open] summary svg{transform:rotate(180deg);}
+  .acc-body{padding:0 2px 26px;font-size:16px;line-height:1.75;color:#3c3c39;}
+  .acc-body .tasting-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .acc-body .tasting-grid h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--olive-dark);margin:0 0 6px;}
+  .acc-body .tasting-grid p{margin:0;font-size:15.5px;}
+  .acc-body .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px 24px;margin-top:6px;}
+  .acc-body .stat b{display:block;font-size:16px;font-weight:600;}
+  .acc-body .stat span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;}
+  .acc-body table{border-collapse:collapse;max-width:440px;width:100%;}
+  .acc-body table td{padding:9px 0;font-size:15.5px;border-bottom:1px solid #f0ece0;}
+  .acc-body table td:last-child{text-align:right;font-weight:600;}
+  .acc-body .blend-bar{display:flex;height:32px;border-radius:2px;overflow:hidden;margin:10px 0 10px;}
+  .acc-body .blend-bar span{display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600;}
+  .acc-body .blend-key{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;}
+  .acc-body .blend-key i{display:inline-block;width:8px;height:8px;margin-right:6px;}
+  .acc-sub{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--olive-dark);font-weight:600;margin:20px 0 8px;}
+  .acc-sub:first-child{margin-top:0;}
+  .acc-body p{margin:0 0 4px;}
+
+  .utility-line{text-align:right;font-size:15px;color:#3c3c39;margin-top:22px;}
+  .utility-line a{color:var(--olive-dark);font-weight:600;}
+  .utility-line .sep{color:#ccc4ac;margin:0 10px;}
+
+  .media-head{margin:0 0 20px;}
+  .media-head h2{font-size:26px;margin:0;}
+  .media-head p{font-size:15px;color:var(--muted);margin:6px 0 0;}
+  .media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:56px;}
+  .media-card{border:1px solid #eee2d0;display:flex;flex-direction:column;background:#fff;}
+  .media-thumb{aspect-ratio:16/10;position:relative;display:flex;align-items:center;justify-content:center;background:var(--cream-2);color:var(--muted);font-size:12px;font-style:italic;}
+  .play-btn{position:absolute;width:44px;height:44px;border-radius:50%;background:var(--olive);display:flex;align-items:center;justify-content:center;}
+  .play-btn svg{width:16px;height:16px;color:#fff;margin-left:2px;}
+  .flag-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:0 20px;}
+  .flag-pill{font-size:12px;padding:5px 11px;border:1px solid #ddd6c4;border-radius:20px;background:#fff;color:var(--olive-dark);}
+  .media-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px;}
+  .media-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--olive);font-weight:600;}
+  .media-title{font-size:19px;font-weight:600;margin:0;}
+  .media-desc{font-size:15px;line-height:1.6;color:var(--muted);margin:0;}
+  .media-cta{font-size:14px;font-weight:600;color:var(--olive-dark);margin-top:6px;}
+
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
+  .section-head h2{font-size:26px;margin:0;}
+
+  /* related products — same card component as shop-listing.html for consistency */
+  .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:60px;}
+  .related-grid .card{display:flex;flex-direction:column;}
+  .related-grid .card-photo{background:#fff;border:1px solid #eee2d0;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;position:relative;padding:20px;}
+  .related-grid .card-photo img{max-width:78%;max-height:100%;object-fit:contain;}
+  .related-grid .card-main{display:flex;flex-direction:column;flex:1;}
+  .related-grid .card-body{padding:16px 2px 0;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;}
+  .related-grid .card-range{font-size:10.5px;color:var(--olive-dark);text-transform:uppercase;letter-spacing:.06em;}
+  .related-grid .card-name{font-size:16px;font-weight:600;}
+  .related-grid .card-style{font-size:12px;color:var(--muted);margin-bottom:6px;}
+  .related-grid .card-price{font-size:14px;color:#333;}
+  .related-grid .card-price small{color:var(--muted);font-size:12px;}
+  .related-grid .card-controls{display:flex;gap:8px;margin-top:12px;}
+  .related-grid .qty{display:flex;align-items:center;border:1px solid #ddd6c4;height:38px;flex-shrink:0;}
+  .related-grid .qty button{width:28px;height:100%;border:none;background:#fff;font-size:14px;cursor:pointer;color:#555;}
+  .related-grid .qty span{width:20px;text-align:center;font-size:13px;}
+  .related-grid .add-btn{flex:1;font-size:13px;letter-spacing:.03em;background:var(--olive);color:#fff;border:none;padding:0 12px;height:38px;cursor:pointer;font-family:'Inter',sans-serif;}
+  .related-grid .add-btn:hover{background:var(--olive-dark);}
+
+  @media (max-width:900px){
+    .pdp-top,.media-grid,.related-grid,.acc-body .tasting-grid{grid-template-columns:1fr;}
+    .gallery{position:static;}
+    .navbar10_menu{display:none;}
+  }
+
+  /* ---------- footer ---------- */
+  .footer3_component{background:var(--cream-2);color:var(--ink);padding:64px 32px 0;margin-top:0;}
+  .container-large{max-width:1160px;margin:0 auto;}
+  .footer3_top-wrapper{display:grid;grid-template-columns:1.3fr 1fr;gap:48px;padding-bottom:40px;}
+  .footer3_logo{height:52px;}
+  .margin-bottom{margin-bottom:14px;}
+  .text-weight-semibold{font-weight:600;}
+  .text-size-small{font-size:14px;line-height:1.65;color:#3c3c39;}
+  ._2col{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px;}
+  .footer3_social-list{display:flex;gap:10px;margin-top:18px;}
+  .footer3_social-link{width:32px;height:32px;border-radius:50%;background:var(--olive);display:flex;align-items:center;justify-content:center;color:#fff;}
+  .footer3_social-link svg{width:15px;height:15px;}
+  .footer3_menu-wrapper{display:flex;gap:72px;flex-wrap:wrap;padding-bottom:32px;align-items:flex-start;}
+  .footer3_link-list{display:flex;flex-direction:column;gap:11px;}
+  .footer3_link{color:var(--ink);font-size:14px;}
+  .footer3_link:hover{color:var(--olive);}
+  .line-divider{border-top:1px solid #ddd6c4;}
+  .footer3_bottom-wrapper{display:flex;align-items:center;justify-content:space-between;padding:20px 0;font-size:13px;color:#7a7a74;}
+  .footer3_legal-list{display:flex;gap:20px;}
+  .footer3_legal-link{color:#7a7a74;}
+  .u18_banner{background:var(--black);color:#fff;text-align:center;font-size:12px;letter-spacing:.06em;padding:9px;}
+</style>
+</head>
+<body>
+
+<div class="navbar10_component" id="nav">
+  <div class="navbar10_container">
+    <a href="/" class="navbar10_logo-link"><img loading="lazy" src="https://cdn.prod.website-files.com/66d96f095c415be61ce630cd/673a96410db3b51ff5a4d0b9_Logo_fountain-only.svg" alt="Waterford Estate" class="navbar10_logo"></a>
+    <nav class="navbar10_menu">
+      <div class="navbar10_menu-left">
+        <a href="#" class="navbar10_dropdown-link">Our Story</a>
+        <a href="#" class="navbar10_dropdown-link">Shop</a>
+        <a href="#" class="navbar10_dropdown-link">Reservations</a>
+        <a href="#" class="navbar10_dropdown-link">Events</a>
+        <a href="#" class="navbar10_dropdown-link">Members</a>
+        <a href="#" class="navbar10_dropdown-link">Journal</a>
+      </div>
+      <div class="navbar10_menu-right">
+        <a href="#" class="_wf-cart-btn"><div class="icon-embed-xxsmall"><svg viewBox="0 0 24 24" fill="#FAF7F2"><path d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 8v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z"/></svg></div>Login</a>
+        <a href="/contact" class="button">Get in Touch</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="breadcrumb">Shop &nbsp;&rsaquo;&nbsp; Red Wines &nbsp;&rsaquo;&nbsp; <span>The Jem</span></div>
+
+  <section class="pdp-top">
+    <div class="gallery">
+      <div class="pdp-photo"><img id="mainImg" src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="The Jem"></div>
+      <div class="thumb-row">
+        <button class="thumb active" data-alt="Front label" onclick="swapImg(this)"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Front label"></button>
+        <button class="thumb" data-alt="Back label" onclick="swapImg(this)"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Back label"></button>
+        <button class="thumb" data-alt="In the cellar" onclick="swapImg(this)"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="In the cellar"></button>
+        <button class="thumb" data-alt="Serving suggestion" onclick="swapImg(this)"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Serving suggestion"></button>
+      </div>
+    </div>
+
+    <div class="pdp-info">
+      <h1 class="serif pdp-title">The Jem</h1>
+      <p class="pdp-tagline">Waterford's flagship wine — deep garnet, blackcurrant and cedar, with fine, structured tannin. Stands among South Africa's finest and the world's top 1%.</p>
+
+      <div class="medals-row">
+        <img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67b391e36a14ad41c416e2f3_01%202024%20PLATTERS%204.5%20Stars.avif" alt="Platter's Wine Guide 2024 — 4.5 Stars">
+        <img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67b391e33a852cbd418a5a94_02%20TA%202024%2093.avif" alt="Tim Atkin 2024 — 93 points">
+        <img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/684aa8dd8526975daf6e8006_Cabernet-Sauvignon-Masters-2025-Medal-GOLD%20sm.avif" alt="Cabernet Sauvignon Masters 2025 — Gold Medal">
+      </div>
+
+      <div class="buy-box">
+        <div class="price">R 2450.00 <small>/ 750 ml</small></div>
+        <div class="qty"><button onclick="stepQty(-1)">–</button><span id="qtyVal">1</span><button onclick="stepQty(1)">+</button></div>
+        <button class="button buy-btn">Add to cart</button>
+      </div>
+      <div class="ship-note">Ships within South Africa in 3–5 days · international distributors listed below</div>
+
+      <div class="quickfacts">
+        <div class="qf"><b>2017</b><span>Vintage</span></div>
+        <div class="qf"><b>14.5%</b><span>Alcohol</span></div>
+        <div class="qf"><b>Cab-led</b><span>Blend</span></div>
+        <div class="qf"><b>24 mo</b><span>New oak</span></div>
+      </div>
+
+      <div class="divider"></div>
+      <h2 class="serif section-title">Details</h2>
+
+      <div class="accordion">
+        <details class="acc-item">
+          <summary>Tasting Notes<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg></summary>
+          <div class="acc-body">
+            <div class="tasting-grid">
+              <div><h4>Appearance</h4><p>Deep, dense garnet with a youthful violet rim.</p></div>
+              <div><h4>Nose</h4><p>Blackcurrant and dark cherry, cedar, graphite and dark chocolate.</p></div>
+              <div><h4>Palate</h4><p>Dense yet polished, fine structured tannin, long savoury finish. Decant an hour before serving.</p></div>
+            </div>
+          </div>
+        </details>
+        <details class="acc-item">
+          <summary>Wine Details<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg></summary>
+          <div class="acc-body">
+            <div class="acc-sub">At a glance</div>
+            <div class="stat-grid">
+              <div class="stat"><b>Stellenbosch</b><span>Region</span></div>
+              <div class="stat"><b>March 2021</b><span>Release date</span></div>
+              <div class="stat"><b>3,800</b><span>Cases produced</span></div>
+              <div class="stat"><b>Cork</b><span>Closure</span></div>
+            </div>
+            <div class="acc-sub">The blend</div>
+            <div class="blend-bar">
+              <span style="width:78%;background:#3c3626;">Cabernet Sauvignon 78%</span>
+              <span style="width:14%;background:#84754e;">14%</span>
+              <span style="width:8%;background:#c9bd9a;color:#3c3626;">8%</span>
+            </div>
+            <div class="blend-key">
+              <span><i style="background:#3c3626;"></i>Cabernet Sauvignon — 78%</span>
+              <span><i style="background:#84754e;"></i>Merlot — 14%</span>
+              <span><i style="background:#c9bd9a;"></i>Cabernet Franc — 8%</span>
+            </div>
+            <div class="acc-sub">Technical analysis</div>
+            <table>
+              <tr><td>Alcohol</td><td>14.5%</td></tr>
+              <tr><td>Residual sugar</td><td>2.1 g/L</td></tr>
+              <tr><td>Total acidity</td><td>5.6 g/L</td></tr>
+              <tr><td>pH</td><td>3.62</td></tr>
+            </table>
+          </div>
+        </details>
+        <details class="acc-item">
+          <summary>Vineyard &amp; Winemaking<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg></summary>
+          <div class="acc-body">
+            <div class="acc-sub">The vineyard</div>
+            <div class="stat-grid">
+              <div class="stat"><b>Block 4 &amp; 7</b><span>Vineyard blocks</span></div>
+              <div class="stat"><b>Granite / clay</b><span>Soil type</span></div>
+              <div class="stat"><b>280m</b><span>Altitude</span></div>
+              <div class="stat"><b>South-facing</b><span>Aspect</span></div>
+            </div>
+            <div class="acc-sub">In the cellar</div>
+            <p>Hand-harvested and fermented in small open-top fermenters with extended maceration, then basket-pressed and gravity-fed to barrel before final blending.</p>
+            <div class="acc-sub">Maturation</div>
+            <div class="stat-grid">
+              <div class="stat"><b>French oak</b><span>Barrel origin</span></div>
+              <div class="stat"><b>100%</b><span>New oak</span></div>
+              <div class="stat"><b>24 months</b><span>In barrel</span></div>
+            </div>
+          </div>
+        </details>
+        <details class="acc-item">
+          <summary>Ageing &amp; Shipping<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg></summary>
+          <div class="acc-body">
+            <div class="acc-sub">Ageing potential</div>
+            <p>Drinking well now, with room to develop for another two decades in a cool, dark cellar. Best from 2028, will hold to 2045.</p>
+            <div class="acc-sub">Shipping &amp; delivery</div>
+            <p>Ships within South Africa in 3–5 working days. Available internationally through select distributors in the UK, USA and Europe — see International Distributors below for details.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="utility-line">Have a question about this wine? <a href="#">Ask us</a><span class="sep">·</span><a href="#">Write a review</a></div>
+    </div>
+  </section>
+
+  <div class="media-head">
+    <h2 class="serif">Watch, read and buy near you</h2>
+    <p>Every wine has a story, a video and a place to find it outside South Africa.</p>
+  </div>
+  <div class="media-grid">
+    <div class="media-card">
+      <div class="media-thumb">cellarmaster video still<div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="media-body">
+        <div class="media-eyebrow">Cellarmaster insights · 4 min</div>
+        <div class="media-title">Behind The Jem</div>
+        <p class="media-desc">Mark le Roux on three decades of block selection and 24 months in new French oak.</p>
+        <a href="#" class="media-cta">Watch on YouTube →</a>
+      </div>
+    </div>
+    <div class="media-card">
+      <div class="media-thumb">journal photograph</div>
+      <div class="media-body">
+        <div class="media-eyebrow">Waterford journal</div>
+        <div class="media-title">An ultimate expression of terroir</div>
+        <p class="media-desc">The full story of the blend, from vineyard selection to the finished wine.</p>
+        <a href="#" class="media-cta">Read the article →</a>
+      </div>
+    </div>
+    <div class="media-card">
+      <div class="media-thumb">
+        <div class="flag-row">
+          <span class="flag-pill">UK</span>
+          <span class="flag-pill">USA</span>
+          <span class="flag-pill">Germany</span>
+          <span class="flag-pill">Netherlands</span>
+        </div>
+      </div>
+      <div class="media-body">
+        <div class="media-eyebrow">International orders</div>
+        <div class="media-title">International Distributors</div>
+        <p class="media-desc">Available through select partners in the UK, USA and Europe. Other regions on request.</p>
+        <a href="#" class="media-cta">View all distributors →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2 class="serif">You may also like</h2>
+  </div>
+  <div class="related-grid">
+    <div class="card">
+      <div class="card-photo"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Estate Grenache Single Vineyard"></div>
+      <div class="card-main">
+        <div class="card-body">
+          <div class="card-range">Estate Range</div>
+          <div class="card-name">Estate Grenache Single Vineyard</div>
+          <div class="card-style">Red Wine</div>
+          <div class="card-price">R 395.00 <small>/ 750 ml</small></div>
+        </div>
+        <div class="card-controls">
+          <div class="qty"><button>–</button><span>1</span><button>+</button></div>
+          <button class="add-btn">Add to cart</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-photo"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Waterford Antigo"></div>
+      <div class="card-main">
+        <div class="card-body">
+          <div class="card-range">Waterford Range</div>
+          <div class="card-name">Waterford Antigo</div>
+          <div class="card-style">Red Wine</div>
+          <div class="card-price">R 295.00 <small>/ 750 ml</small></div>
+        </div>
+        <div class="card-controls">
+          <div class="qty"><button>–</button><span>1</span><button>+</button></div>
+          <button class="add-btn">Add to cart</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-photo"><img src="https://cdn.prod.website-files.com/673aabee9ababb22e62e1708/67d94e5de7916ca8fb1a1b8a_Grenache_web_750%2018%20Mrt.avif" alt="Kevin Arnold Shiraz"></div>
+      <div class="card-main">
+        <div class="card-body">
+          <div class="card-range">Kevin Arnold Collection</div>
+          <div class="card-name">Kevin Arnold Shiraz</div>
+          <div class="card-style">Red Wine</div>
+          <div class="card-price">R 395.00 <small>/ 750 ml</small></div>
+        </div>
+        <div class="card-controls">
+          <div class="qty"><button>–</button><span>1</span><button>+</button></div>
+          <button class="add-btn">Add to cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer3_component">
+  <div class="container-large">
+    <div class="footer3_top-wrapper">
+      <div>
+        <a href="/"><img loading="lazy" src="https://cdn.prod.website-files.com/66d96f095c415be61ce630cd/673ada6253d9117ae4c46f00_Group%201.svg" alt="Waterford Estate" class="footer3_logo"></a>
+        <div class="_2col">
+          <div>
+            <div class="margin-bottom text-weight-semibold">Address:</div>
+            <div class="margin-bottom text-size-small">Upper Blaauwklippen Rd<br>Helderberg Rural, Stellenbosch, 7600</div>
+            <div class="margin-bottom text-weight-semibold">Standard Operating Hours:</div>
+            <div class="margin-bottom text-size-small">Monday – Sunday | 10:00 – 17:00</div>
+            <div class="margin-bottom text-weight-semibold">Summer Operating Hours:</div>
+            <div class="margin-bottom text-size-small">Monday – Saturday | 10:00 – 19:00<br>Sunday | 10:00 – 17:00</div>
+          </div>
+          <div>
+            <div class="margin-bottom text-weight-semibold">Days Closed:</div>
+            <div class="margin-bottom text-size-small">Christmas Eve<br>Christmas Day<br>New Year's Day</div>
+            <div class="margin-bottom text-weight-semibold">Contact:</div>
+            <div class="text-size-small">+27 (0)21 880 5300<br>info@waterfordestate.co.za</div>
+            <div class="footer3_social-list">
+              <a href="#" class="footer3_social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.77-3.91 1.1 0 2.24.2 2.24.2v2.48h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.77l-.44 2.91h-2.33v7.03A10.06 10.06 0 0 0 22 12.06Z"/></svg></a>
+              <a href="#" class="footer3_social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Zm0 7.4a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8ZM16.75 6.25a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM16 3H8a5 5 0 0 0-5 5v8a5 5 0 0 0 5 5h8a5 5 0 0 0 5-5V8a5 5 0 0 0-5-5Zm3.25 13a3.25 3.25 0 0 1-3.25 3.25H8A3.25 3.25 0 0 1 4.75 16V8A3.25 3.25 0 0 1 8 4.75h8A3.25 3.25 0 0 1 19.25 8Z"/></svg></a>
+              <a href="#" class="footer3_social-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.18 4h2.76l-6.03 6.77L21 20h-5.55l-4.35-5.6L6.12 20H3.35l6.45-7.25L3 4h5.7l3.93 5.11Zm-.97 14.38h1.53L7.86 5.53H6.22Z"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer3_menu-wrapper">
+        <div class="footer3_link-list">
+          <a href="#" class="footer3_link">Our Story</a>
+          <a href="#" class="footer3_link">Shop</a>
+          <a href="#" class="footer3_link">Reservations</a>
+          <a href="#" class="footer3_link">Events</a>
+        </div>
+        <div class="footer3_link-list">
+          <a href="#" class="footer3_link">Members</a>
+          <a href="#" class="footer3_link">Journal</a>
+          <a href="#" class="footer3_link">Get in Touch</a>
+          <a href="#" class="footer3_link">Our Achievements</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <a href="#" class="text-size-small" style="color:var(--olive);font-weight:600;">Join our Newsletter</a>
+          <a href="#nav" class="button" style="width:fit-content;">Back to top</a>
+        </div>
+      </div>
+    </div>
+    <div class="line-divider"></div>
+    <div class="footer3_bottom-wrapper">
+      <div>© 2026 Waterford Estate. All rights reserved. Built by <a href="#" style="color:#7a7a74;">vanluke</a></div>
+      <div class="footer3_legal-list">
+        <a href="#" class="footer3_legal-link">Privacy Policy</a>
+        <a href="#" class="footer3_legal-link">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </div>
+  <div class="u18_banner">Not for Persons Under the Age of 18</div>
+</footer>
+
+<script>
+  function swapImg(btn){
+    document.getElementById('mainImg').src = btn.querySelector('img').src;
+    document.getElementById('mainImg').alt = btn.dataset.alt;
+    document.querySelectorAll('.thumb').forEach(function(t){ t.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+  function stepQty(delta){
+    var el = document.getElementById('qtyVal');
+    var v = Math.max(1, parseInt(el.textContent, 10) + delta);
+    el.textContent = v;
+  }
+  document.querySelectorAll('.related-grid .qty').forEach(function(qty){
+    var span = qty.querySelector('span');
+    var buttons = qty.querySelectorAll('button');
+    buttons[0].addEventListener('click', function(){
+      var v = parseInt(span.textContent, 10);
+      if(v > 1) span.textContent = v - 1;
+    });
+    buttons[1].addEventListener('click', function(){
+      span.textContent = parseInt(span.textContent, 10) + 1;
+    });
+  });
+</script>
+
+</body>
+</html>

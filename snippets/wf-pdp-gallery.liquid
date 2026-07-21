@@ -1,5 +1,5 @@
 {%- doc -%}
-  Waterford PDP gallery: main image + thumbnail strip from product.media
+  PDP gallery — mockup classes (.gallery / .pdp-photo / .thumb-row / .thumb)
   @param {object} product
   @param {object} block
 {%- enddoc -%}
@@ -11,50 +11,45 @@
   endif
 -%}
 
-<div class="wf-gallery" {{ block.shopify_attributes }}>
-  <div class="wf-pdp-photo">
+<div class="gallery" {{ block.shopify_attributes }}>
+  <div class="pdp-photo">
     {%- if featured != blank -%}
       {%- assign main_alt = featured.alt | default: product.title | escape -%}
-      {{
-        featured
-        | image_url: width: 1200
-        | image_tag:
-          widths: '400, 600, 800, 1000, 1200',
-          sizes: '(min-width: 901px) 40vw, 100vw',
-          loading: 'eager',
-          fetchpriority: 'high',
-          alt: main_alt,
-          data-wf-main-img: '1',
-          id: 'wf-main-img'
-      }}
+      <img
+        id="mainImg"
+        src="{{ featured | image_url: width: 1200 }}"
+        srcset="{{ featured | image_url: width: 400 }} 400w, {{ featured | image_url: width: 800 }} 800w, {{ featured | image_url: width: 1200 }} 1200w"
+        sizes="(min-width: 901px) 40vw, 100vw"
+        alt="{{ main_alt }}"
+        loading="eager"
+        fetchpriority="high"
+        data-wf-main-img
+      >
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag }}
     {%- endif -%}
   </div>
 
   {%- if product.media.size > 1 -%}
-    <div class="wf-thumb-row" role="list">
+    <div class="thumb-row">
       {%- for media in product.media -%}
         {%- if media.media_type == 'image' -%}
           {%- assign thumb_alt = media.alt | default: product.title | escape -%}
           <button
             type="button"
-            class="wf-thumb{% if media == featured %} active{% endif %}"
+            class="thumb{% if media == featured %} active{% endif %}"
             data-wf-thumb
             data-alt="{{ thumb_alt }}"
             aria-label="{{ thumb_alt }}"
             aria-pressed="{% if media == featured %}true{% else %}false{% endif %}"
-            role="listitem"
           >
-            {{
-              media
-              | image_url: width: 160
-              | image_tag:
-                widths: '80, 120, 160',
-                sizes: '64px',
-                loading: 'lazy',
-                alt: thumb_alt
-            }}
+            <img
+              src="{{ media | image_url: width: 160 }}"
+              alt="{{ thumb_alt }}"
+              loading="lazy"
+              width="64"
+              height="78"
+            >
           </button>
         {%- endif -%}
       {%- endfor -%}

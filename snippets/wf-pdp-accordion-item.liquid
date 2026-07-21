@@ -1,23 +1,23 @@
 {%- doc -%}
-  Shared accordion item for Waterford PDP detail blocks.
-  @param {object} block - Theme section block
-  @param {string} heading - Accordion summary label
-  @param {boolean} open - Open by default
-  @param {string} body - Captured HTML body (pre-rendered)
+  Native details accordion item — mockup classes (.acc-item / .acc-body)
+  @param {object} block
+  @param {string} heading
+  @param {boolean} [open]
+  @param {string} body
 {%- enddoc -%}
 
-{%- if body != blank -%}
-  <details
-    class="wf-acc-item"
-    {% if open %}open{% endif %}
-    {{ block.shopify_attributes }}
-  >
-    <summary>
-      <span>{{ heading }}</span>
-      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/></svg>
-    </summary>
-    <div class="wf-acc-body">
-      {{ body }}
-    </div>
-  </details>
-{%- endif -%}
+<details
+  class="acc-item"
+  {% if open %}open{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <summary>
+    <span>{{ heading }}</span>
+    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M2.6 6.3 3.4 5.1l4.6 4.2 4.6-4.2.8 1.2-5.4 5.3z"/>
+    </svg>
+  </summary>
+  <div class="acc-body">
+    {{ body }}
+  </div>
+</details>

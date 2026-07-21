@@ -1,0 +1,103 @@
+{%- comment -%}
+  Related products — mockup .related-grid using waterford-product-card.
+  Populates via Shopify product recommendations (intent=related), with optional manual list.
+{%- endcomment -%}
+
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+{{ 'waterford-product.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'waterford-collection.js' | asset_url }}"></script>
+
+{%- liquid
+  assign max_items = section.settings.max_products | default: 3
+  assign heading = section.settings.heading | default: 'You may also like'
+  assign use_manual = false
+  if section.settings.product_list != blank and section.settings.product_list.size > 0
+    assign use_manual = true
+  endif
+-%}
+
+<div class="wf-pdp" {{ section.shopify_attributes }}>
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="serif">{{ heading }}</h2>
+    </div>
+
+    <div
+      class="related-grid"
+      id="wf-related-{{ section.id }}"
+      data-wf-related
+      data-section-id="{{ section.id }}"
+      data-product-id="{{ product.id }}"
+      data-limit="{{ max_items }}"
+      data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ max_items }}&intent=related"
+    >
+      {%- if use_manual -%}
+        {%- for related_product in section.settings.product_list limit: max_items -%}
+          {% render 'waterford-product-card', product: related_product, index: forloop.index0 %}
+        {%- endfor -%}
+      {%- elsif recommendations.performed and recommendations.products_count > 0 -%}
+        {%- for related_product in recommendations.products limit: max_items -%}
+          {% render 'waterford-product-card', product: related_product, index: forloop.index0 %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- unless use_manual -%}
+  <script type="module">
+    const root = document.getElementById('wf-related-{{ section.id }}');
+    if (root && !root.children.length && root.dataset.url) {
+      fetch(root.dataset.url)
+        .then((r) => r.text())
+        .then((html) => {
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const incoming = doc.getElementById('wf-related-{{ section.id }}');
+          if (incoming && incoming.children.length) {
+            root.innerHTML = incoming.innerHTML;
+            root.querySelectorAll('[data-wf-card]').forEach((card) => {
+              delete card.dataset.wfCardBound;
+            });
+            document.dispatchEvent(new CustomEvent('shopify:section:load', { bubbles: true }));
+          }
+        })
+        .catch(() => {});
+    }
+  </script>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "WF Related products",
+  "tag": "section",
+  "class": "section-waterford-related",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Maximum products",
+      "default": 3
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Manual product list (optional)",
+      "limit": 6,
+      "info": "If empty, related product recommendations load automatically."
+    }
+  ],
+  "presets": [
+    { "name": "WF Related products" }
+  ]
+}
+{% endschema %}

@@ -32,14 +32,6 @@
           "type": "price",
           "settings": { "unit_label": "/ 750 ml" }
         },
-        "purchase_option": {
-          "type": "purchase_option",
-          "settings": {
-            "enable_purchase_options": false,
-            "onetime_label": "One-time purchase",
-            "subscribe_label": "Subscribe & Save"
-          }
-        },
         "buy_buttons": { "type": "buy_buttons", "settings": {} },
         "shipping_note": {
           "type": "shipping_note",
@@ -56,7 +48,7 @@
             "fact_2_value": "",
             "fact_3_label": "Blend",
             "fact_3_value": "",
-            "fact_4_label": "Oak",
+            "fact_4_label": "New oak",
             "fact_4_value": ""
           }
         },
@@ -153,7 +145,6 @@
         "tagline",
         "awards",
         "price",
-        "purchase_option",
         "buy_buttons",
         "shipping_note",
         "quick_facts",
@@ -168,67 +159,10 @@
       "settings": {}
     },
     "related": {
-      "type": "product-recommendations",
-      "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.header",
-          "settings": {
-            "text": "<h2>You may also like</h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h3",
-            "font": "var(--font-primary--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "static-product-card": {
-          "type": "_product-card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 8,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": ["title"],
+      "type": "waterford-related-products",
       "settings": {
-        "product": "{{ closest.product }}",
-        "recommendation_type": "related",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 3,
-        "columns": 3,
-        "mobile_columns": "2",
-        "columns_gap": 28,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "gap": 28,
-        "background_color": "",
-        "padding-block-start": 24,
-        "padding-block-end": 64
+        "heading": "You may also like",
+        "max_products": 3
       }
     }
   },

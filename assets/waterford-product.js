@@ -1,11 +1,8 @@
 /**
- * Waterford PDP: gallery thumbs, qty, purchase-option sync, add to cart.
- * Purchase option selection is exposed via custom event + data attributes
- * so buy-buttons can read selling_plan independently.
+ * Waterford PDP — gallery thumbs (swapImg), qty stepper, add to cart.
+ * Matches mockup IDs: #mainImg, #qtyVal
  */
 import { addLinesToCart, openCartDrawer } from '@theme/waterford-cart';
-
-const EVENT = 'wf:purchase-option-change';
 
 function qs(root, sel) {
   return root.querySelector(sel);
@@ -16,15 +13,16 @@ function qsa(root, sel) {
 }
 
 function initGallery(root) {
-  const main = qs(root, '[data-wf-main-img]');
+  const main = qs(root, '#mainImg') || qs(root, '[data-wf-main-img]');
   if (!main) return;
-  qsa(root, '[data-wf-thumb]').forEach((btn) => {
+
+  qsa(root, '[data-wf-thumb], .thumb').forEach((btn) => {
     btn.addEventListener('click', () => {
       const img = qs(btn, 'img');
       if (!img) return;
       main.src = img.currentSrc || img.src;
       main.alt = btn.getAttribute('data-alt') || img.alt || '';
-      qsa(root, '[data-wf-thumb]').forEach((t) => {
+      qsa(root, '.thumb, [data-wf-thumb]').forEach((t) => {
         t.classList.remove('active');
         t.setAttribute('aria-pressed', 'false');
       });
@@ -34,57 +32,16 @@ function initGallery(root) {
   });
 }
 
-function publishPurchaseOption(root) {
-  const checked = qs(root, 'input[name="purchase_option"]:checked');
-  const sellingPlan = checked?.getAttribute('data-selling-plan') || '';
-  const detail = { sellingPlanId: sellingPlan || null };
-  root.dataset.sellingPlanId = sellingPlan;
-  root.dispatchEvent(new CustomEvent(EVENT, { bubbles: true, detail }));
-  document.dispatchEvent(new CustomEvent(EVENT, { detail }));
-}
-
-function initPurchaseOptions(root) {
-  const wrap = qs(root, '[data-wf-po]');
-  if (!wrap) return;
-
-  qsa(wrap, 'input[name="purchase_option"]').forEach((input) => {
-    input.addEventListener('change', () => {
-      qsa(wrap, '[data-wf-po-card]').forEach((card) => card.classList.remove('is-selected'));
-      const card = input.closest('[data-wf-po-card]');
-      if (card) card.classList.add('is-selected');
-
-      // Selecting subscribe header radio → auto-select first frequency if present
-      if (input.getAttribute('data-po-type') === 'subscribe' && !input.getAttribute('data-selling-plan')) {
-        const firstFreq = qs(card, 'input[data-selling-plan]');
-        if (firstFreq) {
-          firstFreq.checked = true;
-          firstFreq.dispatchEvent(new Event('change', { bubbles: true }));
-          return;
-        }
-      }
-      publishPurchaseOption(root);
-    });
-  });
-
-  qsa(wrap, '[data-wf-po-card]').forEach((card) => {
-    card.addEventListener('click', (event) => {
-      if (event.target instanceof HTMLInputElement) return;
-      const radio = qs(card, 'input[name="purchase_option"]');
-      if (radio && !radio.checked) {
-        radio.checked = true;
-        radio.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
-  });
-
-  publishPurchaseOption(root);
+function syncQtyInput(form, value) {
+  const input = qs(form, '[data-wf-qty-input], input[name="quantity"]');
+  if (input) input.value = String(value);
 }
 
 function initBuyForm(root) {
-  const form = qs(root, '[data-wf-buy-form]');
+  const form = qs(root, '[data-wf-buy-form], form.buy-actions');
   if (!form) return;
 
-  const qtyValue = qs(form, '[data-qty-value]');
+  const qtyValue = qs(form, '#qtyVal') || qs(form, '[data-qty-value]');
   const dec = qs(form, '[data-qty-dec]');
   const inc = qs(form, '[data-qty-inc]');
   const variantInput = qs(form, '[name="id"]');
@@ -95,13 +52,17 @@ function initBuyForm(root) {
   if (dec && qtyValue) {
     dec.addEventListener('click', () => {
       const v = parseInt(qtyValue.textContent || '1', 10) || 1;
-      if (v > 1) qtyValue.textContent = String(v - 1);
+      if (v > 1) {
+        qtyValue.textContent = String(v - 1);
+        syncQtyInput(form, v - 1);
+      }
     });
   }
   if (inc && qtyValue) {
     inc.addEventListener('click', () => {
       const v = parseInt(qtyValue.textContent || '1', 10) || 1;
       qtyValue.textContent = String(v + 1);
+      syncQtyInput(form, v + 1);
     });
   }
 
@@ -119,26 +80,13 @@ function initBuyForm(root) {
     });
   }
 
-  document.addEventListener(EVENT, (event) => {
-    if (!sellingPlanInput) return;
-    const id = event.detail?.sellingPlanId || '';
-    sellingPlanInput.value = id;
-    if (!id) sellingPlanInput.removeAttribute('value');
-    else sellingPlanInput.value = id;
-  });
-
-  // sync from root dataset on load
-  if (sellingPlanInput && root.dataset.sellingPlanId) {
-    sellingPlanInput.value = root.dataset.sellingPlanId;
-  }
-
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!submitBtn || submitBtn.disabled) return;
 
     const variantId = Number(variantInput?.value || 0);
     const quantity = Math.max(1, parseInt(qtyValue?.textContent || '1', 10) || 1);
-    const sellingPlan = sellingPlanInput?.value || root.dataset.sellingPlanId || '';
+    const sellingPlan = sellingPlanInput?.value || '';
     const defaultLabel = submitBtn.getAttribute('data-label-add') || submitBtn.textContent;
     const addingLabel = submitBtn.getAttribute('data-label-adding') || defaultLabel;
     const addedLabel = submitBtn.getAttribute('data-label-added') || defaultLabel;
@@ -176,7 +124,6 @@ function init(root) {
   if (!(root instanceof HTMLElement) || root.dataset.wfPdpBound === '1') return;
   root.dataset.wfPdpBound = '1';
   initGallery(root);
-  initPurchaseOptions(root);
   initBuyForm(root);
 }
 
