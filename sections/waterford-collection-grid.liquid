@@ -4,7 +4,7 @@
 {%- endcomment -%}
 
 {{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'waterford-collection.js' | asset_url }}" defer></script>
+<script type="module" src="{{ 'waterford-collection.js' | asset_url }}"></script>
 
 {%- liquid
   assign products_per_page = section.settings.products_per_page | default: 24

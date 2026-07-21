@@ -4,138 +4,99 @@
  * - grid/list view toggle (localStorage)
  * - quantity steppers + add to cart
  */
-(function () {
-  const VIEW_KEY = 'wf-collection-view';
+import { addLinesToCart, openCartDrawer } from '@theme/waterford-cart';
 
-  function qs(root, sel) {
-    return root.querySelector(sel);
+const VIEW_KEY = 'wf-collection-view';
+
+function qs(root, sel) {
+  return root.querySelector(sel);
+}
+
+function qsa(root, sel) {
+  return Array.from(root.querySelectorAll(sel));
+}
+
+function getCleanUrlFromForm(form) {
+  const action = form.getAttribute('action') || window.location.pathname;
+  const data = new FormData(form);
+  const params = new URLSearchParams();
+
+  for (const [key, value] of data.entries()) {
+    if (value === '' || value == null) continue;
+    if (key === 'section_id') continue;
+    params.append(key, String(value));
   }
 
-  function qsa(root, sel) {
-    return Array.from(root.querySelectorAll(sel));
-  }
+  const query = params.toString();
+  return query ? `${action}?${query}` : action;
+}
 
-  function getCleanUrlFromForm(form) {
-    const action = form.getAttribute('action') || window.location.pathname;
-    const data = new FormData(form);
-    const params = new URLSearchParams();
+function bindCardControls(scope) {
+  qsa(scope || document, '[data-wf-card]').forEach((card) => {
+    if (card.dataset.wfCardBound === '1') return;
+    card.dataset.wfCardBound = '1';
 
-    for (const [key, value] of data.entries()) {
-      if (value === '' || value == null) continue;
-      if (key === 'section_id') continue;
-      params.append(key, String(value));
-    }
-
-    const query = params.toString();
-    return query ? `${action}?${query}` : action;
-  }
-
-  async function openCartDrawer() {
-    try {
-      if (window.Shopify?.actions?.updateCart) {
-        await window.Shopify.actions.updateCart();
+    const qty = qs(card, '[data-wf-qty]');
+    if (qty) {
+      const valueEl = qs(qty, '[data-qty-value]');
+      const dec = qs(qty, '[data-qty-dec]');
+      const inc = qs(qty, '[data-qty-inc]');
+      if (valueEl && dec && inc) {
+        dec.addEventListener('click', () => {
+          const v = parseInt(valueEl.textContent || '1', 10) || 1;
+          if (v > 1) valueEl.textContent = String(v - 1);
+        });
+        inc.addEventListener('click', () => {
+          const v = parseInt(valueEl.textContent || '1', 10) || 1;
+          valueEl.textContent = String(v + 1);
+        });
       }
-    } catch (_) {
-      /* ignore refresh failures; still try to open */
     }
 
-    try {
-      if (window.Shopify?.actions?.openCart) {
-        await window.Shopify.actions.openCart();
-        return;
-      }
-    } catch (_) {
-      /* fall through */
-    }
+    const btn = qs(card, '[data-wf-add]');
+    if (!btn) return;
 
-    const drawer = document.querySelector('theme-drawer#cart-drawer');
-    if (drawer && typeof drawer.open === 'function') {
-      drawer.open();
-    }
-  }
+    btn.addEventListener('click', async (event) => {
+      event.preventDefault();
+      if (btn.disabled || btn.classList.contains('is-sold-out')) return;
 
-  function bindCardControls(scope) {
-    qsa(scope || document, '[data-wf-card]').forEach((card) => {
-      if (card.dataset.wfCardBound === '1') return;
-      card.dataset.wfCardBound = '1';
+      const variantId = btn.getAttribute('data-variant-id');
+      if (!variantId) return;
 
-      const qty = qs(card, '[data-wf-qty]');
-      if (qty) {
-        const valueEl = qs(qty, '[data-qty-value]');
-        const dec = qs(qty, '[data-qty-dec]');
-        const inc = qs(qty, '[data-qty-inc]');
-        if (valueEl && dec && inc) {
-          dec.addEventListener('click', () => {
-            const v = parseInt(valueEl.textContent || '1', 10) || 1;
-            if (v > 1) valueEl.textContent = String(v - 1);
-          });
-          inc.addEventListener('click', () => {
-            const v = parseInt(valueEl.textContent || '1', 10) || 1;
-            valueEl.textContent = String(v + 1);
-          });
-        }
-      }
+      const qtyEl = qs(card, '[data-qty-value]');
+      const quantity = Math.max(1, parseInt(qtyEl?.textContent || '1', 10) || 1);
+      const defaultLabel = btn.getAttribute('data-label-default') || btn.textContent || '';
+      const addingLabel = btn.getAttribute('data-label-adding') || defaultLabel;
+      const addedLabel = btn.getAttribute('data-label-added') || defaultLabel;
+      const errorLabel = btn.getAttribute('data-label-error') || defaultLabel;
 
-      const btn = qs(card, '[data-wf-add]');
-      if (!btn) return;
+      btn.classList.add('is-loading');
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
+      btn.textContent = addingLabel;
 
-      btn.addEventListener('click', async (event) => {
-        event.preventDefault();
-        if (btn.disabled || btn.classList.contains('is-sold-out')) return;
-
-        const variantId = btn.getAttribute('data-variant-id');
-        if (!variantId) return;
-
-        const qtyEl = qs(card, '[data-qty-value]');
-        const quantity = Math.max(1, parseInt(qtyEl?.textContent || '1', 10) || 1);
-        const defaultLabel = btn.getAttribute('data-label-default') || btn.textContent || '';
-        const addingLabel = btn.getAttribute('data-label-adding') || defaultLabel;
-        const addedLabel = btn.getAttribute('data-label-added') || defaultLabel;
-        const errorLabel = btn.getAttribute('data-label-error') || defaultLabel;
-
-        btn.classList.add('is-loading');
-        btn.disabled = true;
-        btn.setAttribute('aria-busy', 'true');
-        btn.textContent = addingLabel;
-
-        try {
-          const root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
-          const res = await fetch(`${root}cart/add.js`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-            body: JSON.stringify({
-              items: [{ id: Number(variantId), quantity }],
-            }),
-          });
-
-          if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.description || 'Add to cart failed');
-          }
-
-          btn.classList.remove('is-loading');
-          btn.textContent = addedLabel;
-          await openCartDrawer();
-          setTimeout(() => {
-            btn.textContent = defaultLabel;
-            btn.disabled = false;
-            btn.removeAttribute('aria-busy');
-          }, 1200);
-        } catch (_) {
-          btn.classList.remove('is-loading');
-          btn.textContent = errorLabel;
+      try {
+        await addLinesToCart([{ id: variantId, quantity }]);
+        btn.classList.remove('is-loading');
+        btn.textContent = addedLabel;
+        await openCartDrawer();
+        setTimeout(() => {
+          btn.textContent = defaultLabel;
+          btn.disabled = false;
           btn.removeAttribute('aria-busy');
-          setTimeout(() => {
-            btn.textContent = defaultLabel;
-            btn.disabled = false;
-          }, 1800);
-        }
-      });
+        }, 1200);
+      } catch (_) {
+        btn.classList.remove('is-loading');
+        btn.textContent = errorLabel;
+        btn.removeAttribute('aria-busy');
+        setTimeout(() => {
+          btn.textContent = defaultLabel;
+          btn.disabled = false;
+        }, 1800);
+      }
     });
-  }
+  });
+}
 
   class WaterfordCollection {
     /** @param {HTMLElement} root */
@@ -371,4 +332,3 @@
   document.addEventListener('shopify:section:load', (event) => {
     initAll(event.target);
   });
-})();

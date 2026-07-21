@@ -6,8 +6,8 @@
 
 {{ 'waterford-product.css' | asset_url | stylesheet_tag }}
 {{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'waterford-product.js' | asset_url }}" defer></script>
-<script src="{{ 'waterford-collection.js' | asset_url }}" defer></script>
+<script type="module" src="{{ 'waterford-product.js' | asset_url }}"></script>
+<script type="module" src="{{ 'waterford-collection.js' | asset_url }}"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
