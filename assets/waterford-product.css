@@ -221,12 +221,33 @@ body.wf-zoom-open {
 .price {
   font-size: 24px;
   font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
 }
 
 .price small {
   font-size: 14px;
   color: var(--muted);
   font-weight: 400;
+}
+
+.price-compare {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.price-badge {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--olive-dark);
+  background: var(--olive-tint);
+  border: 1px solid #ddd6c4;
+  padding: 3px 8px;
 }
 
 /* Purchase options — mockup .po-* */
@@ -262,6 +283,7 @@ body.wf-zoom-open {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
 }
 
 .po-card input[type='radio'] {
@@ -286,15 +308,43 @@ body.wf-zoom-open {
   flex: 1;
   font-size: 15px;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.po-save-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--olive);
+  padding: 3px 7px;
 }
 
 .po-card__price {
   font-size: 15px;
   font-weight: 600;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  text-align: right;
+}
+
+.po-card__price .po-compare {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.po-card__price .po-sale {
+  font-weight: 600;
 }
 
 .po-frequency {
-  margin: 10px 0 0 30px;
+  margin: 12px 0 0 30px;
   padding-left: 14px;
   border-left: 2px solid #ddd6c4;
   display: none;
@@ -306,19 +356,33 @@ body.wf-zoom-open {
   display: flex;
 }
 
-.po-freq-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  cursor: pointer;
-  font-size: 14px;
+.po-freq-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
 }
 
-.po-freq-row span:last-child {
-  margin-left: auto;
-  font-weight: 600;
+.po-freq-select {
+  width: 100%;
+  max-width: 360px;
+  height: 42px;
+  border: 1px solid #ddd6c4;
+  background: #fff;
+  padding: 0 12px;
+  font-family: inherit;
   font-size: 14px;
+  color: var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.po-freq-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.po-card.is-selected .po-freq-select {
+  border-color: var(--olive);
 }
 
 .buy-actions {

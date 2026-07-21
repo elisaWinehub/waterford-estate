@@ -40,8 +40,11 @@
             "onetime_label": "One-time purchase",
             "subscribe_label": "Subscribe & Save",
             "freq_1": "Every month",
+            "discount_1": 10,
             "freq_2": "Every 2 months",
-            "freq_3": "Every 3 months"
+            "discount_2": 15,
+            "freq_3": "Every 3 months",
+            "discount_3": 20
           }
         },
         "buy_buttons": { "type": "buy_buttons", "settings": {} },

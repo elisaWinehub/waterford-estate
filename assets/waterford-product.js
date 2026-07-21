@@ -115,49 +115,184 @@ function syncQtyInput(form, value) {
 
 const PO_EVENT = 'wf:purchase-option-change';
 
-function publishPurchaseOption(root) {
-  const checked = qs(root, 'input[name="purchase_option"]:checked');
-  const sellingPlan = checked?.getAttribute('data-selling-plan') || '';
-  root.dataset.sellingPlanId = sellingPlan;
-  const detail = { sellingPlanId: sellingPlan || null };
+function formatMoney(cents, moneyFormat) {
+  const amount = Number(cents) || 0;
+  if (window.Shopify?.formatMoney) {
+    return window.Shopify.formatMoney(amount, moneyFormat || window.Shopify.money_format);
+  }
+  const value = (amount / 100).toFixed(2);
+  if (moneyFormat && moneyFormat.includes('{{amount}}')) {
+    return moneyFormat.replace(/\{\{\s*amount\s*\}\}/g, value);
+  }
+  if (moneyFormat && moneyFormat.includes('{{amount_no_decimals}}')) {
+    return moneyFormat.replace(/\{\{\s*amount_no_decimals\s*\}\}/g, String(Math.round(amount / 100)));
+  }
+  return `R ${value}`;
+}
+
+function saleCents(baseCents, discountPct) {
+  const base = Number(baseCents) || 0;
+  const pct = Math.max(0, Math.min(100, Number(discountPct) || 0));
+  return Math.round((base * (100 - pct)) / 100);
+}
+
+function publishPurchaseOption(root, detail) {
+  root.dataset.sellingPlanId = detail.sellingPlanId || '';
   root.dispatchEvent(new CustomEvent(PO_EVENT, { bubbles: true, detail }));
   document.dispatchEvent(new CustomEvent(PO_EVENT, { detail }));
+}
+
+function updateMainPrice(root, { sale, compare, discount }) {
+  const box = qs(root, '[data-wf-price]');
+  if (!box) return;
+  const valueEl = qs(box, '[data-wf-price-value]');
+  const compareEl = qs(box, '[data-wf-compare-price]');
+  const badgeEl = qs(box, '[data-wf-discount-badge]');
+  const format = qs(root, '[data-wf-po]')?.getAttribute('data-money-format') || '';
+
+  if (valueEl) valueEl.textContent = formatMoney(sale, format);
+
+  if (compareEl) {
+    if (discount > 0 && compare > sale) {
+      compareEl.textContent = formatMoney(compare, format);
+      compareEl.hidden = false;
+    } else {
+      compareEl.textContent = '';
+      compareEl.hidden = true;
+    }
+  }
+
+  if (badgeEl) {
+    if (discount > 0) {
+      badgeEl.textContent = `${discount}% off`;
+      badgeEl.hidden = false;
+    } else {
+      badgeEl.textContent = '';
+      badgeEl.hidden = true;
+    }
+  }
+}
+
+function renderCardPrice(el, { base, sale, discount, format }) {
+  if (!el) return;
+  if (discount > 0 && sale < base) {
+    el.innerHTML = `<s class="po-compare">${formatMoney(base, format)}</s><span class="po-sale">${formatMoney(sale, format)}</span>`;
+  } else {
+    el.textContent = formatMoney(base, format);
+  }
 }
 
 function initPurchaseOptions(root) {
   const wrap = qs(root, '[data-wf-po], .po-wrap');
   if (!wrap) return;
 
+  const baseCents = Number(wrap.getAttribute('data-base-cents') || 0);
+  const moneyFormat = wrap.getAttribute('data-money-format') || '';
+
+  function selectedState() {
+    const checked = qs(wrap, 'input[name="purchase_option"]:checked');
+    const card = checked?.closest('[data-wf-po-card], .po-card');
+    const select = card ? qs(card, '[data-po-freq-select]') : null;
+    const option = select?.selectedOptions?.[0];
+
+    let discount = Number(checked?.getAttribute('data-discount') || 0);
+    let sellingPlanId = checked?.getAttribute('data-selling-plan') || '';
+    let sale = saleCents(baseCents, discount);
+
+    if (checked?.getAttribute('data-po-type') === 'subscribe' && option) {
+      discount = Number(option.getAttribute('data-discount') || discount || 0);
+      sellingPlanId = option.getAttribute('data-selling-plan') || '';
+      const explicitSale = option.getAttribute('data-sale-cents');
+      sale = explicitSale != null && explicitSale !== '' ? Number(explicitSale) : saleCents(baseCents, discount);
+    }
+
+    return {
+      type: checked?.getAttribute('data-po-type') || 'onetime',
+      discount,
+      sale,
+      compare: baseCents,
+      sellingPlanId,
+      card,
+      select,
+    };
+  }
+
+  function syncUI() {
+    const state = selectedState();
+
+    qsa(wrap, '[data-wf-po-card], .po-card').forEach((card) => {
+      const isSelected = card === state.card;
+      card.classList.toggle('is-selected', isSelected);
+      const select = qs(card, '[data-po-freq-select]');
+      if (select) select.disabled = !isSelected;
+
+      const priceEl = qs(card, '[data-po-card-price]');
+      const badge = qs(card, '[data-po-save-badge]');
+      if (card.getAttribute('data-po-type') === 'subscribe') {
+        const opt = qs(card, '[data-po-freq-select]')?.selectedOptions?.[0];
+        const disc = Number(opt?.getAttribute('data-discount') || 0);
+        const sale = Number(opt?.getAttribute('data-sale-cents') || saleCents(baseCents, disc));
+        renderCardPrice(priceEl, { base: baseCents, sale, discount: disc, format: moneyFormat });
+        if (badge) badge.textContent = disc > 0 ? `${disc}% off` : '';
+      } else {
+        renderCardPrice(priceEl, { base: baseCents, sale: baseCents, discount: 0, format: moneyFormat });
+      }
+    });
+
+    updateMainPrice(root, state);
+    publishPurchaseOption(root, {
+      sellingPlanId: state.sellingPlanId || null,
+      discount: state.discount,
+      saleCents: state.sale,
+      baseCents,
+      type: state.type,
+    });
+  }
+
   qsa(wrap, 'input[name="purchase_option"]').forEach((input) => {
     input.addEventListener('change', () => {
-      qsa(wrap, '[data-wf-po-card], .po-card').forEach((card) => card.classList.remove('is-selected'));
-      const card = input.closest('[data-wf-po-card], .po-card');
-      if (card) card.classList.add('is-selected');
-
-      if (input.getAttribute('data-po-type') === 'subscribe' && !input.getAttribute('data-selling-plan')) {
-        const firstFreq = qs(card, '.po-frequency input[name="purchase_option"]');
-        if (firstFreq && firstFreq !== input) {
-          firstFreq.checked = true;
-          firstFreq.dispatchEvent(new Event('change', { bubbles: true }));
-          return;
-        }
+      if (input.getAttribute('data-po-type') === 'subscribe') {
+        const card = input.closest('[data-wf-po-card], .po-card');
+        const select = card && qs(card, '[data-po-freq-select]');
+        if (select) select.disabled = false;
       }
-      publishPurchaseOption(root);
+      syncUI();
+    });
+  });
+
+  qsa(wrap, '[data-po-freq-select]').forEach((select) => {
+    select.addEventListener('change', () => {
+      const card = select.closest('[data-wf-po-card], .po-card');
+      const radio = card && qs(card, 'input[name="purchase_option"]');
+      if (radio && !radio.checked) {
+        radio.checked = true;
+      }
+      syncUI();
+    });
+    // Clicking the dropdown should select subscribe
+    select.addEventListener('focus', () => {
+      const card = select.closest('[data-wf-po-card], .po-card');
+      const radio = card && qs(card, 'input[name="purchase_option"]');
+      if (radio && !radio.checked) {
+        radio.checked = true;
+        syncUI();
+      }
     });
   });
 
   qsa(wrap, '[data-wf-po-card], .po-card').forEach((card) => {
     card.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLSelectElement || event.target.closest('select')) return;
       if (event.target instanceof HTMLInputElement) return;
-      const radio = qs(card, '.po-card__row > input[name="purchase_option"]') || qs(card, 'input[name="purchase_option"]');
+      const radio = qs(card, 'input[name="purchase_option"]');
       if (radio && !radio.checked) {
         radio.checked = true;
-        radio.dispatchEvent(new Event('change', { bubbles: true }));
+        syncUI();
       }
     });
   });
 
-  publishPurchaseOption(root);
+  syncUI();
 }
 
 function initBuyForm(root) {

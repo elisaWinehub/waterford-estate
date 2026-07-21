@@ -131,9 +131,11 @@
                 endif
                 assign unit_label = unit_label | remove_first: '/' | strip
               -%}
-              <div class="price-box" {{ block.shopify_attributes }} data-wf-price>
+              <div class="price-box" {{ block.shopify_attributes }} data-wf-price data-base-cents="{{ current_variant.price }}">
                 <div class="price">
+                  <s class="price-compare" data-wf-compare-price hidden></s>
                   <span data-wf-price-value>{{ current_variant.price | money }}</span>
+                  <span class="price-badge" data-wf-discount-badge hidden></span>
                   {%- if unit_label != blank -%}
                     <small>/ {{ unit_label }}</small>
                   {%- endif -%}
@@ -150,32 +152,49 @@
                 if show_po == nil
                   assign show_po = true
                 endif
+                assign d1 = block.settings.discount_1 | default: 10
+                assign d2 = block.settings.discount_2 | default: 15
+                assign d3 = block.settings.discount_3 | default: 20
+                assign price_cents = current_variant.price
+                assign factor1 = 100 | minus: d1
+                assign factor2 = 100 | minus: d2
+                assign factor3 = 100 | minus: d3
+                assign sale1 = price_cents | times: factor1 | divided_by: 100
+                assign sale2 = price_cents | times: factor2 | divided_by: 100
+                assign sale3 = price_cents | times: factor3 | divided_by: 100
               -%}
               {%- if show_po -%}
-                <div class="po-wrap" data-wf-po {{ block.shopify_attributes }}>
+                <div
+                  class="po-wrap"
+                  data-wf-po
+                  data-base-cents="{{ price_cents }}"
+                  data-money-format="{{ shop.money_format | escape }}"
+                  {{ block.shopify_attributes }}
+                >
                   {%- if block.settings.heading != blank -%}
                     <p class="po-heading">{{ block.settings.heading }}</p>
                   {%- endif -%}
 
-                  <label class="po-card is-selected" data-wf-po-card>
-                    <div class="po-card__row">
+                  <div class="po-card is-selected" data-wf-po-card data-po-type="onetime" data-discount="0">
+                    <label class="po-card__row">
                       <input
                         type="radio"
                         name="purchase_option"
                         value="one_time"
                         data-po-type="onetime"
                         data-selling-plan=""
+                        data-discount="0"
                         checked
                       >
                       <span class="po-card__label">{{ block.settings.onetime_label | default: 'One-time purchase' }}</span>
-                      <span class="po-card__price">{{ current_variant.price | money }}</span>
-                    </div>
-                  </label>
+                      <span class="po-card__price" data-po-card-price>{{ price_cents | money }}</span>
+                    </label>
+                  </div>
 
                   {%- if has_selling_plans -%}
                     {%- for group in product.selling_plan_groups -%}
-                      <label class="po-card" data-wf-po-card>
-                        <div class="po-card__row">
+                      <div class="po-card" data-wf-po-card data-po-type="subscribe">
+                        <label class="po-card__row">
                           <input
                             type="radio"
                             name="purchase_option"
@@ -184,42 +203,50 @@
                             data-selling-plan=""
                           >
                           <span class="po-card__label">{{ block.settings.subscribe_label | default: group.name }}</span>
-                        </div>
+                          <span class="po-card__price" data-po-card-price></span>
+                        </label>
                         <div class="po-frequency">
-                          {%- for plan in group.selling_plans -%}
-                            <label class="po-freq-row">
-                              <input
-                                type="radio"
-                                name="purchase_option"
-                                value="plan-{{ plan.id }}"
-                                data-po-type="subscribe"
+                          <label class="po-freq-label" for="po-freq-{{ block.id }}-{{ group.id }}">Delivery frequency</label>
+                          <select
+                            class="po-freq-select"
+                            id="po-freq-{{ block.id }}-{{ group.id }}"
+                            data-po-freq-select
+                            {% unless forloop.first %}disabled{% endunless %}
+                          >
+                            {%- for plan in group.selling_plans -%}
+                              {%- liquid
+                                assign plan_discount = 0
+                                assign plan_sale = price_cents
+                                if plan.price_adjustments.size > 0
+                                  assign adj = plan.price_adjustments.first
+                                  if adj.value_type == 'percentage'
+                                    assign plan_discount = adj.value
+                                    assign plan_sale = price_cents | times: 100 | minus: adj.value | divided_by: 100
+                                  elsif adj.value_type == 'fixed_amount'
+                                    assign plan_sale = price_cents | minus: adj.value
+                                    if price_cents > 0
+                                      assign plan_discount = adj.value | times: 100.0 | divided_by: price_cents | round
+                                    endif
+                                  endif
+                                endif
+                              -%}
+                              <option
+                                value="{{ plan.id }}"
                                 data-selling-plan="{{ plan.id }}"
+                                data-discount="{{ plan_discount }}"
+                                data-sale-cents="{{ plan_sale }}"
                               >
-                              <span>{{ plan.name }}</span>
-                              <span>
-                                {%- if plan.price_adjustments.size > 0 -%}
-                                  {%- assign adj = plan.price_adjustments.first -%}
-                                  {%- if adj.value_type == 'percentage' -%}
-                                    {%- assign factor = 100.0 | minus: adj.value | divided_by: 100.0 -%}
-                                    {{ current_variant.price | times: factor | money }}
-                                  {%- elsif adj.value_type == 'price' -%}
-                                    {{ adj.value | money }}
-                                  {%- else -%}
-                                    {{ current_variant.price | minus: adj.value | money }}
-                                  {%- endif -%}
-                                {%- else -%}
-                                  {{ current_variant.price | money }}
-                                {%- endif -%}
-                              </span>
-                            </label>
-                          {%- endfor -%}
+                                {{ plan.name }}{% if plan_discount > 0 %} — {{ plan_discount }}% off{% endif %}
+                              </option>
+                            {%- endfor -%}
+                          </select>
                         </div>
-                      </label>
+                      </div>
                     {%- endfor -%}
                   {%- else -%}
-                    {%- comment -%} Static mockup fallback until a subscriptions app provides selling plans {%- endcomment -%}
-                    <label class="po-card" data-wf-po-card>
-                      <div class="po-card__row">
+                    {%- comment -%} Demo static subscribe UI with dropdown + live discount pricing {%- endcomment -%}
+                    <div class="po-card" data-wf-po-card data-po-type="subscribe" data-po-static="true">
+                      <label class="po-card__row">
                         <input
                           type="radio"
                           name="purchase_option"
@@ -227,27 +254,45 @@
                           data-po-type="subscribe"
                           data-selling-plan=""
                           data-po-static="true"
+                          data-discount="{{ d1 }}"
                         >
-                        <span class="po-card__label">{{ block.settings.subscribe_label | default: 'Subscribe & Save' }}</span>
-                      </div>
+                        <span class="po-card__label">
+                          {{ block.settings.subscribe_label | default: 'Subscribe & Save' }}
+                          <span class="po-save-badge" data-po-save-badge>{{ d1 }}% off</span>
+                        </span>
+                        <span class="po-card__price" data-po-card-price>
+                          <s class="po-compare">{{ price_cents | money }}</s>
+                          <span class="po-sale">{{ sale1 | money }}</span>
+                        </span>
+                      </label>
                       <div class="po-frequency">
-                        <label class="po-freq-row">
-                          <input type="radio" name="purchase_option" value="freq-1" data-po-type="subscribe" data-selling-plan="" data-po-static="true">
-                          <span>{{ block.settings.freq_1 | default: 'Every month' }}</span>
-                          <span>{{ current_variant.price | money }}</span>
-                        </label>
-                        <label class="po-freq-row">
-                          <input type="radio" name="purchase_option" value="freq-2" data-po-type="subscribe" data-selling-plan="" data-po-static="true">
-                          <span>{{ block.settings.freq_2 | default: 'Every 2 months' }}</span>
-                          <span>{{ current_variant.price | money }}</span>
-                        </label>
-                        <label class="po-freq-row">
-                          <input type="radio" name="purchase_option" value="freq-3" data-po-type="subscribe" data-selling-plan="" data-po-static="true">
-                          <span>{{ block.settings.freq_3 | default: 'Every 3 months' }}</span>
-                          <span>{{ current_variant.price | money }}</span>
-                        </label>
+                        <label class="po-freq-label" for="po-freq-{{ block.id }}">Delivery frequency</label>
+                        <select class="po-freq-select" id="po-freq-{{ block.id }}" data-po-freq-select disabled>
+                          <option
+                            value="freq-1"
+                            data-discount="{{ d1 }}"
+                            data-sale-cents="{{ sale1 }}"
+                            selected
+                          >
+                            {{ block.settings.freq_1 | default: 'Every month' }} — {{ d1 }}% off
+                          </option>
+                          <option
+                            value="freq-2"
+                            data-discount="{{ d2 }}"
+                            data-sale-cents="{{ sale2 }}"
+                          >
+                            {{ block.settings.freq_2 | default: 'Every 2 months' }} — {{ d2 }}% off
+                          </option>
+                          <option
+                            value="freq-3"
+                            data-discount="{{ d3 }}"
+                            data-sale-cents="{{ sale3 }}"
+                          >
+                            {{ block.settings.freq_3 | default: 'Every 3 months' }} — {{ d3 }}% off
+                          </option>
+                        </select>
                       </div>
-                    </label>
+                    </div>
                   {%- endif -%}
                 </div>
               {%- endif -%}
@@ -606,7 +651,7 @@
         },
         {
           "type": "header",
-          "content": "Static frequencies (no selling plans)"
+          "content": "Static frequencies (demo discounts)"
         },
         {
           "type": "text",
@@ -615,16 +660,46 @@
           "default": "Every month"
         },
         {
+          "type": "range",
+          "id": "discount_1",
+          "min": 5,
+          "max": 40,
+          "step": 5,
+          "unit": "%",
+          "label": "Frequency 1 discount",
+          "default": 10
+        },
+        {
           "type": "text",
           "id": "freq_2",
           "label": "Frequency 2",
           "default": "Every 2 months"
         },
         {
+          "type": "range",
+          "id": "discount_2",
+          "min": 5,
+          "max": 40,
+          "step": 5,
+          "unit": "%",
+          "label": "Frequency 2 discount",
+          "default": 15
+        },
+        {
           "type": "text",
           "id": "freq_3",
           "label": "Frequency 3",
           "default": "Every 3 months"
+        },
+        {
+          "type": "range",
+          "id": "discount_3",
+          "min": 5,
+          "max": 40,
+          "step": 5,
+          "unit": "%",
+          "label": "Frequency 3 discount",
+          "default": 20
         }
       ]
     },
