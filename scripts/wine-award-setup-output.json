@@ -1,0 +1,56 @@
+{
+  "store": "waterford-estate-2.myshopify.com",
+  "apiVersion": "2025-10",
+  "authMode": "cli",
+  "createdAt": "2026-07-21T04:18:27.884Z",
+  "metaobjectDefinition": {
+    "id": "gid://shopify/MetaobjectDefinition/17427955778",
+    "type": "wine_award",
+    "name": "Wine Award",
+    "fields": [
+      {
+        "key": "vintage",
+        "name": "Vintage",
+        "type": "single_line_text_field",
+        "required": false
+      },
+      {
+        "key": "publication",
+        "name": "Publication",
+        "type": "single_line_text_field",
+        "required": false
+      },
+      {
+        "key": "award_year",
+        "name": "Award Year",
+        "type": "single_line_text_field",
+        "required": false
+      },
+      {
+        "key": "rating",
+        "name": "Rating",
+        "type": "single_line_text_field",
+        "required": false
+      },
+      {
+        "key": "badge_image",
+        "name": "Badge Image",
+        "type": "file_reference",
+        "required": false
+      },
+      {
+        "key": "badge_alt",
+        "name": "Badge Alt Text",
+        "type": "single_line_text_field",
+        "required": false
+      }
+    ]
+  },
+  "metafieldDefinition": {
+    "id": "gid://shopify/MetafieldDefinition/197692751938",
+    "namespace": "custom",
+    "key": "awards",
+    "name": "Awards",
+    "type": "list.metaobject_reference"
+  }
+}

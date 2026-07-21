@@ -1,0 +1,114 @@
+{
+  "product": {
+    "id": "gid://shopify/Product/8316292825154",
+    "title": "Waterford Antigo",
+    "handle": "antigo"
+  },
+  "awardIds": [
+    "gid://shopify/Metaobject/235298684994",
+    "gid://shopify/Metaobject/235298750530",
+    "gid://shopify/Metaobject/235298816066"
+  ],
+  "metafield": {
+    "type": "list.metaobject_reference",
+    "value": "[\"gid://shopify/Metaobject/235298684994\",\"gid://shopify/Metaobject/235298750530\",\"gid://shopify/Metaobject/235298816066\"]",
+    "references": {
+      "nodes": [
+        {
+          "id": "gid://shopify/Metaobject/235298684994",
+          "handle": "antigo-platters-2021-4-5",
+          "type": "wine_award",
+          "fields": [
+            {
+              "key": "vintage",
+              "value": "2021"
+            },
+            {
+              "key": "publication",
+              "value": "Platter's Wine Guide"
+            },
+            {
+              "key": "award_year",
+              "value": "2026"
+            },
+            {
+              "key": "rating",
+              "value": "4.5 Stars"
+            },
+            {
+              "key": "badge_image",
+              "value": null
+            },
+            {
+              "key": "badge_alt",
+              "value": "Platter's Wine Guide 2026 — 4.5 Stars"
+            }
+          ]
+        },
+        {
+          "id": "gid://shopify/Metaobject/235298750530",
+          "handle": "antigo-tim-atkin-2021-93",
+          "type": "wine_award",
+          "fields": [
+            {
+              "key": "vintage",
+              "value": "2021"
+            },
+            {
+              "key": "publication",
+              "value": "Tim Atkin Special Report"
+            },
+            {
+              "key": "award_year",
+              "value": "2025"
+            },
+            {
+              "key": "rating",
+              "value": "93 Points"
+            },
+            {
+              "key": "badge_image",
+              "value": null
+            },
+            {
+              "key": "badge_alt",
+              "value": "Tim Atkin Special Report 2025 — 93 Points"
+            }
+          ]
+        },
+        {
+          "id": "gid://shopify/Metaobject/235298816066",
+          "handle": "antigo-winemag-2019-92",
+          "type": "wine_award",
+          "fields": [
+            {
+              "key": "vintage",
+              "value": "2019"
+            },
+            {
+              "key": "publication",
+              "value": "Winemag.co.za SA Wine Rating"
+            },
+            {
+              "key": "award_year",
+              "value": "2024"
+            },
+            {
+              "key": "rating",
+              "value": "92 points"
+            },
+            {
+              "key": "badge_image",
+              "value": null
+            },
+            {
+              "key": "badge_alt",
+              "value": "Winemag.co.za SA Wine Rating 2024 — 92 points"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "storefrontCheckHint": "On PDP Liquid: {{ product.metafields.custom.awards.value | json }}"
+}

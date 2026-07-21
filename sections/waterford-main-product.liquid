@@ -77,14 +77,39 @@
               {%- if awards != blank or block.settings.award_1 != blank -%}
                 <div class="wf-medals-row" {{ block.shopify_attributes }}>
                   {%- if awards != blank -%}
+                    {%- comment -%}
+                      custom.awards → list of wine_award metaobjects
+                      Fields: vintage, publication, award_year, rating, badge_image, badge_alt
+                    {%- endcomment -%}
                     {%- for award in awards -%}
-                      {%- if award.image != blank -%}
-                        {%- assign award_alt = award.alt | default: award.image.alt | default: 'Award' -%}
+                      {%- liquid
+                        assign badge = award.badge_image.value | default: award.badge_image
+                        assign badge_alt = award.badge_alt.value | default: award.badge_alt
+                        if badge_alt == blank
+                          assign pub = award.publication.value | default: award.publication
+                          assign yr = award.award_year.value | default: award.award_year
+                          assign badge_alt = pub | append: ' ' | append: yr | strip
+                        endif
+                        if badge_alt == blank
+                          assign badge_alt = 'Award'
+                        endif
+                      -%}
+                      {%- if badge != blank -%}
+                        {{
+                          badge
+                          | image_url: width: 200
+                          | image_tag: loading: 'lazy', alt: badge_alt, height: 58, class: 'wf-medal'
+                        }}
+                      {%- elsif award.image != blank -%}
+                        {%- comment -%} Legacy file-list shape fallback {%- endcomment -%}
+                        {%- assign award_alt = award.alt | default: award.image.alt | default: badge_alt -%}
                         {{ award.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: award_alt, height: 58 }}
-                      {%- elsif award != blank and award.preview_image != blank -%}
-                        {{ award | image_url: width: 200 | image_tag: loading: 'lazy', alt: award.alt | default: 'Award', height: 58 }}
-                      {%- elsif award.url != blank -%}
-                        <img src="{{ award | image_url: width: 200 }}" alt="{{ award.alt | default: 'Award' | escape }}" height="58" loading="lazy" width="auto">
+                      {%- else -%}
+                        <span class="wf-medal wf-medal--text" title="{{ badge_alt | escape }}">
+                          {%- assign rating = award.rating.value | default: award.rating -%}
+                          {%- assign pub = award.publication.value | default: award.publication -%}
+                          {%- if rating != blank -%}{{ rating }}{%- elsif pub != blank -%}{{ pub }}{%- else -%}Award{%- endif -%}
+                        </span>
                       {%- endif -%}
                     {%- endfor -%}
                   {%- else -%}
@@ -99,6 +124,9 @@
                     {%- endif -%}
                   {%- endif -%}
                 </div>
+              {%- endif -%}
+              {%- if request.design_mode and product.metafields.custom.awards != blank -%}
+                <!-- wf-awards-debug: {{ product.metafields.custom.awards.value | json }} -->
               {%- endif -%}
 
             {%- when 'price' -%}

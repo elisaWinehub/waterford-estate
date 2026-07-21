@@ -126,10 +126,24 @@
   flex-wrap: wrap;
 }
 
-.wf-medals-row img {
+.wf-medals-row img,
+.wf-medals-row .wf-medal {
   height: 58px;
   width: auto;
+  max-width: 140px;
+  object-fit: contain;
   display: block;
+}
+
+.wf-medal--text {
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--wf-olive-dark, #6b5f40);
+  border: 1px solid #ddd6c4;
+  background: #fff;
+  padding: 6px 8px;
+  max-width: 140px;
+  height: auto;
 }
 
 .wf-price-box {
