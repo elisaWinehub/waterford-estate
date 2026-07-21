@@ -378,6 +378,7 @@
 .wf-card {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .wf-card-photo {
@@ -425,6 +426,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
 }
 
 .wf-card-body {
@@ -434,6 +436,7 @@
   flex-direction: column;
   gap: 4px;
   align-items: center;
+  flex: 1;
 }
 
 .wf-card-range {
@@ -473,7 +476,8 @@
 .wf-card-controls {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: auto;
+  padding-top: 12px;
 }
 
 .wf-qty {
@@ -574,10 +578,12 @@
   padding: 0;
   text-align: left;
   align-items: flex-start;
+  flex: 0 1 auto;
 }
 
 .wf-grid.list-view .wf-card-controls {
   margin-top: 0;
+  padding-top: 0;
   flex-shrink: 0;
 }
 
