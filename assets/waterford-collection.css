@@ -527,6 +527,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .wf-add-btn:hover:not(:disabled):not(.is-sold-out) {
@@ -540,8 +541,28 @@
 }
 
 .wf-add-btn.is-loading {
-  opacity: 0.75;
+  color: transparent;
   pointer-events: none;
+  cursor: wait;
+}
+
+.wf-add-btn.is-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: wf-spin 0.65s linear infinite;
+}
+
+@keyframes wf-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* List view */

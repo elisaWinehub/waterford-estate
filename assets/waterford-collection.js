@@ -94,6 +94,8 @@
         const errorLabel = btn.getAttribute('data-label-error') || defaultLabel;
 
         btn.classList.add('is-loading');
+        btn.disabled = true;
+        btn.setAttribute('aria-busy', 'true');
         btn.textContent = addingLabel;
 
         try {
@@ -114,17 +116,21 @@
             throw new Error(err.description || 'Add to cart failed');
           }
 
+          btn.classList.remove('is-loading');
           btn.textContent = addedLabel;
           await openCartDrawer();
           setTimeout(() => {
             btn.textContent = defaultLabel;
-            btn.classList.remove('is-loading');
+            btn.disabled = false;
+            btn.removeAttribute('aria-busy');
           }, 1200);
         } catch (_) {
-          btn.textContent = errorLabel;
           btn.classList.remove('is-loading');
+          btn.textContent = errorLabel;
+          btn.removeAttribute('aria-busy');
           setTimeout(() => {
             btn.textContent = defaultLabel;
+            btn.disabled = false;
           }, 1800);
         }
       });

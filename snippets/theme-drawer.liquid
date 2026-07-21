@@ -37,6 +37,10 @@
       var drawer = document.getElementById(drawerIds[i]);
       if (!drawer) continue;
 
+      // Overlay drawers (e.g. cart) never squeeze the page — skip restore so
+      // they don't reopen as a sidebar after navigation.
+      if (drawer.hasAttribute('overlay')) continue;
+
       drawer.setAttribute('open', '');
 
       // Set [open] directly so the CSS slide-in applies without triggering
@@ -59,8 +63,7 @@
     }
 
     // Apply squeeze immediately, bypassing the margin transition.
-    // Only squeeze if at least one drawer was actually restored — saved
-    // drawer IDs may not exist on every page (e.g. cart-drawer on /cart).
+    // Only squeeze if at least one non-overlay drawer was restored.
     var pageWrapper = document.querySelector('.page-wrapper');
     if (pageWrapper && dialogs.length > 0) {
       pageWrapper.style.transition = 'none';
@@ -86,23 +89,26 @@
   const squeezeQuery = window.matchMedia('(min-width: 990px)');
 
   // ── Squeeze coordination ──
-  // Listens to all drawers. Only squeezes on wide viewports.
+  // Only non-overlay drawers squeeze page content on wide viewports.
+  // Overlay drawers (e.g. cart) sit on top of the page without shifting layout.
+  function hasSqueezeDrawerOpen() {
+    return Boolean(document.querySelector('theme-drawer[open]:not([overlay])'));
+  }
+
   document.addEventListener('theme-drawer:open', () => {
-    if (squeezeQuery.matches) {
+    if (squeezeQuery.matches && hasSqueezeDrawerOpen()) {
       pageWrapper?.classList.add('page-wrapper--drawer-open');
     }
   });
 
   document.addEventListener('theme-drawer:close', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    if (!openDrawer) {
+    if (!hasSqueezeDrawerOpen()) {
       pageWrapper?.classList.remove('page-wrapper--drawer-open');
     }
   });
 
   squeezeQuery.addEventListener('change', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches);
+    pageWrapper?.classList.toggle('page-wrapper--drawer-open', hasSqueezeDrawerOpen() && squeezeQuery.matches);
   });
 
   // ── State persistence ──

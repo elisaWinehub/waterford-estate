@@ -161,6 +161,8 @@
       if (sellingPlan) payload.items[0].selling_plan = Number(sellingPlan);
 
       submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
+      submitBtn.setAttribute('aria-busy', 'true');
       submitBtn.textContent = addingLabel;
 
       try {
@@ -174,14 +176,18 @@
           const err = await res.json().catch(() => ({}));
           throw new Error(err.description || 'Add failed');
         }
+        submitBtn.classList.remove('is-loading');
         submitBtn.textContent = addedLabel;
         await openCartDrawer();
       } catch (_) {
+        submitBtn.classList.remove('is-loading');
         submitBtn.textContent = errorLabel;
       } finally {
         setTimeout(() => {
           submitBtn.textContent = defaultLabel;
           submitBtn.disabled = false;
+          submitBtn.classList.remove('is-loading');
+          submitBtn.removeAttribute('aria-busy');
         }, 1400);
       }
     });
