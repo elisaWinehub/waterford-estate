@@ -1,6 +1,7 @@
 {%- comment -%}
   Waterford Estate collection hero banner.
-  Data from collection object; optional fallback image in section settings.
+  Uses the collection featured image from Admin (Products → Collections),
+  with an optional section fallback image.
 {%- endcomment -%}
 
 {{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
@@ -11,15 +12,29 @@
 {%- liquid
   assign hero_image = collection.image
   if hero_image == blank
+    assign hero_image = collection.featured_image
+  endif
+  if hero_image == blank
     assign hero_image = section.settings.fallback_image
   endif
+
   assign eyebrow = section.settings.eyebrow_label | default: 'Wine collection'
+  assign hero_alt = collection.title | escape
+  assign has_hero_image = false
+  if hero_image != blank
+    assign has_hero_image = true
+  endif
 -%}
 
-<section class="wf-collection wf-hero" {{ section.shopify_attributes }}>
-  {%- if hero_image != blank -%}
+<section
+  class="wf-collection wf-hero{% if has_hero_image %} wf-hero--has-image{% endif %}"
+  {% if has_hero_image %}
+    style="--wf-hero-image: url('{{ hero_image | image_url: width: 2400 }}');"
+  {% endif %}
+  {{ section.shopify_attributes }}
+>
+  {%- if has_hero_image -%}
     <div class="wf-hero__media">
-      {%- assign hero_alt = collection.title | escape -%}
       {{
         hero_image
         | image_url: width: 2400
@@ -28,6 +43,7 @@
           sizes: '100vw',
           loading: 'eager',
           fetchpriority: 'high',
+          class: 'wf-hero__img',
           alt: hero_alt
       }}
     </div>
@@ -61,7 +77,7 @@
       "type": "image_picker",
       "id": "fallback_image",
       "label": "Fallback hero image",
-      "info": "Used when the collection has no featured image"
+      "info": "Used when the collection has no featured image in Admin"
     }
   ],
   "presets": [
