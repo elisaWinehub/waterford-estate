@@ -113,6 +113,53 @@ function syncQtyInput(form, value) {
   if (input) input.value = String(value);
 }
 
+const PO_EVENT = 'wf:purchase-option-change';
+
+function publishPurchaseOption(root) {
+  const checked = qs(root, 'input[name="purchase_option"]:checked');
+  const sellingPlan = checked?.getAttribute('data-selling-plan') || '';
+  root.dataset.sellingPlanId = sellingPlan;
+  const detail = { sellingPlanId: sellingPlan || null };
+  root.dispatchEvent(new CustomEvent(PO_EVENT, { bubbles: true, detail }));
+  document.dispatchEvent(new CustomEvent(PO_EVENT, { detail }));
+}
+
+function initPurchaseOptions(root) {
+  const wrap = qs(root, '[data-wf-po], .po-wrap');
+  if (!wrap) return;
+
+  qsa(wrap, 'input[name="purchase_option"]').forEach((input) => {
+    input.addEventListener('change', () => {
+      qsa(wrap, '[data-wf-po-card], .po-card').forEach((card) => card.classList.remove('is-selected'));
+      const card = input.closest('[data-wf-po-card], .po-card');
+      if (card) card.classList.add('is-selected');
+
+      if (input.getAttribute('data-po-type') === 'subscribe' && !input.getAttribute('data-selling-plan')) {
+        const firstFreq = qs(card, '.po-frequency input[name="purchase_option"]');
+        if (firstFreq && firstFreq !== input) {
+          firstFreq.checked = true;
+          firstFreq.dispatchEvent(new Event('change', { bubbles: true }));
+          return;
+        }
+      }
+      publishPurchaseOption(root);
+    });
+  });
+
+  qsa(wrap, '[data-wf-po-card], .po-card').forEach((card) => {
+    card.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLInputElement) return;
+      const radio = qs(card, '.po-card__row > input[name="purchase_option"]') || qs(card, 'input[name="purchase_option"]');
+      if (radio && !radio.checked) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    });
+  });
+
+  publishPurchaseOption(root);
+}
+
 function initBuyForm(root) {
   const form = qs(root, '[data-wf-buy-form], form.buy-actions');
   if (!form) return;
@@ -156,13 +203,23 @@ function initBuyForm(root) {
     });
   }
 
+  document.addEventListener(PO_EVENT, (event) => {
+    if (!sellingPlanInput) return;
+    const id = event.detail?.sellingPlanId || '';
+    sellingPlanInput.value = id;
+  });
+
+  if (sellingPlanInput && root.dataset.sellingPlanId) {
+    sellingPlanInput.value = root.dataset.sellingPlanId;
+  }
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!submitBtn || submitBtn.disabled) return;
 
     const variantId = Number(variantInput?.value || 0);
     const quantity = Math.max(1, parseInt(qtyValue?.textContent || '1', 10) || 1);
-    const sellingPlan = sellingPlanInput?.value || '';
+    const sellingPlan = sellingPlanInput?.value || root.dataset.sellingPlanId || '';
     const defaultLabel = submitBtn.getAttribute('data-label-add') || submitBtn.textContent;
     const addingLabel = submitBtn.getAttribute('data-label-adding') || defaultLabel;
     const addedLabel = submitBtn.getAttribute('data-label-added') || defaultLabel;
@@ -200,6 +257,7 @@ function init(root) {
   if (!(root instanceof HTMLElement) || root.dataset.wfPdpBound === '1') return;
   root.dataset.wfPdpBound = '1';
   initGallery(root);
+  initPurchaseOptions(root);
   initBuyForm(root);
 }
 

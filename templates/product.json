@@ -32,6 +32,18 @@
           "type": "price",
           "settings": { "unit_label": "750 ml" }
         },
+        "purchase_option": {
+          "type": "purchase_option",
+          "settings": {
+            "enable_purchase_options": true,
+            "heading": "Choose your purchase option",
+            "onetime_label": "One-time purchase",
+            "subscribe_label": "Subscribe & Save",
+            "freq_1": "Every month",
+            "freq_2": "Every 2 months",
+            "freq_3": "Every 3 months"
+          }
+        },
         "buy_buttons": { "type": "buy_buttons", "settings": {} },
         "shipping_note": {
           "type": "shipping_note",
@@ -145,6 +157,7 @@
         "tagline",
         "awards",
         "price",
+        "purchase_option",
         "buy_buttons",
         "shipping_note",
         "quick_facts",
