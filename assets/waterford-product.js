@@ -12,16 +12,75 @@ function qsa(root, sel) {
   return Array.from(root.querySelectorAll(sel));
 }
 
+function getOrCreateLightbox() {
+  let lightbox = document.querySelector('[data-wf-zoom-lightbox]');
+  if (lightbox) return lightbox;
+
+  lightbox = document.createElement('div');
+  lightbox.className = 'wf-zoom-lightbox';
+  lightbox.setAttribute('data-wf-zoom-lightbox', '');
+  lightbox.setAttribute('role', 'dialog');
+  lightbox.setAttribute('aria-modal', 'true');
+  lightbox.setAttribute('aria-label', 'Zoomed product image');
+  lightbox.innerHTML =
+    '<button type="button" class="wf-zoom-lightbox__close" data-wf-zoom-close aria-label="Close zoom">&times;</button>' +
+    '<img class="wf-zoom-lightbox__img" data-wf-zoom-img alt="" />';
+  document.body.appendChild(lightbox);
+
+  const close = () => {
+    lightbox.classList.remove('is-open');
+    document.body.classList.remove('wf-zoom-open');
+  };
+
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox || event.target.closest('[data-wf-zoom-close]')) {
+      close();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+      close();
+    }
+  });
+
+  return lightbox;
+}
+
+function openZoom(src, alt) {
+  if (!src) return;
+  const lightbox = getOrCreateLightbox();
+  const img = qs(lightbox, '[data-wf-zoom-img]');
+  if (!img) return;
+  img.src = src;
+  img.alt = alt || '';
+  lightbox.classList.add('is-open');
+  document.body.classList.add('wf-zoom-open');
+}
+
 function initGallery(root) {
   const main = qs(root, '#mainImg') || qs(root, '[data-wf-main-img]');
   if (!main) return;
 
+  const trigger = qs(root, '[data-wf-zoom-trigger], .pdp-photo');
+
   qsa(root, '[data-wf-thumb], .thumb').forEach((btn) => {
     btn.addEventListener('click', () => {
+      const fullSrc = btn.getAttribute('data-full-src');
+      const zoomSrc = btn.getAttribute('data-zoom-src') || fullSrc;
       const img = qs(btn, 'img');
-      if (!img) return;
-      main.src = img.currentSrc || img.src;
-      main.alt = btn.getAttribute('data-alt') || img.alt || '';
+      if (!img && !fullSrc) return;
+
+      if (fullSrc) {
+        main.src = fullSrc;
+        main.removeAttribute('srcset');
+      } else if (img) {
+        main.src = img.currentSrc || img.src;
+      }
+
+      main.alt = btn.getAttribute('data-alt') || img?.alt || '';
+      if (zoomSrc) main.setAttribute('data-zoom-src', zoomSrc);
+
       qsa(root, '.thumb, [data-wf-thumb]').forEach((t) => {
         t.classList.remove('active');
         t.setAttribute('aria-pressed', 'false');
@@ -30,6 +89,23 @@ function initGallery(root) {
       btn.setAttribute('aria-pressed', 'true');
     });
   });
+
+  if (trigger) {
+    const openFromTrigger = (event) => {
+      // Ignore clicks that originated on a thumb control inside the gallery
+      if (event.target.closest('.thumb, [data-wf-thumb]')) return;
+      const src = main.getAttribute('data-zoom-src') || main.currentSrc || main.src;
+      openZoom(src, main.alt);
+    };
+
+    trigger.addEventListener('click', openFromTrigger);
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openFromTrigger(event);
+      }
+    });
+  }
 }
 
 function syncQtyInput(form, value) {

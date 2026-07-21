@@ -1,5 +1,6 @@
 {%- doc -%}
   PDP gallery — mockup classes (.gallery / .pdp-photo / .thumb-row / .thumb)
+  Main image covers .pdp-photo; click opens zoom lightbox.
   @param {object} product
   @param {object} block
 {%- enddoc -%}
@@ -11,8 +12,8 @@
   endif
 -%}
 
-<div class="gallery" {{ block.shopify_attributes }}>
-  <div class="pdp-photo">
+<div class="gallery" {{ block.shopify_attributes }} data-wf-gallery>
+  <div class="pdp-photo" data-wf-zoom-trigger role="button" tabindex="0" aria-label="Zoom image">
     {%- if featured != blank -%}
       {%- assign main_alt = featured.alt | default: product.title | escape -%}
       <img
@@ -24,6 +25,7 @@
         loading="eager"
         fetchpriority="high"
         data-wf-main-img
+        data-zoom-src="{{ featured | image_url: width: 2000 }}"
       >
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag }}
@@ -40,6 +42,8 @@
             class="thumb{% if media == featured %} active{% endif %}"
             data-wf-thumb
             data-alt="{{ thumb_alt }}"
+            data-full-src="{{ media | image_url: width: 1200 }}"
+            data-zoom-src="{{ media | image_url: width: 2000 }}"
             aria-label="{{ thumb_alt }}"
             aria-pressed="{% if media == featured %}true{% else %}false{% endif %}"
           >
