@@ -84,9 +84,7 @@
         <div class="wf-card-range">{{ range_label }}</div>
       {%- endif -%}
       <a class="wf-card-name" href="{{ product.url }}">{{ product.title }}</a>
-      {%- if style_label != blank -%}
-        <div class="wf-card-style">{{ style_label }}</div>
-      {%- endif -%}
+      <div class="wf-card-style">{% if style_label != blank %}{{ style_label }}{% endif %}</div>
       <div class="wf-card-price">
         {%- if price_varies -%}
           {{ 'waterford.collection.from' | t }} {{ product.price_min | money }}
