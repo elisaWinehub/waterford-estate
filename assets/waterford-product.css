@@ -1,4 +1,9 @@
 /* Waterford Estate PDP — exact classes from reference/product-main-page.html */
+.section-waterford-main-product,
+.section-waterford-related {
+  background-color: #faf7f2;
+}
+
 .wf-pdp {
   --black: #0b0b0b;
   --olive: #84754e;

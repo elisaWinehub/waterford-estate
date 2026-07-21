@@ -10,6 +10,10 @@
   --wf-muted: #6b6b66;
 }
 
+.section-waterford-collection-grid {
+  background-color: #faf7f2;
+}
+
 .wf-collection {
   font-family: 'Inter', -apple-system, sans-serif;
   color: var(--wf-ink);
