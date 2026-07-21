@@ -168,6 +168,7 @@
   padding: .75rem 1.5rem;
   font-weight: 400;
   text-decoration: none;
+  border-radius: 0;
 }
 .button.is-small { padding: .5rem 1.25rem; font-weight: 400; transition: all .3s; }
 .button.is-small:hover { border-color: var(--color-brand--gold-muted); background-color: var(--color-brand--gold-muted); color: var(--color-brand--gold); }
