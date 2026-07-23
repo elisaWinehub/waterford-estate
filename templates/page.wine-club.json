@@ -1,6 +1,10 @@
 /*
  * ------------------------------------------------------------
- * Wine Club page template — sections are independently editable
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
 {
@@ -18,38 +22,16 @@
         "mobile_min_height": 260,
         "padding_top": 0,
         "padding_bottom": 0
-      },
-      "blocks": {}
+      }
     },
     "wine_club_breadcrumb": {
       "type": "wine-club-breadcrumb",
       "settings": {
         "home_label": "Home",
+        "home_link": "",
         "current_label": "Wine Club",
         "padding_top": 20,
-        "padding_bottom": 0
-      }
-    },
-    "wine_club_intro": {
-      "type": "wine-club-intro",
-      "blocks": {
-        "intro_cta": {
-          "type": "button",
-          "settings": {
-            "text": "Join the Club",
-            "link": "#join",
-            "style": "primary"
-          }
-        }
-      },
-      "block_order": ["intro_cta"],
-      "settings": {
-        "heading": "",
-        "text": "<p>A curated case of our finest releases, delivered to your door every quarter — with member pricing, priority allocation on limited releases, and complimentary tastings at the estate.</p>",
-        "text_alignment": "center",
-        "max_width": 640,
-        "padding_top": 0,
-        "padding_bottom": 64
+        "padding_bottom": 20
       }
     },
     "wine_club_benefits": {
@@ -104,13 +86,21 @@
           }
         }
       },
-      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "b5",
+        "b6"
+      ],
       "settings": {
         "eyebrow_text": "Member Benefits",
         "heading": "Your all-access pass to Waterford Estate",
         "heading_size": "large",
+        "description": "",
         "columns_desktop": "3",
-        "padding_top": 0,
+        "padding_top": 40,
         "padding_bottom": 84
       }
     },
@@ -133,7 +123,8 @@
             "title": "Monthly",
             "discount_text": "15% off club shipments",
             "cadence_text": "Every month",
-            "button_text": "View extra benefits"
+            "button_text": "View extra benefits",
+            "button_link": ""
           }
         },
         "freq_quarterly": {
@@ -143,7 +134,8 @@
             "title": "Quarterly",
             "discount_text": "18% off club shipments",
             "cadence_text": "Every 3 months",
-            "button_text": "View extra benefits"
+            "button_text": "View extra benefits",
+            "button_link": ""
           }
         },
         "freq_biannual": {
@@ -153,7 +145,8 @@
             "title": "Bi-Annually",
             "discount_text": "20% off club shipments",
             "cadence_text": "Every 6 months",
-            "button_text": "View extra benefits"
+            "button_text": "View extra benefits",
+            "button_link": ""
           }
         },
         "freq_annual": {
@@ -163,7 +156,8 @@
             "title": "Annually",
             "discount_text": "25% off club shipments",
             "cadence_text": "Every 12 months",
-            "button_text": "View extra benefits"
+            "button_text": "View extra benefits",
+            "button_link": ""
           }
         }
       },
@@ -183,21 +177,6 @@
         "note": "This step flow, card styling, icons and colors are rendered by the WineHub app once installed — the layout above shows how it will appear once themed to match the site. Remove frequency cards when the app block is live.",
         "padding_top": 72,
         "padding_bottom": 72
-      }
-    },
-    "wine_club_case": {
-      "type": "wine-club-case-preview",
-      "blocks": {},
-      "block_order": [],
-      "settings": {
-        "eyebrow_text": "A Taste of What's Inside",
-        "heading": "This quarter's selection",
-        "heading_size": "large",
-        "description": "<p>A preview of the wines currently featured in the Wine Club case — the exact selection varies each quarter.</p>",
-        "products_to_show": 3,
-        "columns_desktop": "3",
-        "padding_top": 0,
-        "padding_bottom": 84
       }
     },
     "wine_club_faq": {
@@ -236,13 +215,18 @@
           }
         }
       },
-      "block_order": ["q1", "q2", "q3", "q4"],
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
       "settings": {
         "eyebrow_text": "FAQ",
         "heading": "Membership questions",
         "heading_size": "large",
         "max_width": 760,
-        "padding_top": 0,
+        "padding_top": 40,
         "padding_bottom": 40
       }
     }
@@ -250,10 +234,8 @@
   "order": [
     "wine_club_hero",
     "wine_club_breadcrumb",
-    "wine_club_intro",
     "wine_club_benefits",
     "wine_club_signup",
-    "wine_club_case",
     "wine_club_faq"
   ]
 }
