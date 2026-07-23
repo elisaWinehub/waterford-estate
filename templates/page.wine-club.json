@@ -12,6 +12,7 @@
     "wine_club_hero": {
       "type": "wine-club-hero",
       "settings": {
+        "background_image": "shopify://shop_images/67bf1891ab84dfa6b4868577__DSC8437-Enhanced-NR_1_1.jpg",
         "overlay_opacity": 45,
         "eyebrow_text": "Membership",
         "heading": "The Waterford Wine Club",
