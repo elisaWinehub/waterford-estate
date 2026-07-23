@@ -21,6 +21,15 @@
       },
       "blocks": {}
     },
+    "wine_club_breadcrumb": {
+      "type": "wine-club-breadcrumb",
+      "settings": {
+        "home_label": "Home",
+        "current_label": "Wine Club",
+        "padding_top": 20,
+        "padding_bottom": 0
+      }
+    },
     "wine_club_intro": {
       "type": "wine-club-intro",
       "blocks": {
@@ -35,7 +44,6 @@
       },
       "block_order": ["intro_cta"],
       "settings": {
-        "show_breadcrumb": true,
         "heading": "",
         "text": "<p>A curated case of our finest releases, delivered to your door every quarter — with member pricing, priority allocation on limited releases, and complimentary tastings at the estate.</p>",
         "text_alignment": "center",
@@ -241,6 +249,7 @@
   },
   "order": [
     "wine_club_hero",
+    "wine_club_breadcrumb",
     "wine_club_intro",
     "wine_club_benefits",
     "wine_club_signup",

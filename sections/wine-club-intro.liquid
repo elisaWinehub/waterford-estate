@@ -15,14 +15,6 @@
   {{ section.shopify_attributes }}
 >
   <div class="wine-club__wrap">
-    {%- if section.settings.show_breadcrumb -%}
-      <div class="wine-club-intro__breadcrumb">
-        <a href="{{ routes.root_url }}">Home</a>
-        &nbsp;&rsaquo;&nbsp;
-        <span>{{ page.title | default: 'Wine Club' }}</span>
-      </div>
-    {%- endif -%}
-
     <div
       class="wine-club-intro__inner wine-club-intro__inner--{{ align }}"
       style="max-width: {{ max_w }}px;"
@@ -63,12 +55,6 @@
   "class": "section-wine-club-intro",
   "enabled_on": { "templates": ["page"] },
   "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_breadcrumb",
-      "label": "Show breadcrumb",
-      "default": true
-    },
     { "type": "text", "id": "heading", "label": "Optional supporting heading" },
     {
       "type": "select",

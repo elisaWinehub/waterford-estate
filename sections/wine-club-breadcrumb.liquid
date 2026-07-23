@@ -1,0 +1,71 @@
+{%- comment -%}
+  Wine Club breadcrumb — standalone section between hero and intro
+{%- endcomment -%}
+
+{{ 'wine-club.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign current_label = section.settings.current_label
+  if current_label == blank
+    assign current_label = page.title | default: 'Wine Club'
+  endif
+-%}
+
+<section
+  class="wine-club wine-club-breadcrumb"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="wine-club__wrap">
+    <nav class="wine-club-breadcrumb__nav" aria-label="Breadcrumb">
+      <a href="{{ section.settings.home_link | default: routes.root_url }}">
+        {{ section.settings.home_label | default: 'Home' }}
+      </a>
+      &nbsp;&rsaquo;&nbsp;
+      <span>{{ current_label }}</span>
+    </nav>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wine Club breadcrumb",
+  "tag": "section",
+  "class": "section-wine-club-breadcrumb",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "home_label", "label": "Home label", "default": "Home" },
+    { "type": "url", "id": "home_link", "label": "Home link" },
+    {
+      "type": "text",
+      "id": "current_label",
+      "label": "Current page label",
+      "default": "Wine Club",
+      "info": "Leave blank to use the page title"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    { "name": "Wine Club breadcrumb" }
+  ]
+}
+{% endschema %}
