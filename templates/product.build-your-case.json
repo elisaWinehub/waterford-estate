@@ -1,0 +1,156 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "byc_hero": {
+      "type": "build-your-case-hero",
+      "settings": {
+        "overlay_opacity": 45,
+        "eyebrow_text": "Wine Club",
+        "heading": "Build Your Case",
+        "heading_size": "large",
+        "content_position": "left",
+        "content_alignment_vertical": "center",
+        "min_height": 260,
+        "mobile_min_height": 200,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "byc_breadcrumb": {
+      "type": "build-your-case-breadcrumb",
+      "settings": {
+        "home_label": "Home",
+        "home_link": "",
+        "wine_club_label": "Wine Club",
+        "wine_club_link": "/pages/wine-club",
+        "current_label": "Build Your Case",
+        "padding_top": 20,
+        "padding_bottom": 0
+      }
+    },
+    "byc_context": {
+      "type": "build-your-case-context",
+      "settings": {
+        "label_text": "Building your case",
+        "price_suffix": "/ quarterly case",
+        "change_case_text": "Change case",
+        "change_case_link": "/pages/wine-club#cases",
+        "padding_top": 24,
+        "padding_bottom": 48
+      }
+    },
+    "byc_signup": {
+      "type": "wine-club-signup",
+      "blocks": {
+        "steps": {
+          "type": "step_indicator",
+          "settings": {
+            "step_1_label": "Frequency",
+            "step_2_label": "Quantity",
+            "step_3_label": "Review",
+            "active_step": "1"
+          }
+        },
+        "freq_monthly": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Monthly",
+            "discount_text": "15% off club shipments",
+            "cadence_text": "Every month",
+            "button_text": "View extra benefits",
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>15% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>15% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
+          }
+        },
+        "freq_quarterly": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Quarterly",
+            "discount_text": "18% off club shipments",
+            "cadence_text": "Every 3 months",
+            "button_text": "View extra benefits",
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>18% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>18% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
+          }
+        },
+        "freq_biannual": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Bi-Annually",
+            "discount_text": "20% off club shipments",
+            "cadence_text": "Every 6 months",
+            "button_text": "View extra benefits",
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>20% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>20% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
+          }
+        },
+        "freq_annual": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "star",
+            "title": "Annually",
+            "discount_text": "25% off club shipments",
+            "cadence_text": "Every 12 months",
+            "button_text": "View extra benefits",
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>25% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>25% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
+          }
+        }
+      },
+      "block_order": [
+        "steps",
+        "freq_monthly",
+        "freq_quarterly",
+        "freq_biannual",
+        "freq_annual"
+      ],
+      "settings": {
+        "eyebrow_text": "Build Your Case",
+        "heading": "Choose your delivery frequency",
+        "heading_size": "large",
+        "description": "<p>Select how often you'd like your case delivered — quantity and final review follow next.</p>",
+        "powered_by_text": "Powered by WineHub",
+        "note": "This step flow, card styling, icons and colors are rendered by the WineHub app once installed — this page shows how the Frequency step will appear once themed to match the site. Quantity and Review are the next two steps in the app's own flow.",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "byc_actions": {
+      "type": "build-your-case-actions",
+      "settings": {
+        "back_text": "Go back",
+        "back_link": "/pages/wine-club#cases",
+        "continue_text": "Continue to Quantity",
+        "continue_link": "",
+        "padding_top": 0,
+        "padding_bottom": 60
+      }
+    }
+  },
+  "order": [
+    "byc_hero",
+    "byc_breadcrumb",
+    "byc_context",
+    "byc_signup",
+    "byc_actions"
+  ]
+}

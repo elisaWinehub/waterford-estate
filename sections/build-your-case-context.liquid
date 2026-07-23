@@ -1,0 +1,109 @@
+{%- comment -%}
+  Build Your Case context bar — shows the product (case) being built.
+{%- endcomment -%}
+
+{{ 'build-your-case.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign change_href = section.settings.change_case_link
+  if change_href == blank
+    assign change_href = '/pages/wine-club#cases'
+  endif
+-%}
+
+<section
+  class="byc byc-context"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="byc__wrap">
+    <div class="byc-context__bar">
+      {%- if product.featured_image != blank -%}
+        {%- assign case_alt = product.title | escape -%}
+        {{
+          product.featured_image
+          | image_url: width: 120
+          | image_tag: loading: 'lazy', class: 'byc-context__img', alt: case_alt
+        }}
+      {%- else -%}
+        <div class="byc-context__img-placeholder" aria-hidden="true"></div>
+      {%- endif -%}
+      <div class="byc-context__info">
+        {%- if section.settings.label_text != blank -%}
+          <div class="byc-context__label">{{ section.settings.label_text }}</div>
+        {%- endif -%}
+        <div class="byc-context__name">{{ product.title }}</div>
+        <div class="byc-context__price">
+          {{ product.price | money }}
+          {%- if section.settings.price_suffix != blank -%}
+            {{ section.settings.price_suffix }}
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if section.settings.change_case_text != blank -%}
+        <a class="byc-context__change" href="{{ change_href }}">
+          {{ section.settings.change_case_text }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Build Your Case context",
+  "tag": "section",
+  "class": "section-build-your-case-context",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label above case name",
+      "default": "Building your case"
+    },
+    {
+      "type": "text",
+      "id": "price_suffix",
+      "label": "Price suffix",
+      "default": "/ quarterly case",
+      "info": "Appended after the product price — keep consistent with Wine Club case cards"
+    },
+    {
+      "type": "text",
+      "id": "change_case_text",
+      "label": "Change case link text",
+      "default": "Change case"
+    },
+    {
+      "type": "url",
+      "id": "change_case_link",
+      "label": "Change case link",
+      "info": "Defaults to /pages/wine-club#cases when blank"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    { "name": "Build Your Case context" }
+  ]
+}
+{% endschema %}

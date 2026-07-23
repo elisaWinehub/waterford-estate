@@ -1,0 +1,246 @@
+/* Waterford Estate — Build Your Case product template frame */
+.byc {
+  --byc-black: #0b0b0b;
+  --byc-olive: #84754e;
+  --byc-olive-dark: #6b5f40;
+  --byc-olive-tint: #ede8dc;
+  --byc-cream: #faf7f2;
+  --byc-ink: #1a1a1a;
+  --byc-muted: #6b6b66;
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--byc-ink);
+  background: var(--byc-cream);
+  -webkit-font-smoothing: antialiased;
+}
+
+.byc .serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.byc a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.byc img,
+.byc svg {
+  display: block;
+}
+
+.byc__wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Hero */
+.byc-hero {
+  position: relative;
+  min-height: var(--byc-hero-min, 260px);
+  overflow: hidden;
+  background: linear-gradient(120deg, #3a3320, #1c1912);
+  color: #fff;
+}
+
+.byc-hero__media,
+.byc-hero__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.byc-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.byc-hero__overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 11, 11, calc(var(--byc-overlay, 0.45) * 0.35)),
+    rgba(11, 11, 11, var(--byc-overlay, 0.45))
+  );
+  z-index: 1;
+}
+
+.byc-hero__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(250, 247, 242, 0.35);
+  font-size: 13px;
+  font-style: italic;
+  z-index: 1;
+}
+
+.byc-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 40px 32px;
+  min-height: var(--byc-hero-min, 260px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.byc-hero__content--h-left { align-items: flex-start; text-align: left; }
+.byc-hero__content--h-center { align-items: center; text-align: center; }
+.byc-hero__content--v-top { justify-content: flex-start; }
+.byc-hero__content--v-center { justify-content: center; }
+.byc-hero__content--v-bottom { justify-content: flex-end; }
+
+.byc-hero__eyebrow {
+  color: rgba(250, 247, 242, 0.85);
+  font-size: 12px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.byc-hero__heading {
+  color: #fff;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.byc-hero__heading--small { font-size: 26px; }
+.byc-hero__heading--medium { font-size: 32px; }
+.byc-hero__heading--large { font-size: 38px; }
+.byc-hero__heading--xlarge { font-size: 46px; }
+
+@media (max-width: 749px) {
+  .byc-hero,
+  .byc-hero__content {
+    min-height: var(--byc-hero-min-mobile, 200px);
+  }
+
+  .byc-hero__heading--large { font-size: 30px; }
+  .byc-hero__heading--xlarge { font-size: 34px; }
+}
+
+/* Breadcrumb */
+.byc-breadcrumb__nav {
+  font-size: 13px;
+  color: var(--byc-muted);
+}
+
+.byc-breadcrumb__nav a:hover {
+  color: var(--byc-olive-dark);
+}
+
+.byc-breadcrumb__nav span {
+  color: var(--byc-ink);
+}
+
+/* Context bar */
+.byc-context__bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #e6ddc9;
+  background: #fff;
+  padding: 14px 18px;
+}
+
+.byc-context__img {
+  width: 44px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.byc-context__img-placeholder {
+  width: 44px;
+  height: 56px;
+  flex-shrink: 0;
+  background: var(--byc-olive-tint);
+}
+
+.byc-context__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.byc-context__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--byc-muted);
+  margin-bottom: 2px;
+}
+
+.byc-context__name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.byc-context__price {
+  font-size: 13.5px;
+  color: var(--byc-muted);
+}
+
+.byc-context__change {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--byc-olive-dark);
+  text-decoration: underline;
+  flex-shrink: 0;
+}
+
+/* Actions */
+.byc-actions__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.byc-actions__back {
+  font-size: 13.5px;
+  color: var(--byc-muted);
+  text-decoration: underline;
+}
+
+.byc-actions__continue {
+  background: var(--byc-olive);
+  color: #fff;
+  border: none;
+  padding: 14px 40px;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-block;
+  border-radius: 0;
+  text-align: center;
+}
+
+.byc-actions__continue:hover:not(:disabled) {
+  background: var(--byc-olive-dark);
+  color: #fff;
+}
+
+.byc-actions__continue:disabled,
+.byc-actions__continue[aria-disabled='true'] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .byc-context__bar {
+    flex-wrap: wrap;
+  }
+
+  .byc__wrap {
+    padding: 0 20px;
+  }
+
+  .byc-hero__content {
+    padding: 32px 20px;
+  }
+}

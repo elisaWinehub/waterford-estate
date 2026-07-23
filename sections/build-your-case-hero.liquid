@@ -1,0 +1,156 @@
+{%- comment -%}
+  Build Your Case hero — same pattern as Membership/Wine Club heroes (separate file for now).
+{%- endcomment -%}
+
+{{ 'build-your-case.css' | asset_url | stylesheet_tag }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+{%- liquid
+  assign overlay = section.settings.overlay_opacity | default: 45 | divided_by: 100.0
+  assign heading_size = section.settings.heading_size | default: 'large'
+  assign h_align = section.settings.content_position | default: 'left'
+  assign v_align = section.settings.content_alignment_vertical | default: 'center'
+  assign min_h = section.settings.min_height | default: 260
+  assign min_h_m = section.settings.mobile_min_height | default: 200
+-%}
+
+<section
+  class="byc byc-hero"
+  style="--byc-hero-min: {{ min_h }}px; --byc-hero-min-mobile: {{ min_h_m }}px; --byc-overlay: {{ overlay }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  {%- if section.settings.background_image != blank -%}
+    <div class="byc-hero__media">
+      {{
+        section.settings.background_image
+        | image_url: width: 2400
+        | image_tag:
+          widths: '800, 1200, 1600, 2000, 2400',
+          sizes: '100vw',
+          loading: 'eager',
+          fetchpriority: 'high',
+          class: 'byc-hero__img',
+          alt: ''
+      }}
+    </div>
+  {%- else -%}
+    <div class="byc-hero__empty">Add a background image in the theme editor</div>
+  {%- endif -%}
+  <div class="byc-hero__overlay" aria-hidden="true"></div>
+  <div class="byc-hero__content byc-hero__content--h-{{ h_align }} byc-hero__content--v-{{ v_align }}">
+    {%- if section.settings.eyebrow_text != blank -%}
+      <div class="byc-hero__eyebrow">{{ section.settings.eyebrow_text }}</div>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="serif byc-hero__heading byc-hero__heading--{{ heading_size }}">{{ section.settings.heading }}</h1>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Build Your Case hero",
+  "tag": "section",
+  "class": "section-build-your-case-hero",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay darkness",
+      "default": 45
+    },
+    { "type": "text", "id": "eyebrow_text", "label": "Eyebrow", "default": "Wine Club" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Build Your Case" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "X-Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_vertical",
+      "label": "Vertical position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "min_height",
+      "min": 160,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "label": "Hero height (desktop)",
+      "default": 260
+    },
+    {
+      "type": "range",
+      "id": "mobile_min_height",
+      "min": 120,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "label": "Hero height (mobile)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Build Your Case hero",
+      "settings": {
+        "eyebrow_text": "Wine Club",
+        "heading": "Build Your Case"
+      }
+    }
+  ]
+}
+{% endschema %}

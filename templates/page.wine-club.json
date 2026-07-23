@@ -111,6 +111,7 @@
         "case_estate": {
           "type": "case_card",
           "settings": {
+            "product": "the-estate-case",
             "title": "The Estate Case",
             "description": "<p>Six bottles from our Estate Range, refreshed every quarter with our winemaking team's latest picks.</p>",
             "price_text": "R 1,850.00",
@@ -122,6 +123,7 @@
         "case_library": {
           "type": "case_card",
           "settings": {
+            "product": "the-library-collection",
             "title": "The Library Collection",
             "description": "<p>Rare and limited-release vintages from our library cellar, offered to members before anyone else.</p>",
             "price_text": "R 3,200.00",
@@ -133,6 +135,7 @@
         "case_reserve": {
           "type": "case_card",
           "settings": {
+            "product": "the-reserve-case",
             "title": "The Reserve Case",
             "description": "<p>Featuring The Jem and our flagship reds, for members who want the very best from every release.</p>",
             "price_text": "R 4,650.00",

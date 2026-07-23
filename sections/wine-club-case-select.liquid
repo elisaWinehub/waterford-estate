@@ -82,10 +82,16 @@
                   </div>
                 {%- endif -%}
                 {%- if block.settings.button_text != blank -%}
-                  <a
-                    class="wine-club-case-card__btn"
-                    href="{{ block.settings.button_link | default: '#' }}"
-                  >
+                  {%- liquid
+                    assign case_btn_href = block.settings.button_link
+                    if case_btn_href == blank and use_product
+                      assign case_btn_href = case_product.url
+                    endif
+                    if case_btn_href == blank
+                      assign case_btn_href = '#'
+                    endif
+                  -%}
+                  <a class="wine-club-case-card__btn" href="{{ case_btn_href }}">
                     {{ block.settings.button_text }}
                   </a>
                 {%- endif -%}
