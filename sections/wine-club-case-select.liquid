@@ -1,0 +1,266 @@
+{%- comment -%}
+  Wine Club — Choose Your Case grid.
+  Cards link out to Build Your Case (URL setting); optional product backs image/title/price.
+{%- endcomment -%}
+
+{{ 'wine-club.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols = section.settings.columns_desktop | default: '3'
+-%}
+
+<section
+  id="cases"
+  class="wine-club wine-club-case-select"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; --wc-case-cols: {{ cols }};"
+  {{ section.shopify_attributes }}
+>
+  <div class="wine-club__wrap">
+    <div class="wine-club-case-select__head">
+      {%- if section.settings.eyebrow_text != blank -%}
+        <div class="wine-club__eyebrow">{{ section.settings.eyebrow_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="serif wine-club__heading wine-club__heading--{{ section.settings.heading_size | default: 'large' }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="wine-club-case-select__desc">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="wine-club-case-select__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'case_card' -%}
+            {%- liquid
+              assign case_product = block.settings.product
+              assign use_product = false
+              if case_product != blank
+                assign use_product = true
+              endif
+
+              assign case_title = block.settings.title
+              assign case_price = block.settings.price_text
+              assign case_image = block.settings.image
+
+              if use_product
+                assign case_title = case_product.title
+                assign case_price = case_product.price | money
+                if case_product.featured_image != blank
+                  assign case_image = case_product.featured_image
+                endif
+              endif
+              assign case_alt = case_title | escape
+            -%}
+            <article class="wine-club-case-card" {{ block.shopify_attributes }}>
+              <div class="wine-club-case-card__photo">
+                {%- if case_image != blank -%}
+                  {{
+                    case_image
+                    | image_url: width: 800
+                    | image_tag: loading: 'lazy', widths: '280, 400, 560, 800', sizes: '(min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw', alt: case_alt
+                  }}
+                {%- else -%}
+                  <div class="wine-club-case-card__photo-placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+              </div>
+              <div class="wine-club-case-card__body">
+                {%- if case_title != blank -%}
+                  <h3 class="wine-club-case-card__title">{{ case_title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <div class="wine-club-case-card__desc">{{ block.settings.description }}</div>
+                {%- endif -%}
+                {%- if case_price != blank or block.settings.price_suffix != blank -%}
+                  <div class="wine-club-case-card__price">
+                    {%- if case_price != blank -%}{{ case_price }}{%- endif -%}
+                    {%- if block.settings.price_suffix != blank -%}
+                      <small>{{ block.settings.price_suffix }}</small>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+                {%- if block.settings.button_text != blank -%}
+                  <a
+                    class="wine-club-case-card__btn"
+                    href="{{ block.settings.button_link | default: '#' }}"
+                  >
+                    {{ block.settings.button_text }}
+                  </a>
+                {%- endif -%}
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wine Club case select",
+  "tag": "section",
+  "class": "section-wine-club-case-select",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow",
+      "default": "Choose Your Case"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find your Wine Club case"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "X-Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Pick a case to get started — you'll choose your delivery frequency on the next step.</p>"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 84
+    }
+  ],
+  "blocks": [
+    {
+      "type": "case_card",
+      "name": "Case card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product (optional)",
+          "info": "When set, the card uses this product's image, title, and price. Description and button still come from the fields below."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Used when no product is selected"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "The Estate Case",
+          "info": "Used when no product is selected"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Six bottles from our Estate Range, refreshed every quarter with our winemaking team's latest picks.</p>"
+        },
+        {
+          "type": "text",
+          "id": "price_text",
+          "label": "Price text",
+          "default": "R 1,850.00",
+          "info": "Used when no product is selected"
+        },
+        {
+          "type": "text",
+          "id": "price_suffix",
+          "label": "Price suffix",
+          "default": "/ quarterly case"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Join the Club"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link",
+          "info": "Destination for Join the Club — e.g. the upcoming Build Your Case page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wine Club case select",
+      "blocks": [
+        {
+          "type": "case_card",
+          "settings": {
+            "title": "The Estate Case",
+            "description": "<p>Six bottles from our Estate Range, refreshed every quarter with our winemaking team's latest picks.</p>",
+            "price_text": "R 1,850.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club"
+          }
+        },
+        {
+          "type": "case_card",
+          "settings": {
+            "title": "The Library Collection",
+            "description": "<p>Rare and limited-release vintages from our library cellar, offered to members before anyone else.</p>",
+            "price_text": "R 3,200.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club"
+          }
+        },
+        {
+          "type": "case_card",
+          "settings": {
+            "title": "The Reserve Case",
+            "description": "<p>Featuring The Jem and our flagship reds, for members who want the very best from every release.</p>",
+            "price_text": "R 4,650.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

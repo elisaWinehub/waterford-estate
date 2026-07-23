@@ -720,6 +720,140 @@ body.wc-modal-open {
   margin-bottom: 0;
 }
 
+/* Choose Your Case */
+.wine-club-case-select {
+  background: var(--wc-cream-2);
+}
+
+.wine-club-case-select__head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 44px;
+}
+
+.wine-club-case-select__desc {
+  font-size: 15.5px;
+  color: var(--wc-muted);
+  margin: 12px 0 0;
+}
+
+.wine-club-case-select__desc p {
+  margin: 0;
+}
+
+.wine-club-case-select__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--wc-case-cols, 3), 1fr);
+  gap: 28px;
+  max-width: 1096px;
+  margin: 0 auto;
+}
+
+.wine-club-case-card {
+  background: #fff;
+  border: 1px solid #e6ddc9;
+  display: flex;
+  flex-direction: column;
+}
+
+.wine-club-case-card__photo {
+  background: #fff;
+  border-bottom: 1px solid #eee2d0;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.wine-club-case-card__photo img {
+  max-width: 60%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.wine-club-case-card__photo-placeholder {
+  width: 40%;
+  aspect-ratio: 1;
+  background: var(--wc-olive-tint);
+}
+
+.wine-club-case-card__body {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.wine-club-case-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.wine-club-case-card__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--wc-muted);
+  margin: 0 0 16px;
+  flex: 1;
+}
+
+.wine-club-case-card__desc p {
+  margin: 0;
+}
+
+.wine-club-case-card__price {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 18px;
+}
+
+.wine-club-case-card__price small {
+  font-size: 12.5px;
+  color: var(--wc-muted);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.wine-club-case-card__btn,
+.wine-club a.wine-club-case-card__btn {
+  background: var(--wc-black);
+  color: #fff;
+  border: none;
+  padding: 13px 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+  display: block;
+  border-radius: 0;
+  width: 100%;
+}
+
+.wine-club-case-card__btn:hover,
+.wine-club a.wine-club-case-card__btn:hover {
+  background: var(--wc-olive-dark);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .wine-club-case-select__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .wine-club-case-select__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* App slot utility */
 .wine-club-app-slot {
   background: var(--wc-cream);

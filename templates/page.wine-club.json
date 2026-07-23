@@ -105,91 +105,56 @@
         "padding_bottom": 84
       }
     },
-    "wine_club_signup": {
-      "type": "wine-club-signup",
+    "wine_club_case_select": {
+      "type": "wine-club-case-select",
       "blocks": {
-        "steps": {
-          "type": "step_indicator",
+        "case_estate": {
+          "type": "case_card",
           "settings": {
-            "step_1_label": "Frequency",
-            "step_2_label": "Quantity",
-            "step_3_label": "Review",
-            "active_step": "1"
+            "title": "The Estate Case",
+            "description": "<p>Six bottles from our Estate Range, refreshed every quarter with our winemaking team's latest picks.</p>",
+            "price_text": "R 1,850.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club",
+            "button_link": ""
           }
         },
-        "freq_monthly": {
-          "type": "frequency_card",
+        "case_library": {
+          "type": "case_card",
           "settings": {
-            "icon": "calendar",
-            "title": "Monthly",
-            "discount_text": "15% off club shipments",
-            "cadence_text": "Every month",
-            "button_text": "View extra benefits",
-            "button_link": "",
-            "benefits_heading": "Benefits:",
-            "benefits": "<ul><li>15% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>15% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
-            "close_label": "Close"
+            "title": "The Library Collection",
+            "description": "<p>Rare and limited-release vintages from our library cellar, offered to members before anyone else.</p>",
+            "price_text": "R 3,200.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club",
+            "button_link": ""
           }
         },
-        "freq_quarterly": {
-          "type": "frequency_card",
+        "case_reserve": {
+          "type": "case_card",
           "settings": {
-            "icon": "calendar",
-            "title": "Quarterly",
-            "discount_text": "18% off club shipments",
-            "cadence_text": "Every 3 months",
-            "button_text": "View extra benefits",
-            "button_link": "",
-            "benefits_heading": "Benefits:",
-            "benefits": "<ul><li>18% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>18% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
-            "close_label": "Close"
-          }
-        },
-        "freq_biannual": {
-          "type": "frequency_card",
-          "settings": {
-            "icon": "calendar",
-            "title": "Bi-Annually",
-            "discount_text": "20% off club shipments",
-            "cadence_text": "Every 6 months",
-            "button_text": "View extra benefits",
-            "button_link": "",
-            "benefits_heading": "Benefits:",
-            "benefits": "<ul><li>20% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>20% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
-            "close_label": "Close"
-          }
-        },
-        "freq_annual": {
-          "type": "frequency_card",
-          "settings": {
-            "icon": "star",
-            "title": "Annually",
-            "discount_text": "25% off club shipments",
-            "cadence_text": "Every 12 months",
-            "button_text": "View extra benefits",
-            "button_link": "",
-            "benefits_heading": "Benefits:",
-            "benefits": "<ul><li>25% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>25% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
-            "close_label": "Close"
+            "title": "The Reserve Case",
+            "description": "<p>Featuring The Jem and our flagship reds, for members who want the very best from every release.</p>",
+            "price_text": "R 4,650.00",
+            "price_suffix": "/ quarterly case",
+            "button_text": "Join the Club",
+            "button_link": ""
           }
         }
       },
       "block_order": [
-        "steps",
-        "freq_monthly",
-        "freq_quarterly",
-        "freq_biannual",
-        "freq_annual"
+        "case_estate",
+        "case_library",
+        "case_reserve"
       ],
       "settings": {
-        "eyebrow_text": "Build Your Case",
-        "heading": "Choose your membership",
+        "eyebrow_text": "Choose Your Case",
+        "heading": "Find your Wine Club case",
         "heading_size": "large",
-        "description": "<p>Select a delivery frequency to begin — quantity and wine selection follow in the next steps.</p>",
-        "powered_by_text": "Powered by WineHub",
-        "note": "This step flow, card styling, icons and colors are rendered by the WineHub app once installed — the layout above shows how it will appear once themed to match the site. Remove frequency cards when the app block is live.",
+        "description": "<p>Pick a case to get started — you'll choose your delivery frequency on the next step.</p>",
+        "columns_desktop": "3",
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 84
       }
     },
     "wine_club_faq": {
@@ -248,7 +213,7 @@
     "wine_club_hero",
     "wine_club_breadcrumb",
     "wine_club_benefits",
-    "wine_club_signup",
+    "wine_club_case_select",
     "wine_club_faq"
   ]
 }
