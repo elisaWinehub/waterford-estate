@@ -1,0 +1,108 @@
+{%- comment -%}
+  Membership intro — centered page intro
+{%- endcomment -%}
+
+{{ 'membership.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign align = section.settings.text_alignment | default: 'center'
+  assign max_w = section.settings.max_width | default: 640
+-%}
+
+<section
+  class="membership membership-intro"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="membership__wrap">
+    <div
+      class="membership-intro__inner membership-intro__inner--{{ align }}"
+      style="max-width: {{ max_w }}px;"
+    >
+      {%- if section.settings.heading != blank -%}
+        <h2 class="serif membership__heading membership__heading--{{ section.settings.heading_size | default: 'medium' }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="membership-intro__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Membership intro",
+  "tag": "section",
+  "class": "section-membership-intro",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Optional supporting heading" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "X-Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Intro text",
+      "default": "<p>Three levels of access to Waterford Estate, from an introduction to our Estate Range through to full access to our library cellar and The Jem Room. Every tier includes a Wine Club case — pick the level that suits you, then build your case.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 400,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Reading width",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Membership intro"
+    }
+  ]
+}
+{% endschema %}

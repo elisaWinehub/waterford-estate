@@ -1,0 +1,106 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "membership_hero": {
+      "type": "membership-hero",
+      "settings": {
+        "overlay_opacity": 45,
+        "eyebrow_text": "Membership",
+        "heading": "Choose Your Membership",
+        "heading_size": "large",
+        "content_position": "left",
+        "content_alignment_vertical": "bottom",
+        "min_height": 340,
+        "mobile_min_height": 260,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "membership_intro": {
+      "type": "membership-intro",
+      "settings": {
+        "heading": "",
+        "heading_size": "medium",
+        "text": "<p>Three levels of access to Waterford Estate, from an introduction to our Estate Range through to full access to our library cellar and The Jem Room. Every tier includes a Wine Club case — pick the level that suits you, then build your case.</p>",
+        "text_alignment": "center",
+        "max_width": 640,
+        "padding_top": 28,
+        "padding_bottom": 64
+      }
+    },
+    "membership_tiers": {
+      "type": "membership-tiers",
+      "blocks": {
+        "tier_bronze": {
+          "type": "tier_card",
+          "settings": {
+            "name": "Bronze",
+            "featured": false,
+            "badge_text": "",
+            "price": "R 650.00",
+            "price_suffix": "/ quarter",
+            "description": "<p>An easy introduction to membership, with two bottles from our Estate Range every quarter.</p>",
+            "benefits": "<ul><li>Two bottles per quarter</li><li>Member pricing on all purchases</li><li>Complimentary shipping</li><li>Pause or cancel anytime</li></ul>",
+            "button_text": "Join the Club",
+            "button_link": ""
+          }
+        },
+        "tier_silver": {
+          "type": "tier_card",
+          "settings": {
+            "name": "Silver",
+            "featured": true,
+            "badge_text": "Most Popular",
+            "price": "R 950.00",
+            "price_suffix": "/ quarter",
+            "description": "<p>Our most popular tier — four bottles per quarter with priority allocation on limited releases.</p>",
+            "benefits": "<ul><li>Four bottles per quarter</li><li>Priority allocation on limited releases</li><li>Two complimentary tastings a year</li><li>Complimentary shipping</li><li>Pause or cancel anytime</li></ul>",
+            "button_text": "Join the Club",
+            "button_link": ""
+          }
+        },
+        "tier_gold": {
+          "type": "tier_card",
+          "settings": {
+            "name": "Gold",
+            "featured": false,
+            "badge_text": "",
+            "price": "R 1,450.00",
+            "price_suffix": "/ quarter",
+            "description": "<p>Full access to Waterford Estate — six bottles per quarter, including library and flagship releases.</p>",
+            "benefits": "<ul><li>Six bottles per quarter, including library releases</li><li>First access to The Jem and single-vineyard wines</li><li>Quarterly member tastings and cellar tours</li><li>Access to The Jem Room for private bookings</li><li>Complimentary shipping</li></ul>",
+            "button_text": "Join the Club",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "tier_bronze",
+        "tier_silver",
+        "tier_gold"
+      ],
+      "settings": {
+        "eyebrow_text": "",
+        "heading": "",
+        "heading_size": "large",
+        "columns_desktop": "3",
+        "note_text": "<p>Not sure which tier is right for you? <a href=\"/pages/wine-club\" title=\"Wine Club\">Compare our Wine Club cases</a> or <a href=\"/pages/contact\" title=\"Contact\">get in touch</a> and our team will help you choose.</p>",
+        "padding_top": 0,
+        "padding_bottom": 70
+      }
+    }
+  },
+  "order": [
+    "membership_hero",
+    "membership_intro",
+    "membership_tiers"
+  ]
+}
