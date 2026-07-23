@@ -192,6 +192,10 @@
 }
 
 /* Actions */
+.byc-actions {
+  background: #f2eee4;
+}
+
 .byc-actions__row {
   display: flex;
   align-items: center;
