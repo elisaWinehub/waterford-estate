@@ -221,8 +221,9 @@
                                   assign adj = plan.price_adjustments.first
                                   if adj.value_type == 'percentage'
                                     assign plan_discount = adj.value
-                                    assign plan_sale = price_cents | times: 100 | minus: adj.value | divided_by: 100
-                                  elsif adj.value_type == 'fixed_amount'
+                                    assign plan_factor = 100 | minus: adj.value
+                                    assign plan_sale = price_cents | times: plan_factor | divided_by: 100
+                                  elsif adj.value_type == 'fixed_amount' or adj.value_type == 'price'
                                     assign plan_sale = price_cents | minus: adj.value
                                     if price_cents > 0
                                       assign plan_discount = adj.value | times: 100.0 | divided_by: price_cents | round

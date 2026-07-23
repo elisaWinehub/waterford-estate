@@ -1,0 +1,206 @@
+{%- comment -%}
+  Wine Club member benefits — repeatable icon + text cards
+{%- endcomment -%}
+
+{{ 'wine-club.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols = section.settings.columns_desktop | default: '3'
+-%}
+
+<section
+  class="wine-club wine-club-benefits color-{{ section.settings.color_scheme }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px; --wc-cols: {{ cols }};"
+  {{ section.shopify_attributes }}
+>
+  <div class="wine-club__wrap">
+    <div class="wine-club-benefits__head">
+      {%- if section.settings.eyebrow_text != blank -%}
+        <div class="wine-club__eyebrow">{{ section.settings.eyebrow_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="serif wine-club__heading wine-club__heading--{{ section.settings.heading_size | default: 'large' }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="wine-club-benefits__desc">{{ section.settings.description }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="wine-club-benefits__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'benefit_item' -%}
+            <div class="wine-club-benefit" {{ block.shopify_attributes }}>
+              <div class="wine-club-benefit__icon">
+                {%- if block.settings.icon == 'custom' and block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: block.settings.heading | escape }}
+                {%- else -%}
+                  {% render 'wf-wine-club-icon', icon: block.settings.icon %}
+                {%- endif -%}
+              </div>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="wine-club-benefit__title">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <div class="wine-club-benefit__text">{{ block.settings.text }}</div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wine Club benefits",
+  "tag": "section",
+  "class": "section-wine-club-benefits",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow_text", "label": "Eyebrow", "default": "Member Benefits" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your all-access pass to Waterford Estate" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "X-Large" }
+      ],
+      "default": "large"
+    },
+    { "type": "richtext", "id": "description", "label": "Optional supporting text" },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "3"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 84
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit_item",
+      "name": "Benefit",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "case", "label": "Case" },
+            { "value": "tag", "label": "Discount tag" },
+            { "value": "star", "label": "Priority star" },
+            { "value": "truck", "label": "Shipping truck" },
+            { "value": "wine_glass", "label": "Wine glass" },
+            { "value": "calendar", "label": "Calendar" },
+            { "value": "pause", "label": "Pause / cancel" },
+            { "value": "custom", "label": "Custom" }
+          ],
+          "default": "case"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom icon",
+          "info": "Used when Icon is set to Custom"
+        },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Curated cases" },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>A hand-picked selection from our Estate, Waterford and Library ranges, chosen by our winemaking team each quarter.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wine Club benefits",
+      "blocks": [
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "case",
+            "heading": "Curated cases",
+            "text": "<p>A hand-picked selection from our Estate, Waterford and Library ranges, chosen by our winemaking team each quarter.</p>"
+          }
+        },
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "tag",
+            "heading": "Member pricing",
+            "text": "<p>Enjoy preferential pricing on every wine in your case, plus member-only rates on additional purchases year-round.</p>"
+          }
+        },
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "star",
+            "heading": "Priority allocation",
+            "text": "<p>First access to The Jem, single-vineyard releases and library vintages before they're offered to the public.</p>"
+          }
+        },
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "truck",
+            "heading": "Complimentary shipping",
+            "text": "<p>Every case ships free within South Africa, with tracked delivery and careful, temperature-conscious packaging.</p>"
+          }
+        },
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "calendar",
+            "heading": "Member tastings",
+            "text": "<p>Invitations to seasonal tastings, cellar tours and pairing dinners at the estate, hosted by our winemaking team.</p>"
+          }
+        },
+        {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "pause",
+            "heading": "Pause or cancel anytime",
+            "text": "<p>No lock-in contracts. Skip a delivery, change your case size, or cancel your membership whenever you need to.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

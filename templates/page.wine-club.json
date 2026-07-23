@@ -1,0 +1,250 @@
+/*
+ * ------------------------------------------------------------
+ * Wine Club page template — sections are independently editable
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "wine_club_hero": {
+      "type": "wine-club-hero",
+      "settings": {
+        "overlay_opacity": 45,
+        "eyebrow_text": "Membership",
+        "heading": "The Waterford Wine Club",
+        "heading_size": "large",
+        "content_position": "left",
+        "content_alignment_vertical": "bottom",
+        "min_height": 340,
+        "mobile_min_height": 260,
+        "padding_top": 0,
+        "padding_bottom": 0
+      },
+      "blocks": {}
+    },
+    "wine_club_intro": {
+      "type": "wine-club-intro",
+      "blocks": {
+        "intro_cta": {
+          "type": "button",
+          "settings": {
+            "text": "Join the Club",
+            "link": "#join",
+            "style": "primary"
+          }
+        }
+      },
+      "block_order": ["intro_cta"],
+      "settings": {
+        "show_breadcrumb": true,
+        "heading": "",
+        "text": "<p>A curated case of our finest releases, delivered to your door every quarter — with member pricing, priority allocation on limited releases, and complimentary tastings at the estate.</p>",
+        "text_alignment": "center",
+        "max_width": 640,
+        "padding_top": 0,
+        "padding_bottom": 64
+      }
+    },
+    "wine_club_benefits": {
+      "type": "wine-club-benefits",
+      "blocks": {
+        "b1": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "case",
+            "heading": "Curated cases",
+            "text": "<p>A hand-picked selection from our Estate, Waterford and Library ranges, chosen by our winemaking team each quarter.</p>"
+          }
+        },
+        "b2": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "tag",
+            "heading": "Member pricing",
+            "text": "<p>Enjoy preferential pricing on every wine in your case, plus member-only rates on additional purchases year-round.</p>"
+          }
+        },
+        "b3": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "star",
+            "heading": "Priority allocation",
+            "text": "<p>First access to The Jem, single-vineyard releases and library vintages before they're offered to the public.</p>"
+          }
+        },
+        "b4": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "truck",
+            "heading": "Complimentary shipping",
+            "text": "<p>Every case ships free within South Africa, with tracked delivery and careful, temperature-conscious packaging.</p>"
+          }
+        },
+        "b5": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "calendar",
+            "heading": "Member tastings",
+            "text": "<p>Invitations to seasonal tastings, cellar tours and pairing dinners at the estate, hosted by our winemaking team.</p>"
+          }
+        },
+        "b6": {
+          "type": "benefit_item",
+          "settings": {
+            "icon": "pause",
+            "heading": "Pause or cancel anytime",
+            "text": "<p>No lock-in contracts. Skip a delivery, change your case size, or cancel your membership whenever you need to.</p>"
+          }
+        }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6"],
+      "settings": {
+        "eyebrow_text": "Member Benefits",
+        "heading": "Your all-access pass to Waterford Estate",
+        "heading_size": "large",
+        "columns_desktop": "3",
+        "padding_top": 0,
+        "padding_bottom": 84
+      }
+    },
+    "wine_club_signup": {
+      "type": "wine-club-signup",
+      "blocks": {
+        "steps": {
+          "type": "step_indicator",
+          "settings": {
+            "step_1_label": "Frequency",
+            "step_2_label": "Quantity",
+            "step_3_label": "Review",
+            "active_step": "1"
+          }
+        },
+        "freq_monthly": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Monthly",
+            "discount_text": "15% off club shipments",
+            "cadence_text": "Every month",
+            "button_text": "View extra benefits"
+          }
+        },
+        "freq_quarterly": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Quarterly",
+            "discount_text": "18% off club shipments",
+            "cadence_text": "Every 3 months",
+            "button_text": "View extra benefits"
+          }
+        },
+        "freq_biannual": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "calendar",
+            "title": "Bi-Annually",
+            "discount_text": "20% off club shipments",
+            "cadence_text": "Every 6 months",
+            "button_text": "View extra benefits"
+          }
+        },
+        "freq_annual": {
+          "type": "frequency_card",
+          "settings": {
+            "icon": "star",
+            "title": "Annually",
+            "discount_text": "25% off club shipments",
+            "cadence_text": "Every 12 months",
+            "button_text": "View extra benefits"
+          }
+        }
+      },
+      "block_order": [
+        "steps",
+        "freq_monthly",
+        "freq_quarterly",
+        "freq_biannual",
+        "freq_annual"
+      ],
+      "settings": {
+        "eyebrow_text": "Build Your Case",
+        "heading": "Choose your membership",
+        "heading_size": "large",
+        "description": "<p>Select a delivery frequency to begin — quantity and wine selection follow in the next steps.</p>",
+        "powered_by_text": "Powered by WineHub",
+        "note": "This step flow, card styling, icons and colors are rendered by the WineHub app once installed — the layout above shows how it will appear once themed to match the site. Remove frequency cards when the app block is live.",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "wine_club_case": {
+      "type": "wine-club-case-preview",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "eyebrow_text": "A Taste of What's Inside",
+        "heading": "This quarter's selection",
+        "heading_size": "large",
+        "description": "<p>A preview of the wines currently featured in the Wine Club case — the exact selection varies each quarter.</p>",
+        "products_to_show": 3,
+        "columns_desktop": "3",
+        "padding_top": 0,
+        "padding_bottom": 84
+      }
+    },
+    "wine_club_faq": {
+      "type": "wine-club-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Can I skip or cancel a delivery?",
+            "answer": "<p>Yes — you can pause, skip an upcoming shipment, or cancel your membership at any time from your account, with no lock-in contract.</p>",
+            "default_open": true
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How is shipping handled?",
+            "answer": "<p>All Wine Club deliveries within South Africa ship free, with tracked courier delivery and temperature-conscious packaging. International membership is available on request — contact us for details.</p>",
+            "default_open": false
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I change my case size or wines?",
+            "answer": "<p>Yes — you can adjust your quantity ahead of each delivery, and swap out individual bottles for alternatives from the current selection before your case ships.</p>",
+            "default_open": false
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "What if a wine in my case is unavailable?",
+            "answer": "<p>Our winemaking team selects a comparable substitute of equal or greater value from the current release, so your case is never short a bottle.</p>",
+            "default_open": false
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4"],
+      "settings": {
+        "eyebrow_text": "FAQ",
+        "heading": "Membership questions",
+        "heading_size": "large",
+        "max_width": 760,
+        "padding_top": 0,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "wine_club_hero",
+    "wine_club_intro",
+    "wine_club_benefits",
+    "wine_club_signup",
+    "wine_club_case",
+    "wine_club_faq"
+  ]
+}

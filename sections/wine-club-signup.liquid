@@ -1,0 +1,253 @@
+{%- comment -%}
+  Wine Club signup — WineHub / app integration point.
+  Primary path: @app block. frequency_card + step_indicator are manual visual fallbacks;
+  remove them once a real app block is functioning to avoid stacked signup UIs.
+{%- endcomment -%}
+
+{{ 'wine-club.css' | asset_url | stylesheet_tag }}
+
+<section
+  id="join"
+  class="wine-club wine-club-signup color-{{ section.settings.color_scheme }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="wine-club__wrap">
+    <div class="wine-club-signup__head">
+      {%- if section.settings.eyebrow_text != blank -%}
+        <div class="wine-club__eyebrow">{{ section.settings.eyebrow_text }}</div>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="serif wine-club__heading wine-club__heading--{{ section.settings.heading_size | default: 'large' }}">
+          {{ section.settings.heading }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.description != blank -%}
+        <div class="wine-club-signup__desc">{{ section.settings.description }}</div>
+      {%- endif -%}
+      {%- if section.settings.powered_by_text != blank -%}
+        <p class="wine-club-signup__powered">{{ section.settings.powered_by_text }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when '@app' -%}
+          <div class="wine-club-signup__app" {{ block.shopify_attributes }}>
+            {% render block %}
+          </div>
+
+        {%- when 'custom_liquid' -%}
+          {%- comment -%} Raw Liquid/HTML embed — trusted staff only {%- endcomment -%}
+          <div
+            class="wine-club-signup__liquid{% if block.settings.full_width %} wine-club-signup__liquid--full{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {{ block.settings.code }}
+          </div>
+
+        {%- when 'step_indicator' -%}
+          {%- liquid
+            assign active = block.settings.active_step | default: '1' | plus: 0
+          -%}
+          <div class="wine-club-signup__steps" {{ block.shopify_attributes }}>
+            <div class="wine-club-signup__step{% if active == 1 %} is-active{% endif %}">
+              <span class="wine-club-signup__dot"></span>
+              <span class="wine-club-signup__step-label">{{ block.settings.step_1_label | default: 'Frequency' }}</span>
+            </div>
+            <div class="wine-club-signup__line" aria-hidden="true"></div>
+            <div class="wine-club-signup__step{% if active == 2 %} is-active{% endif %}">
+              <span class="wine-club-signup__dot"></span>
+              <span class="wine-club-signup__step-label">{{ block.settings.step_2_label | default: 'Quantity' }}</span>
+            </div>
+            <div class="wine-club-signup__line" aria-hidden="true"></div>
+            <div class="wine-club-signup__step{% if active == 3 %} is-active{% endif %}">
+              <span class="wine-club-signup__dot"></span>
+              <span class="wine-club-signup__step-label">{{ block.settings.step_3_label | default: 'Review' }}</span>
+            </div>
+          </div>
+
+        {%- when 'frequency_card' -%}
+          {%- comment -%} Cards rendered after loop into a grid — collected below {%- endcomment -%}
+      {%- endcase -%}
+    {%- endfor -%}
+
+    {%- assign has_freq = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'frequency_card' -%}
+        {%- assign has_freq = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_freq -%}
+      <div class="wine-club-signup__freq-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'frequency_card' -%}
+            <div class="wine-club-signup__freq-card" {{ block.shopify_attributes }}>
+              <div class="wine-club-signup__freq-icon">
+                {%- if block.settings.icon == 'custom' and block.settings.custom_icon != blank -%}
+                  {{ block.settings.custom_icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: block.settings.title | escape }}
+                {%- else -%}
+                  {% render 'wf-wine-club-icon', icon: block.settings.icon %}
+                {%- endif -%}
+              </div>
+              {%- if block.settings.title != blank -%}
+                <div class="wine-club-signup__freq-name">{{ block.settings.title }}</div>
+              {%- endif -%}
+              {%- if block.settings.discount_text != blank -%}
+                <div class="wine-club-signup__freq-discount">{{ block.settings.discount_text }}</div>
+              {%- endif -%}
+              {%- if block.settings.cadence_text != blank -%}
+                <div class="wine-club-signup__freq-cadence">{{ block.settings.cadence_text }}</div>
+              {%- endif -%}
+              {%- if block.settings.button_text != blank -%}
+                <a class="wine-club-signup__freq-btn" href="{{ block.settings.button_link | default: '#' }}">
+                  {{ block.settings.button_text }}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.note != blank -%}
+      <p class="wine-club-signup__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wine Club signup",
+  "tag": "section",
+  "class": "section-wine-club-signup",
+  "enabled_on": { "templates": ["page"] },
+  "settings": [
+    { "type": "text", "id": "eyebrow_text", "label": "Eyebrow", "default": "Build Your Case" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your membership" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "X-Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Select a delivery frequency to begin — quantity and wine selection follow in the next steps.</p>"
+    },
+    {
+      "type": "text",
+      "id": "powered_by_text",
+      "label": "Powered by label",
+      "default": "Powered by WineHub"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Footer note",
+      "default": "This step flow is rendered by the WineHub app once installed — frequency cards below are a temporary visual fallback."
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "custom_liquid",
+      "name": "Custom liquid / embed",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Renders raw Liquid/HTML. Only trusted staff should edit this block."
+        },
+        { "type": "text", "id": "label", "label": "Admin label", "default": "Embed" },
+        { "type": "liquid", "id": "code", "label": "Custom code" },
+        { "type": "checkbox", "id": "full_width", "label": "Full width", "default": false }
+      ]
+    },
+    {
+      "type": "step_indicator",
+      "name": "Step indicator",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "step_1_label", "label": "Step 1", "default": "Frequency" },
+        { "type": "text", "id": "step_2_label", "label": "Step 2", "default": "Quantity" },
+        { "type": "text", "id": "step_3_label", "label": "Step 3", "default": "Review" },
+        {
+          "type": "select",
+          "id": "active_step",
+          "label": "Active step",
+          "options": [
+            { "value": "1", "label": "1" },
+            { "value": "2", "label": "2" },
+            { "value": "3", "label": "3" }
+          ],
+          "default": "1"
+        }
+      ]
+    },
+    {
+      "type": "frequency_card",
+      "name": "Frequency card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "calendar", "label": "Calendar" },
+            { "value": "case", "label": "Case" },
+            { "value": "tag", "label": "Discount tag" },
+            { "value": "star", "label": "Priority star" },
+            { "value": "truck", "label": "Shipping truck" },
+            { "value": "wine_glass", "label": "Wine glass" },
+            { "value": "pause", "label": "Pause / cancel" },
+            { "value": "custom", "label": "Custom" }
+          ],
+          "default": "calendar"
+        },
+        { "type": "image_picker", "id": "custom_icon", "label": "Custom icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Monthly" },
+        { "type": "text", "id": "discount_text", "label": "Discount text", "default": "15% off club shipments" },
+        { "type": "text", "id": "cadence_text", "label": "Cadence text", "default": "Every month" },
+        { "type": "text", "id": "button_text", "label": "Button text", "default": "View extra benefits" },
+        { "type": "url", "id": "button_link", "label": "Button link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Wine Club signup"
+    }
+  ]
+}
+{% endschema %}
