@@ -5,6 +5,7 @@
 {%- endcomment -%}
 
 {{ 'wine-club.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'wine-club.js' | asset_url }}" defer></script>
 
 <section
   id="join"
@@ -84,6 +85,13 @@
       <div class="wine-club-signup__freq-grid">
         {%- for block in section.blocks -%}
           {%- if block.type == 'frequency_card' -%}
+            {%- liquid
+              assign modal_id = 'wc-benefits-' | append: section.id | append: '-' | append: block.id
+              assign open_modal = true
+              if block.settings.button_link != blank
+                assign open_modal = false
+              endif
+            -%}
             <div class="wine-club-signup__freq-card" {{ block.shopify_attributes }}>
               <div class="wine-club-signup__freq-icon">
                 {%- if block.settings.icon == 'custom' and block.settings.custom_icon != blank -%}
@@ -102,14 +110,68 @@
                 <div class="wine-club-signup__freq-cadence">{{ block.settings.cadence_text }}</div>
               {%- endif -%}
               {%- if block.settings.button_text != blank -%}
-                <a class="wine-club-signup__freq-btn" href="{{ block.settings.button_link | default: '#' }}">
-                  {{ block.settings.button_text }}
-                </a>
+                {%- if open_modal -%}
+                  <button
+                    type="button"
+                    class="wine-club-signup__freq-btn"
+                    data-wc-benefits-open
+                    data-wc-modal="{{ modal_id }}"
+                    aria-haspopup="dialog"
+                  >
+                    {{ block.settings.button_text }}
+                  </button>
+                {%- else -%}
+                  <a class="wine-club-signup__freq-btn" href="{{ block.settings.button_link }}">
+                    {{ block.settings.button_text }}
+                  </a>
+                {%- endif -%}
               {%- endif -%}
             </div>
           {%- endif -%}
         {%- endfor -%}
       </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'frequency_card' -%}
+          {%- liquid
+            assign modal_id = 'wc-benefits-' | append: section.id | append: '-' | append: block.id
+            assign open_modal = true
+            if block.settings.button_link != blank
+              assign open_modal = false
+            endif
+          -%}
+          {%- if open_modal -%}
+            <dialog class="wine-club-benefits-modal" id="{{ modal_id }}" data-wc-benefits-modal>
+              <div class="wine-club-benefits-modal__panel">
+                <div class="wine-club-benefits-modal__icon" aria-hidden="true">
+                  {%- if block.settings.icon == 'custom' and block.settings.custom_icon != blank -%}
+                    {{ block.settings.custom_icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: '' }}
+                  {%- else -%}
+                    {% render 'wf-wine-club-icon', icon: block.settings.icon %}
+                  {%- endif -%}
+                </div>
+                {%- if block.settings.title != blank -%}
+                  <h3 class="wine-club-benefits-modal__title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.cadence_text != blank -%}
+                  <p class="wine-club-benefits-modal__subtitle">{{ block.settings.cadence_text }}</p>
+                {%- endif -%}
+                {%- if block.settings.benefits_heading != blank -%}
+                  <p class="wine-club-benefits-modal__label">{{ block.settings.benefits_heading }}</p>
+                {%- endif -%}
+                {%- if block.settings.benefits != blank -%}
+                  <div class="wine-club-benefits-modal__list">
+                    {{ block.settings.benefits }}
+                  </div>
+                {%- endif -%}
+                <button type="button" class="wine-club-benefits-modal__close" data-wc-benefits-close>
+                  {{ block.settings.close_label | default: 'Close' }}
+                </button>
+              </div>
+            </dialog>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
     {%- endif -%}
 
     {%- if section.settings.note != blank -%}
@@ -239,7 +301,34 @@
         { "type": "text", "id": "discount_text", "label": "Discount text", "default": "15% off club shipments" },
         { "type": "text", "id": "cadence_text", "label": "Cadence text", "default": "Every month" },
         { "type": "text", "id": "button_text", "label": "Button text", "default": "View extra benefits" },
-        { "type": "url", "id": "button_link", "label": "Button link" }
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link (optional)",
+          "info": "Leave blank to open the benefits popup. If set, the button navigates to this URL instead."
+        },
+        {
+          "type": "header",
+          "content": "Benefits popup"
+        },
+        {
+          "type": "text",
+          "id": "benefits_heading",
+          "label": "Benefits heading",
+          "default": "Benefits:"
+        },
+        {
+          "type": "richtext",
+          "id": "benefits",
+          "label": "Benefits list",
+          "default": "<ul><li>15% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>15% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>"
+        },
+        {
+          "type": "text",
+          "id": "close_label",
+          "label": "Close button label",
+          "default": "Close"
+        }
       ]
     }
   ],

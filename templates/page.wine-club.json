@@ -124,7 +124,10 @@
             "discount_text": "15% off club shipments",
             "cadence_text": "Every month",
             "button_text": "View extra benefits",
-            "button_link": ""
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>15% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>15% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
           }
         },
         "freq_quarterly": {
@@ -135,7 +138,10 @@
             "discount_text": "18% off club shipments",
             "cadence_text": "Every 3 months",
             "button_text": "View extra benefits",
-            "button_link": ""
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>18% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>18% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
           }
         },
         "freq_biannual": {
@@ -146,7 +152,10 @@
             "discount_text": "20% off club shipments",
             "cadence_text": "Every 6 months",
             "button_text": "View extra benefits",
-            "button_link": ""
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>20% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>20% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
           }
         },
         "freq_annual": {
@@ -157,7 +166,10 @@
             "discount_text": "25% off club shipments",
             "cadence_text": "Every 12 months",
             "button_text": "View extra benefits",
-            "button_link": ""
+            "button_link": "",
+            "benefits_heading": "Benefits:",
+            "benefits": "<ul><li>25% Off Club Shipments</li><li>Exclusive wines, event invitations, loyalty rewards, exclusive tastings</li><li>25% discount storewide</li><li>Free Shipping on all orders over R 3,000</li></ul>",
+            "close_label": "Close"
           }
         }
       },
