@@ -67,6 +67,8 @@
   position: sticky;
   /* Match sticky header height (set from JS; fallback = navbar min-height) */
   top: var(--wf-header-offset, 4.5rem);
+  align-self: start;
+  width: 100%;
 }
 
 .pdp-photo {

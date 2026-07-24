@@ -46,13 +46,11 @@
     </div>
 
     <section class="pdp-top">
-      <div>
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'gallery' -%}
-            {% render 'wf-pdp-gallery', product: product, block: block %}
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'gallery' -%}
+          {% render 'wf-pdp-gallery', product: product, block: block %}
+        {%- endif -%}
+      {%- endfor -%}
 
       <div class="pdp-info">
         {%- for block in section.blocks -%}
