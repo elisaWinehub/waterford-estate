@@ -21,8 +21,8 @@
   style="--ms-hero-min: {{ min_h }}px; --ms-hero-min-mobile: {{ min_h_m }}px; --ms-overlay: {{ overlay }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
   {{ section.shopify_attributes }}
 >
-  {%- if section.settings.background_image != blank -%}
-    <div class="membership-hero__media">
+  <div class="membership-hero__media">
+    {%- if section.settings.background_image != blank -%}
       {{
         section.settings.background_image
         | image_url: width: 2400
@@ -34,10 +34,18 @@
           class: 'membership-hero__img',
           alt: ''
       }}
-    </div>
-  {%- else -%}
-    <div class="membership-hero__empty">Add a background image in the theme editor</div>
-  {%- endif -%}
+    {%- else -%}
+      <img
+        class="membership-hero__img"
+        src="{{ 'page-hero-default.jpg' | asset_url }}"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+        width="2400"
+        height="1350"
+      >
+    {%- endif -%}
+  </div>
   <div class="membership-hero__overlay" aria-hidden="true"></div>
   <div class="membership-hero__content membership-hero__content--h-{{ h_align }} membership-hero__content--v-{{ v_align }}">
     {%- if section.settings.eyebrow_text != blank -%}
@@ -71,7 +79,12 @@
   "class": "section-membership-hero",
   "enabled_on": { "templates": ["page"] },
   "settings": [
-    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Optional — a default estate photo is used when empty"
+    },
     {
       "type": "range",
       "id": "overlay_opacity",
