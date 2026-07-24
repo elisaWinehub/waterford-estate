@@ -831,6 +831,7 @@ body.wf-zoom-open {
   flex-direction: column;
   background: #fff;
   color: inherit;
+  height: 100%;
 }
 
 .media-thumb {
@@ -844,6 +845,7 @@ body.wf-zoom-open {
   font-size: 12px;
   font-style: italic;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .media-thumb img {
@@ -892,6 +894,7 @@ body.wf-zoom-open {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  flex: 1;
 }
 
 .media-eyebrow {
@@ -928,7 +931,8 @@ body.wf-zoom-open {
   font-size: 14px;
   font-weight: 600;
   color: var(--olive-dark);
-  margin-top: 6px;
+  margin-top: auto;
+  padding-top: 6px;
 }
 
 .section-head {

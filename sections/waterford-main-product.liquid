@@ -677,7 +677,13 @@
               {%- endif -%}
 
               {%- if show_dist -%}
-                <a class="media-card" href="{{ block.settings.dist_url | default: '#' }}">
+                {%- liquid
+                  assign dist_href = block.settings.dist_url | strip
+                  if dist_href == blank or dist_href == '#'
+                    assign dist_href = 'mailto:werner@waterfordestate.co.za'
+                  endif
+                -%}
+                <a class="media-card" href="{{ dist_href }}">
                   <div class="media-thumb">
                     {%- if block.settings.dist_image != blank -%}
                       {{ block.settings.dist_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.dist_title }}
@@ -695,7 +701,7 @@
                     <div class="media-eyebrow">{{ block.settings.dist_eyebrow }}</div>
                     <div class="media-title">{{ block.settings.dist_title }}</div>
                     {%- if block.settings.dist_desc != blank -%}<p class="media-desc">{{ block.settings.dist_desc }}</p>{%- endif -%}
-                    <span class="media-cta">{{ block.settings.dist_cta }}</span>
+                    <span class="media-cta">{{ block.settings.dist_cta | default: 'Contact us →' }}</span>
                   </div>
                 </a>
               {%- endif -%}
@@ -959,8 +965,8 @@
         { "type": "textarea", "id": "dist_desc", "label": "Description", "default": "Available through select partners in the UK, USA and Europe. Other regions on request." },
         { "type": "text", "id": "dist_flags", "label": "Flags (comma-separated)", "default": "UK, USA, Germany, Netherlands" },
         { "type": "image_picker", "id": "dist_image", "label": "Thumbnail override", "info": "Leave empty to use the default international distributors photo." },
-        { "type": "url", "id": "dist_url", "label": "URL" },
-        { "type": "text", "id": "dist_cta", "label": "CTA", "default": "View all distributors →" }
+        { "type": "text", "id": "dist_url", "label": "URL", "default": "mailto:werner@waterfordestate.co.za", "info": "Page URL or mailto: address." },
+        { "type": "text", "id": "dist_cta", "label": "CTA", "default": "Contact us →" }
       ]
     },
     { "type": "@app" }
