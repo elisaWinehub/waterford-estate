@@ -679,14 +679,17 @@
               {%- if show_dist -%}
                 <a class="media-card" href="{{ block.settings.dist_url | default: '#' }}">
                   <div class="media-thumb">
-                    <div class="flag-row">
-                      {%- assign flags = dist_flags_raw | split: ',' -%}
-                      {%- for flag in flags -%}
-                        {%- if flag != blank -%}
-                          <span class="flag-pill">{{ flag | strip }}</span>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </div>
+                    {%- if block.settings.dist_image != blank -%}
+                      {{ block.settings.dist_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.dist_title }}
+                    {%- else -%}
+                      <img
+                        src="{{ 'wf-media-international-distributors.png' | asset_url }}"
+                        alt="{{ block.settings.dist_title | default: 'International Distributors' | escape }}"
+                        loading="lazy"
+                        width="800"
+                        height="500"
+                      >
+                    {%- endif -%}
                   </div>
                   <div class="media-body">
                     <div class="media-eyebrow">{{ block.settings.dist_eyebrow }}</div>
@@ -955,6 +958,7 @@
         { "type": "text", "id": "dist_title", "label": "Title", "default": "International Distributors" },
         { "type": "textarea", "id": "dist_desc", "label": "Description", "default": "Available through select partners in the UK, USA and Europe. Other regions on request." },
         { "type": "text", "id": "dist_flags", "label": "Flags (comma-separated)", "default": "UK, USA, Germany, Netherlands" },
+        { "type": "image_picker", "id": "dist_image", "label": "Thumbnail override", "info": "Leave empty to use the default international distributors photo." },
         { "type": "url", "id": "dist_url", "label": "URL" },
         { "type": "text", "id": "dist_cta", "label": "CTA", "default": "View all distributors →" }
       ]
