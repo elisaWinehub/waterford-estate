@@ -388,12 +388,88 @@ function initBuyForm(root) {
   });
 }
 
+function upgradeYoutubeThumbs(root) {
+  qsa(root, 'img[data-wf-yt-thumb]').forEach((img) => {
+    const id = img.getAttribute('data-wf-yt-thumb');
+    if (!id) return;
+    const max = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+    const probe = new Image();
+    probe.onload = () => {
+      // maxresdefault returns a tiny placeholder when missing (~120px wide)
+      if (probe.naturalWidth > 200) img.src = max;
+    };
+    probe.src = max;
+  });
+}
+
+async function fetchOgImage(url) {
+  if (!url) return null;
+
+  try {
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}&palette=false&audio=false&video=false&iframe=false`);
+    if (res.ok) {
+      const json = await res.json();
+      const image = json?.data?.image?.url || json?.data?.logo?.url || null;
+      if (image) return { image, title: json?.data?.title || '' };
+    }
+  } catch (_) {
+    /* try fallback */
+  }
+
+  try {
+    const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+    if (!res.ok) return null;
+    const html = await res.text();
+    const imageMatch =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+    const titleMatch =
+      html.match(/<meta[^>]+property=["']og:title["'][^>]*content=["']([^"']+)["']/i) ||
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:title["']/i);
+    if (imageMatch?.[1]) {
+      return { image: imageMatch[1], title: titleMatch?.[1] || '' };
+    }
+  } catch (_) {
+    /* ignore */
+  }
+
+  return null;
+}
+
+function initMediaCards(root) {
+  upgradeYoutubeThumbs(root);
+
+  qsa(root, '[data-wf-og-url]').forEach(async (thumb) => {
+    if (thumb.dataset.wfOgBound === '1') return;
+    thumb.dataset.wfOgBound = '1';
+
+    const url = thumb.getAttribute('data-wf-og-url');
+    const img = qs(thumb, '[data-wf-og-target]');
+    if (!url || !img) return;
+
+    const meta = await fetchOgImage(url);
+    thumb.classList.remove('is-loading-og');
+    if (!meta?.image) return;
+
+    img.src = meta.image;
+    img.hidden = false;
+    img.removeAttribute('hidden');
+
+    const card = thumb.closest('.media-card');
+    const titleEl = card && qs(card, '[data-wf-og-title]');
+    if (titleEl && !titleEl.textContent.trim() && meta.title) {
+      titleEl.textContent = meta.title;
+    }
+  });
+}
+
 function init(root) {
   if (!(root instanceof HTMLElement) || root.dataset.wfPdpBound === '1') return;
   root.dataset.wfPdpBound = '1';
   initGallery(root);
   initPurchaseOptions(root);
   initBuyForm(root);
+  initMediaCards(root);
 }
 
 function initAll(scope) {

@@ -27,8 +27,8 @@ See [docs/wine-award-metaobject.md](docs/wine-award-metaobject.md) for setup scr
 | `custom.technical_analysis` | Multi-line / HTML | Fallback for Wine Analysis |
 | `custom.vineyard_winemaking` | Multi-line / HTML | Fallback for Vineyard |
 | `custom.ageing_shipping` | Multi-line / HTML | Fallback for Shipping |
-| `custom.video_url` / `video_title` / `video_thumbnail` | URL / text / image | Media video card |
-| `custom.journal_url` | URL | Journal card link (external article) |
+| `custom.video_url` / `video_title` / `video_thumbnail` | URL / text / image | Media video card. If thumbnail blank, YouTube HQ/maxres thumb is used automatically from `video_url`. |
+| `custom.journal_url` | URL | Journal card link (external article). If `journal_image` blank, storefront fetches the page’s OG image. |
 | `custom.journal_title` | Single line text | Journal card title |
 | `custom.journal_image` | File (image) | Journal card thumbnail |
 | `custom.journal_article` | Article reference (optional) | Fallback if no `journal_url` |

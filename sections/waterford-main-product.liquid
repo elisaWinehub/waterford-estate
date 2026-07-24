@@ -513,6 +513,26 @@
           if dist_flags_raw != blank or block.settings.dist_url != blank
             assign show_dist = true
           endif
+
+          # Derive YouTube thumbnail when no custom image is set
+          assign youtube_id = ''
+          assign youtube_thumb = ''
+          if video_url != blank and video_thumb == blank
+            if video_url contains 'youtu.be/'
+              assign youtube_id = video_url | split: 'youtu.be/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+            elsif video_url contains 'youtube.com/shorts/'
+              assign youtube_id = video_url | split: 'youtube.com/shorts/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+            elsif video_url contains 'youtube.com/embed/'
+              assign youtube_id = video_url | split: 'youtube.com/embed/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+            elsif video_url contains 'youtube.com/live/'
+              assign youtube_id = video_url | split: 'youtube.com/live/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+            elsif video_url contains 'v='
+              assign youtube_id = video_url | split: 'v=' | last | split: '&' | first | split: '?' | first
+            endif
+            if youtube_id != blank
+              assign youtube_thumb = 'https://i.ytimg.com/vi/' | append: youtube_id | append: '/hqdefault.jpg'
+            endif
+          endif
         -%}
         {%- if show_video or show_journal or show_dist -%}
           <div {{ block.shopify_attributes }}>
@@ -530,6 +550,15 @@
                   <div class="media-thumb">
                     {%- if video_thumb != blank -%}
                       {{ video_thumb | image_url: width: 800 | image_tag: loading: 'lazy', alt: video_title }}
+                    {%- elsif youtube_thumb != blank -%}
+                      <img
+                        src="{{ youtube_thumb }}"
+                        alt="{{ video_title | escape }}"
+                        loading="lazy"
+                        width="480"
+                        height="360"
+                        data-wf-yt-thumb="{{ youtube_id | escape }}"
+                      >
                     {%- endif -%}
                     <div class="play-btn" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -550,14 +579,27 @@
                   href="{{ journal_url | default: '#' }}"
                   {% if journal_external or journal_url contains 'http' %}target="_blank" rel="noopener"{% endif %}
                 >
-                  <div class="media-thumb">
+                  <div
+                    class="media-thumb{% if journal_image == blank %} is-loading-og{% endif %}"
+                    {% if journal_image == blank and journal_url != blank %}
+                      data-wf-og-url="{{ journal_url | escape }}"
+                    {% endif %}
+                  >
                     {%- if journal_image != blank -%}
                       {{ journal_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
+                    {%- else -%}
+                      <img
+                        class="media-thumb__og"
+                        data-wf-og-target
+                        alt="{{ journal_title | escape }}"
+                        loading="lazy"
+                        hidden
+                      >
                     {%- endif -%}
                   </div>
                   <div class="media-body">
                     <div class="media-eyebrow">{{ block.settings.journal_eyebrow }}</div>
-                    <div class="media-title">{{ journal_title }}</div>
+                    <div class="media-title" data-wf-og-title>{{ journal_title }}</div>
                     {%- if block.settings.journal_desc != blank -%}<p class="media-desc">{{ block.settings.journal_desc }}</p>{%- endif -%}
                     <span class="media-cta">{{ block.settings.journal_cta }}</span>
                   </div>
