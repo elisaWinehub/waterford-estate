@@ -28,6 +28,15 @@
     dd.addEventListener('mouseleave', function () { if (isDesktop()) scheduleClose(); });
 
     toggle.addEventListener('click', function (e) {
+      // Let top-level nav labels navigate (e.g. Members → /pages/membership).
+      // Chevron / empty toggle area still opens/closes the dropdown.
+      var link = e.target.closest('a[href]');
+      if (link && toggle.contains(link)) {
+        var href = link.getAttribute('href');
+        if (href && href !== '#' && href.indexOf('javascript:') !== 0) {
+          return;
+        }
+      }
       e.preventDefault();
       var isOpen = list.classList.contains('w--open');
       // close all others
