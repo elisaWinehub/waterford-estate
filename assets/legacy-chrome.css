@@ -219,7 +219,11 @@
   margin-left: 0;
   margin-right: 0;
 }
-.navbar10_menu-dropdown.is-static { position: static; }
+/* Full-bleed megas (Shop/Journal) position against the sticky header, not the item */
+.navbar10_menu-left .navbar10_menu-dropdown.is-static,
+.navbar10_menu-left .w-dropdown.is-static {
+  position: static;
+}
 .navbar10_dropdown-toggle { grid-column-gap: .5rem; align-items: center; padding: 1.5rem 1rem; display: flex; }
 .navbar10_dropdown-link {
   grid-column-gap: 8px;
@@ -252,10 +256,18 @@
   top: 100%;
   left: auto;
   right: auto;
+  z-index: 2;
   box-shadow: 0 2px 5px rgba(0,0,0,.2);
 }
 .navbar10_dropdown-list.w--open { display: block; }
-.navbar10_dropdown-list.is-full.w--open { width: 100vw; max-width: 100%; top: auto; left: 0; right: 0; }
+/* Sit below the sticky header bar (top:auto overlapped the nav links in flex layout) */
+.navbar10_dropdown-list.is-full.w--open {
+  width: 100%;
+  max-width: 100%;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
 .navbar10_dropdown-content { width: auto; margin-left: auto; margin-right: auto; display: flex; }
 .navbar10_dropdown-content.is-full { width: 100%; }
 .navbar10_dropdown-content-left { grid-column-gap: 2rem; grid-row-gap: 0px; grid-template-rows: auto; grid-template-columns: 1fr 1fr; grid-auto-columns: 1fr; width: auto; max-width: none; padding: 2rem; display: grid; }
