@@ -480,13 +480,28 @@
           assign video_url = product.metafields.custom.video_url.value | default: block.settings.video_url
           assign video_title = product.metafields.custom.video_title.value | default: block.settings.video_title
           assign video_thumb = product.metafields.custom.video_thumbnail.value | default: block.settings.video_image
+
+          # Journal: prefer external URL metafields, then article reference, then editor fallbacks
           assign journal = product.metafields.custom.journal_article.value
-          assign journal_url = block.settings.journal_url
-          assign journal_title = block.settings.journal_title
-          if journal != blank
-            assign journal_url = journal.url
-            assign journal_title = journal.title
+          assign journal_url = product.metafields.custom.journal_url.value | default: block.settings.journal_url
+          assign journal_title = product.metafields.custom.journal_title.value | default: block.settings.journal_title
+          assign journal_image = product.metafields.custom.journal_image.value | default: block.settings.journal_image
+          assign journal_external = false
+          if product.metafields.custom.journal_url.value != blank
+            assign journal_external = true
           endif
+          if journal != blank
+            if journal_url == blank
+              assign journal_url = journal.url
+            endif
+            if journal_title == blank
+              assign journal_title = journal.title
+            endif
+            if journal_image == blank and journal.image != blank
+              assign journal_image = journal.image
+            endif
+          endif
+
           assign dist_flags_raw = product.metafields.custom.distributors.value | default: block.settings.dist_flags
           assign show_video = false
           assign show_journal = false
@@ -532,12 +547,14 @@
               {%- endif -%}
 
               {%- if show_journal -%}
-                <a class="media-card" href="{{ journal_url | default: '#' }}">
+                <a
+                  class="media-card"
+                  href="{{ journal_url | default: '#' }}"
+                  {% if journal_external or journal_url contains 'http' %}target="_blank" rel="noopener"{% endif %}
+                >
                   <div class="media-thumb">
-                    {%- if journal.image != blank -%}
-                      {{ journal.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
-                    {%- elsif block.settings.journal_image != blank -%}
-                      {{ block.settings.journal_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
+                    {%- if journal_image != blank -%}
+                      {{ journal_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
                     {%- endif -%}
                   </div>
                   <div class="media-body">
@@ -816,7 +833,7 @@
         { "type": "url", "id": "video_url", "label": "Video URL" },
         { "type": "image_picker", "id": "video_image", "label": "Thumbnail" },
         { "type": "text", "id": "video_cta", "label": "CTA", "default": "Watch on YouTube →" },
-        { "type": "header", "content": "Journal" },
+        { "type": "header", "content": "Journal (product metafields: journal_url, journal_title, journal_image)" },
         { "type": "text", "id": "journal_eyebrow", "label": "Eyebrow", "default": "Waterford journal" },
         { "type": "text", "id": "journal_title", "label": "Title fallback" },
         { "type": "textarea", "id": "journal_desc", "label": "Description" },

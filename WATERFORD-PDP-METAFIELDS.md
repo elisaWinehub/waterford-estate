@@ -18,8 +18,11 @@ See [docs/wine-award-metaobject.md](docs/wine-award-metaobject.md) for setup scr
 | `custom.technical_analysis` | Rich text / HTML | Analysis table |
 | `custom.vineyard_winemaking` | Rich text / HTML | Vineyard accordion |
 | `custom.ageing_shipping` | Rich text / HTML | Ageing accordion |
-| `custom.video_url` / `video_title` | URL / text | Media video card |
-| `custom.journal_article` | Article reference | Journal card |
+| `custom.video_url` / `video_title` / `video_thumbnail` | URL / text / image | Media video card |
+| `custom.journal_url` | URL | Journal card link (external article) |
+| `custom.journal_title` | Single line text | Journal card title |
+| `custom.journal_image` | File (image) | Journal card thumbnail |
+| `custom.journal_article` | Article reference (optional) | Fallback if no `journal_url` |
 
 ## Subscriptions (purchase option block)
 

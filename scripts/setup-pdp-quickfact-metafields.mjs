@@ -26,7 +26,11 @@ const DEFINITIONS = [
   { key: 'new_oak', name: 'New oak', type: 'single_line_text_field' },
   { key: 'tagline', name: 'Tagline', type: 'multi_line_text_field' },
   { key: 'video_url', name: 'Video URL', type: 'url' },
+  { key: 'video_title', name: 'Video title', type: 'single_line_text_field' },
   { key: 'video_thumbnail', name: 'Video thumbnail', type: 'file_reference' },
+  { key: 'journal_url', name: 'Journal URL', type: 'url' },
+  { key: 'journal_title', name: 'Journal title', type: 'single_line_text_field' },
+  { key: 'journal_image', name: 'Journal image', type: 'file_reference' },
   { key: 'distributors', name: 'Distributors', type: 'single_line_text_field' },
 ];
 
