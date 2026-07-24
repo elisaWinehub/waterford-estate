@@ -65,7 +65,8 @@
 
 .gallery {
   position: sticky;
-  top: 96px;
+  /* Match sticky header height (set from JS; fallback = navbar min-height) */
+  top: var(--wf-header-offset, 4.5rem);
 }
 
 .pdp-photo {
@@ -195,37 +196,75 @@ body.wf-zoom-open {
 .awards-block {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0;
   margin-top: 6px;
-}
-
-.awards-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 4px;
-}
-
-.awards-list li {
-  font-size: 13px;
-  line-height: 1.45;
-  color: #8a8a84;
 }
 
 .medals-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 22px;
   flex-wrap: wrap;
 }
 
-.medals-row img {
+.medal {
+  position: relative;
+  display: flex;
+}
+
+.medal:focus {
+  outline: none;
+}
+
+.medal:focus-visible {
+  outline: 2px solid var(--olive);
+  outline-offset: 3px;
+}
+
+.medals-row img,
+.medal img {
   height: 52px;
   width: auto;
   max-width: 72px;
   object-fit: contain;
   display: block;
+}
+
+.medal .tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--black, #0b0b0b);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 7px 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  margin-bottom: 8px;
+  z-index: 5;
+}
+
+.medal .tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--black, #0b0b0b);
+}
+
+.medal:hover .tooltip,
+.medal:focus-within .tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
 }
 
 .medals-row .medal-text {
@@ -568,9 +607,9 @@ body.wf-zoom-open {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 2px;
+  padding: 17px 2px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 
@@ -579,8 +618,8 @@ body.wf-zoom-open {
 }
 
 .acc-item summary svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--olive-dark);
   transition: transform 0.15s;
   flex-shrink: 0;
@@ -591,16 +630,16 @@ body.wf-zoom-open {
 }
 
 .acc-body {
-  padding: 0 2px 26px;
-  font-size: 16px;
-  line-height: 1.75;
+  padding: 0 2px 22px;
+  font-size: 15px;
+  line-height: 1.65;
   color: #3c3c39;
 }
 
 .acc-body .tasting-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 18px;
 }
 
 .acc-body .tasting-grid h4 {
@@ -619,8 +658,8 @@ body.wf-zoom-open {
 .acc-body .stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px 24px;
-  margin-top: 6px;
+  gap: 14px 24px;
+  margin-top: 4px;
 }
 
 .acc-body .stat b {
@@ -643,8 +682,8 @@ body.wf-zoom-open {
 }
 
 .acc-body table td {
-  padding: 9px 0;
-  font-size: 15.5px;
+  padding: 7px 0;
+  font-size: 15px;
   border-bottom: 1px solid #f0ece0;
 }
 
@@ -655,10 +694,10 @@ body.wf-zoom-open {
 
 .acc-body .blend-bar {
   display: flex;
-  height: 32px;
+  height: 28px;
   border-radius: 2px;
   overflow: hidden;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .acc-body .blend-bar span {
@@ -685,12 +724,12 @@ body.wf-zoom-open {
 }
 
 .acc-sub {
-  font-size: 12px;
+  font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   color: var(--olive-dark);
   font-weight: 600;
-  margin: 20px 0 8px;
+  margin: 16px 0 7px;
 }
 
 .acc-sub:first-child {
@@ -733,22 +772,27 @@ body.wf-zoom-open {
   margin: 6px 0 0;
 }
 
-.acc-body .fact-sheet-list {
+.factsheet-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 20px;
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 8px;
 }
 
-.acc-body .fact-sheet-list a {
-  color: var(--olive, #84754e);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.factsheet-list a,
+.factsheet-list span {
+  display: block;
+  font-size: 14px;
+  color: var(--olive-dark);
+  padding: 5px 0;
+  border-bottom: 1px solid #f0ece0;
+  text-decoration: none;
 }
 
-.acc-body .fact-sheet-list a:hover {
-  color: var(--olive-dark, #6b5f40);
+.factsheet-list a:hover {
+  color: var(--ink);
 }
 
 .media-thumb.is-loading-og::before {
@@ -904,7 +948,8 @@ body.wf-zoom-open {
   .pdp-top,
   .media-grid,
   .related-grid,
-  .acc-body .tasting-grid {
+  .acc-body .tasting-grid,
+  .factsheet-list {
     grid-template-columns: 1fr;
   }
 

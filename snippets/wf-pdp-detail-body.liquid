@@ -14,7 +14,7 @@
     echo raw
   elsif as_links
     assign lines = raw | newline_to_br | split: '<br />'
-    echo '<ul class="fact-sheet-list">'
+    echo '<div class="factsheet-list">'
     for line in lines
       assign row = line | strip | replace: '<br/>', '' | replace: '<br>', ''
       if row == blank
@@ -24,18 +24,18 @@
         assign parts = row | split: '|'
         assign label = parts[0] | strip
         assign href = parts[1] | strip
-        echo '<li><a href="'
+        echo '<a href="'
         echo href
         echo '" target="_blank" rel="noopener">'
         echo label
-        echo '</a></li>'
+        echo '</a>'
       else
-        echo '<li>'
+        echo '<span>'
         echo row
-        echo '</li>'
+        echo '</span>'
       endif
     endfor
-    echo '</ul>'
+    echo '</div>'
   else
     echo '<p>'
     echo raw | newline_to_br

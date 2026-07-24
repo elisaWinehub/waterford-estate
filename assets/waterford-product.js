@@ -463,13 +463,45 @@ function initMediaCards(root) {
   });
 }
 
+function syncGalleryStickyOffset() {
+  const header = document.querySelector('.navbar10_component');
+  if (!header) return;
+  const apply = () => {
+    const h = Math.ceil(header.getBoundingClientRect().height);
+    if (h > 0) {
+      document.documentElement.style.setProperty('--wf-header-offset', `${h}px`);
+    }
+  };
+  apply();
+  if (!window.__wfHeaderOffsetBound) {
+    window.__wfHeaderOffsetBound = true;
+    window.addEventListener('resize', apply, { passive: true });
+  }
+}
+
+function initAccordion(root) {
+  const items = qsa(root, '.acc-item');
+  if (!items.length) return;
+
+  items.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      items.forEach((other) => {
+        if (other !== item) other.removeAttribute('open');
+      });
+    });
+  });
+}
+
 function init(root) {
   if (!(root instanceof HTMLElement) || root.dataset.wfPdpBound === '1') return;
   root.dataset.wfPdpBound = '1';
+  syncGalleryStickyOffset();
   initGallery(root);
   initPurchaseOptions(root);
   initBuyForm(root);
   initMediaCards(root);
+  initAccordion(root);
 }
 
 function initAll(scope) {
