@@ -79,46 +79,101 @@
                 assign awards = product.metafields.custom.awards.value
               -%}
               {%- if awards != blank or block.settings.award_1 != blank -%}
-                <div class="medals-row" {{ block.shopify_attributes }}>
+                <div class="awards-block" {{ block.shopify_attributes }}>
                   {%- if awards != blank -%}
-                    {%- for award in awards -%}
-                      {%- liquid
-                        assign badge = award.badge_image.value | default: award.badge_image
-                        assign badge_alt = award.badge_alt.value | default: award.badge_alt
-                        if badge_alt == blank
-                          assign pub = award.publication.value | default: award.publication
-                          assign yr = award.award_year.value | default: award.award_year
-                          assign badge_alt = pub | append: ' ' | append: yr | strip
-                        endif
-                        if badge_alt == blank
-                          assign badge_alt = 'Award'
-                        endif
-                      -%}
-                      {%- if badge != blank -%}
-                        <img
-                          src="{{ badge | image_url: width: 160 }}"
-                          alt="{{ badge_alt | escape }}"
-                          loading="lazy"
-                          width="80"
-                          height="80"
-                        >
-                      {%- else -%}
-                        <span class="medal-text" title="{{ badge_alt | escape }}">
-                          {%- assign rating = award.rating.value | default: award.rating -%}
-                          {%- if rating != blank -%}{{ rating }}{%- else -%}{{ badge_alt }}{%- endif -%}
-                        </span>
-                      {%- endif -%}
-                    {%- endfor -%}
+                    <ul class="awards-list">
+                      {%- for award in awards -%}
+                        {%- liquid
+                          assign vintage = award.vintage.value | default: award.vintage
+                          assign publication = award.publication.value | default: award.publication
+                          assign award_year = award.award_year.value | default: award.award_year
+                          assign rating = award.rating.value | default: award.rating
+                          assign line = ''
+                          if vintage != blank
+                            assign line = vintage
+                          endif
+                          if publication != blank
+                            if line != blank
+                              assign line = line | append: ' | ' | append: publication
+                            else
+                              assign line = publication
+                            endif
+                          endif
+                          if award_year != blank and publication != blank
+                            unless publication contains award_year
+                              assign line = line | append: ' ' | append: award_year
+                            endunless
+                          elsif award_year != blank and publication == blank
+                            if line != blank
+                              assign line = line | append: ' | ' | append: award_year
+                            else
+                              assign line = award_year
+                            endif
+                          endif
+                          if rating != blank
+                            if line != blank
+                              assign line = line | append: ' | ' | append: rating
+                            else
+                              assign line = rating
+                            endif
+                          endif
+                        -%}
+                        {%- if line != blank -%}
+                          <li>{{ line }}</li>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </ul>
+                    <div class="medals-row">
+                      {%- for award in awards -%}
+                        {%- liquid
+                          assign badge = award.badge_image.value | default: award.badge_image
+                          assign badge_url = award.badge_url.value | default: award.badge_url
+                          assign badge_alt = award.badge_alt.value | default: award.badge_alt
+                          if badge_alt == blank
+                            assign pub = award.publication.value | default: award.publication
+                            assign yr = award.award_year.value | default: award.award_year
+                            assign badge_alt = pub | append: ' ' | append: yr | strip
+                          endif
+                          if badge_alt == blank
+                            assign badge_alt = 'Award'
+                          endif
+                        -%}
+                        {%- if badge != blank -%}
+                          <img
+                            src="{{ badge | image_url: width: 160 }}"
+                            alt="{{ badge_alt | escape }}"
+                            loading="lazy"
+                            width="80"
+                            height="80"
+                          >
+                        {%- elsif badge_url != blank -%}
+                          <img
+                            src="{{ badge_url | escape }}"
+                            alt="{{ badge_alt | escape }}"
+                            loading="lazy"
+                            width="80"
+                            height="80"
+                          >
+                        {%- else -%}
+                          <span class="medal-text" title="{{ badge_alt | escape }}">
+                            {%- assign rating = award.rating.value | default: award.rating -%}
+                            {%- if rating != blank -%}{{ rating }}{%- else -%}{{ badge_alt }}{%- endif -%}
+                          </span>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
                   {%- else -%}
-                    {%- if block.settings.award_1 != blank -%}
-                      <img src="{{ block.settings.award_1 | image_url: width: 160 }}" alt="{{ block.settings.award_1_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
-                    {%- endif -%}
-                    {%- if block.settings.award_2 != blank -%}
-                      <img src="{{ block.settings.award_2 | image_url: width: 160 }}" alt="{{ block.settings.award_2_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
-                    {%- endif -%}
-                    {%- if block.settings.award_3 != blank -%}
-                      <img src="{{ block.settings.award_3 | image_url: width: 160 }}" alt="{{ block.settings.award_3_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
-                    {%- endif -%}
+                    <div class="medals-row">
+                      {%- if block.settings.award_1 != blank -%}
+                        <img src="{{ block.settings.award_1 | image_url: width: 160 }}" alt="{{ block.settings.award_1_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
+                      {%- endif -%}
+                      {%- if block.settings.award_2 != blank -%}
+                        <img src="{{ block.settings.award_2 | image_url: width: 160 }}" alt="{{ block.settings.award_2_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
+                      {%- endif -%}
+                      {%- if block.settings.award_3 != blank -%}
+                        <img src="{{ block.settings.award_3 | image_url: width: 160 }}" alt="{{ block.settings.award_3_alt | default: 'Award' | escape }}" loading="lazy" height="58" width="auto">
+                      {%- endif -%}
+                    </div>
                   {%- endif -%}
                 </div>
               {%- endif -%}

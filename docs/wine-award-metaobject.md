@@ -13,6 +13,7 @@ Store-side data model for the PDP medals row on **waterford-estate-2**.
 | `award_year` | Award Year | single line text |
 | `rating` | Rating | single line text |
 | `badge_image` | Badge Image | file (images) |
+| `badge_url` | Badge URL | URL (optional external badge image, e.g. Webflow CDN) |
 | `badge_alt` | Badge Alt Text | single line text (optional; Liquid falls back to publication + year) |
 
 Storefront access: **Public read**.

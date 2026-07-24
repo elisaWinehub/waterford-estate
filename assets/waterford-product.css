@@ -192,16 +192,40 @@ body.wf-zoom-open {
   margin: 0;
 }
 
+.awards-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.awards-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.awards-list li {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #8a8a84;
+}
+
 .medals-row {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
 .medals-row img {
-  height: 58px;
+  height: 52px;
   width: auto;
+  max-width: 72px;
+  object-fit: contain;
+  display: block;
 }
 
 .medals-row .medal-text {

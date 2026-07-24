@@ -6,7 +6,7 @@ Blocks hide cleanly when the matching metafield is empty.
 | Metafield key | Type | Used by |
 |---|---|---|
 | `custom.tagline` | Single line text / multi-line | Tagline block |
-| `custom.awards` | List of `wine_award` metaobject references (`badge_image`, `badge_alt`, …) | Awards / medals row |
+| `custom.awards` | List of `wine_award` metaobject references (`vintage`, `publication`, `award_year`, `rating`, `badge_image`, `badge_url`, `badge_alt`) | Awards text list + medals row under Add to cart |
 
 See [docs/wine-award-metaobject.md](docs/wine-award-metaobject.md) for setup scripts and field list.
 | `custom.shipping_note` | Single line text | Shipping note |
