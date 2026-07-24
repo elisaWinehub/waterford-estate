@@ -908,6 +908,15 @@ body.wf-zoom-open {
   margin: 0;
 }
 
+.media-title--journal {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
 .media-desc {
   font-size: 15px;
   line-height: 1.6;
