@@ -205,12 +205,22 @@
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  flex: 1 1 auto;
+  justify-content: flex-start;
+  flex: 0 1 auto;
   min-width: 0;
+  gap: 0;
 }
-.navbar10_menu-dropdown { position: relative; display: inline-flex; flex-shrink: 0; }
+/* Cancel Webflow .w-dropdown margin:auto — in a flex row it spreads items apart */
+.navbar10_menu-left .navbar10_menu-dropdown,
+.navbar10_menu-left .w-dropdown {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
 .navbar10_menu-dropdown.is-static { position: static; }
-.navbar10_dropdown-toggle { grid-column-gap: .35rem; align-items: center; padding: 1.5rem .55rem; display: flex; }
+.navbar10_dropdown-toggle { grid-column-gap: .5rem; align-items: center; padding: 1.5rem 1rem; display: flex; }
 .navbar10_dropdown-link {
   grid-column-gap: 8px;
   grid-row-gap: 0px;
