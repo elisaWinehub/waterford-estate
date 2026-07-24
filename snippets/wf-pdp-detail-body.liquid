@@ -1,0 +1,44 @@
+{%- doc -%}
+  Format a PDP detail metafield for accordion body output.
+  Supports HTML, plain paragraphs, or "Label | URL" lines (fact sheets).
+
+  @param {string} content - Raw metafield / setting value
+  @param {boolean} [as_links] - When true, treat non-HTML lines as Label | URL links
+{%- enddoc -%}
+
+{%- liquid
+  assign raw = content | strip
+  if raw == blank
+    echo ''
+  elsif raw contains '<'
+    echo raw
+  elsif as_links
+    assign lines = raw | newline_to_br | split: '<br />'
+    echo '<ul class="fact-sheet-list">'
+    for line in lines
+      assign row = line | strip | replace: '<br/>', '' | replace: '<br>', ''
+      if row == blank
+        continue
+      endif
+      if row contains '|'
+        assign parts = row | split: '|'
+        assign label = parts[0] | strip
+        assign href = parts[1] | strip
+        echo '<li><a href="'
+        echo href
+        echo '" target="_blank" rel="noopener">'
+        echo label
+        echo '</a></li>'
+      else
+        echo '<li>'
+        echo row
+        echo '</li>'
+      endif
+    endfor
+    echo '</ul>'
+  else
+    echo '<p>'
+    echo raw | newline_to_br
+    echo '</p>'
+  endif
+-%}

@@ -377,82 +377,80 @@
                 <div class="divider"></div>
                 <h2 class="serif section-title">{{ block.settings.heading | default: 'Details' }}</h2>
               </div>
+              {%- liquid
+                assign fact_sheets = product.metafields.custom.fact_sheets.value | default: product.metafields.custom.fact_sheets
+                assign tasting_notes = product.metafields.custom.tasting_notes.value | default: product.metafields.custom.tasting_notes
+                if tasting_notes == blank
+                  assign appearance = product.metafields.custom.appearance.value | default: product.metafields.custom.appearance
+                  assign nose = product.metafields.custom.nose.value | default: product.metafields.custom.nose
+                  assign palate = product.metafields.custom.palate.value | default: product.metafields.custom.palate
+                endif
+                assign cultivars = product.metafields.custom.cultivars.value | default: product.metafields.custom.cultivars | default: product.metafields.custom.blend_composition.value
+                assign wine_analysis = product.metafields.custom.wine_analysis.value | default: product.metafields.custom.wine_analysis | default: product.metafields.custom.technical_analysis.value
+                assign vinification = product.metafields.custom.vinification.value | default: product.metafields.custom.vinification
+                assign vineyard = product.metafields.custom.vineyard.value | default: product.metafields.custom.vineyard | default: product.metafields.custom.vineyard_winemaking.value
+                assign maturation = product.metafields.custom.maturation.value | default: product.metafields.custom.maturation
+                assign ageing_potential = product.metafields.custom.ageing_potential.value | default: product.metafields.custom.ageing_potential
+                assign shipping = product.metafields.custom.shipping.value | default: product.metafields.custom.shipping | default: product.metafields.custom.ageing_shipping.value | default: product.metafields.custom.shipping_note.value
+              -%}
               <div class="accordion">
-                {%- for acc_block in section.blocks -%}
-                  {%- case acc_block.type -%}
-                    {%- when 'accordion_tasting' -%}
-                      {%- liquid
-                        assign appearance = product.metafields.custom.appearance.value | default: acc_block.settings.appearance
-                        assign nose = product.metafields.custom.nose.value | default: acc_block.settings.nose
-                        assign palate = product.metafields.custom.palate.value | default: acc_block.settings.palate
-                      -%}
-                      {%- capture acc_body -%}
-                        <div class="tasting-grid">
-                          <div><h4>{{ acc_block.settings.label_appearance }}</h4><p>{% if appearance != blank %}{{ appearance }}{% endif %}</p></div>
-                          <div><h4>{{ acc_block.settings.label_nose }}</h4><p>{% if nose != blank %}{{ nose }}{% endif %}</p></div>
-                          <div><h4>{{ acc_block.settings.label_palate }}</h4><p>{% if palate != blank %}{{ palate }}{% endif %}</p></div>
-                        </div>
-                      {%- endcapture -%}
-                      {% render 'wf-pdp-accordion-item', block: acc_block, heading: acc_block.settings.heading, open: acc_block.settings.open_by_default, body: acc_body %}
+                {%- if fact_sheets != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: fact_sheets, as_links: true %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Fact Sheets', open: false, body: acc_body %}
+                {%- endif -%}
 
-                    {%- when 'accordion_wine_details' -%}
-                      {%- liquid
-                        assign region = product.metafields.custom.region.value | default: acc_block.settings.region
-                        assign release = product.metafields.custom.release_date.value | default: acc_block.settings.release_date
-                        assign cases = product.metafields.custom.cases_produced.value | default: acc_block.settings.cases_produced
-                        assign closure = product.metafields.custom.closure.value | default: acc_block.settings.closure
-                        assign blend_html = product.metafields.custom.blend_composition.value | default: acc_block.settings.blend_html
-                        assign analysis_html = product.metafields.custom.technical_analysis.value | default: acc_block.settings.analysis_html
-                      -%}
-                      {%- capture acc_body -%}
-                        <div class="acc-sub">{{ acc_block.settings.sub_glance }}</div>
-                        <div class="stat-grid">
-                          <div class="stat"><b>{% if region != blank %}{{ region }}{% endif %}</b><span>{{ acc_block.settings.label_region }}</span></div>
-                          <div class="stat"><b>{% if release != blank %}{{ release }}{% endif %}</b><span>{{ acc_block.settings.label_release }}</span></div>
-                          <div class="stat"><b>{% if cases != blank %}{{ cases }}{% endif %}</b><span>{{ acc_block.settings.label_cases }}</span></div>
-                          <div class="stat"><b>{% if closure != blank %}{{ closure }}{% endif %}</b><span>{{ acc_block.settings.label_closure }}</span></div>
-                        </div>
-                        <div class="acc-sub">{{ acc_block.settings.sub_blend }}</div>
-                        {% if blend_html != blank %}{{ blend_html }}{% endif %}
-                        <div class="acc-sub">{{ acc_block.settings.sub_analysis }}</div>
-                        {% if analysis_html != blank %}{{ analysis_html }}{% endif %}
-                      {%- endcapture -%}
-                      {% render 'wf-pdp-accordion-item', block: acc_block, heading: acc_block.settings.heading, open: acc_block.settings.open_by_default, body: acc_body %}
+                {%- if tasting_notes != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: tasting_notes %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Tasting Notes', open: false, body: acc_body %}
+                {%- elsif appearance != blank or nose != blank or palate != blank -%}
+                  {%- capture acc_body -%}
+                    <div class="tasting-grid">
+                      {%- if appearance != blank -%}<div><h4>Appearance</h4><p>{{ appearance | newline_to_br }}</p></div>{%- endif -%}
+                      {%- if nose != blank -%}<div><h4>Nose</h4><p>{{ nose | newline_to_br }}</p></div>{%- endif -%}
+                      {%- if palate != blank -%}<div><h4>Palate</h4><p>{{ palate | newline_to_br }}</p></div>{%- endif -%}
+                    </div>
+                  {%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Tasting Notes', open: false, body: acc_body %}
+                {%- endif -%}
 
-                    {%- when 'accordion_vineyard' -%}
-                      {%- liquid
-                        assign vineyard_html = product.metafields.custom.vineyard_winemaking.value | default: acc_block.settings.body_html
-                      -%}
-                      {%- capture acc_body -%}
-                        {% if vineyard_html != blank %}
-                          {{ vineyard_html }}
-                        {% else %}
-                          <div class="acc-sub">The vineyard</div>
-                          <div class="acc-sub">In the cellar</div>
-                          <div class="acc-sub">Maturation</div>
-                        {% endif %}
-                      {%- endcapture -%}
-                      {% render 'wf-pdp-accordion-item', block: acc_block, heading: acc_block.settings.heading, open: acc_block.settings.open_by_default, body: acc_body %}
+                {%- if cultivars != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: cultivars %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Cultivars', open: false, body: acc_body %}
+                {%- endif -%}
 
-                    {%- when 'accordion_ageing' -%}
-                      {%- liquid
-                        assign ageing_html = product.metafields.custom.ageing_shipping.value | default: acc_block.settings.body_html
-                      -%}
-                      {%- capture acc_body -%}
-                        {% if ageing_html != blank %}
-                          {{ ageing_html }}
-                        {% else %}
-                          <div class="acc-sub">Ageing potential</div>
-                          <div class="acc-sub">Shipping &amp; delivery</div>
-                        {% endif %}
-                      {%- endcapture -%}
-                      {% render 'wf-pdp-accordion-item', block: acc_block, heading: acc_block.settings.heading, open: acc_block.settings.open_by_default, body: acc_body %}
-                  {%- endcase -%}
-                {%- endfor -%}
+                {%- if wine_analysis != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: wine_analysis %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Wine Analysis', open: false, body: acc_body %}
+                {%- endif -%}
+
+                {%- if vinification != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: vinification %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Vinification', open: false, body: acc_body %}
+                {%- endif -%}
+
+                {%- if vineyard != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: vineyard %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Vineyard', open: false, body: acc_body %}
+                {%- endif -%}
+
+                {%- if maturation != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: maturation %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Maturation', open: false, body: acc_body %}
+                {%- endif -%}
+
+                {%- if ageing_potential != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: ageing_potential %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Ageing Potential', open: false, body: acc_body %}
+                {%- endif -%}
+
+                {%- if shipping != blank -%}
+                  {%- capture acc_body -%}{% render 'wf-pdp-detail-body', content: shipping %}{%- endcapture -%}
+                  {% render 'wf-pdp-accordion-item', block: block, heading: 'Shipping', open: false, body: acc_body %}
+                {%- endif -%}
               </div>
 
             {%- when 'accordion_tasting', 'accordion_wine_details', 'accordion_vineyard', 'accordion_ageing' -%}
-              {%- comment -%} Rendered inside details_heading accordion wrapper {%- endcomment -%}
+              {%- comment -%} Legacy blocks kept for editor compatibility; Details now render from product metafields. {%- endcomment -%}
 
             {%- when 'utility_line' -%}
               <div class="utility-line" {{ block.shopify_attributes }}>

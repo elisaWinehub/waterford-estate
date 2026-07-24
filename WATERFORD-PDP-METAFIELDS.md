@@ -12,12 +12,21 @@ See [docs/wine-award-metaobject.md](docs/wine-award-metaobject.md) for setup scr
 | `custom.shipping_note` | Single line text | Shipping note |
 | `custom.fact_1` … `custom.fact_4` | Single line text | Quick facts (generic) |
 | `custom.vintage` / `alcohol` / `blend` / `oak` | Single line text | Quick facts aliases |
-| `custom.appearance` / `nose` / `palate` | Multi-line text | Tasting Notes accordion |
-| `custom.region` / `release_date` / `cases_produced` / `closure` | Single line text | Wine Details |
-| `custom.blend_composition` | Rich text / HTML | Blend bar + key |
-| `custom.technical_analysis` | Rich text / HTML | Analysis table |
-| `custom.vineyard_winemaking` | Rich text / HTML | Vineyard accordion |
-| `custom.ageing_shipping` | Rich text / HTML | Ageing accordion |
+| `custom.fact_sheets` | Multi-line text | Fact Sheets accordion — one link per line: `Label \| https://...` |
+| `custom.tasting_notes` | Multi-line text | Tasting Notes accordion (or use `appearance` / `nose` / `palate`) |
+| `custom.cultivars` | Multi-line text | Cultivars accordion |
+| `custom.wine_analysis` | Multi-line text | Wine Analysis accordion |
+| `custom.vinification` | Multi-line text | Vinification accordion |
+| `custom.vineyard` | Multi-line text | Vineyard accordion |
+| `custom.maturation` | Multi-line text | Maturation accordion |
+| `custom.ageing_potential` | Single line text | Ageing Potential accordion |
+| `custom.shipping` | Multi-line text | Shipping accordion |
+| `custom.appearance` / `nose` / `palate` | Multi-line text | Tasting Notes fallback (grid) |
+| `custom.region` / `release_date` / `cases_produced` / `closure` | Single line text | Legacy Wine Details (optional) |
+| `custom.blend_composition` | Multi-line / HTML | Fallback for Cultivars |
+| `custom.technical_analysis` | Multi-line / HTML | Fallback for Wine Analysis |
+| `custom.vineyard_winemaking` | Multi-line / HTML | Fallback for Vineyard |
+| `custom.ageing_shipping` | Multi-line / HTML | Fallback for Shipping |
 | `custom.video_url` / `video_title` / `video_thumbnail` | URL / text / image | Media video card |
 | `custom.journal_url` | URL | Journal card link (external article) |
 | `custom.journal_title` | Single line text | Journal card title |
