@@ -38,6 +38,7 @@
     },
     "byc_context": {
       "type": "build-your-case-context",
+      "disabled": true,
       "settings": {
         "label_text": "Building your case",
         "price_suffix": "/ quarterly case",
