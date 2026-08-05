@@ -7,14 +7,14 @@
   --byc-cream: #faf7f2;
   --byc-ink: #1a1a1a;
   --byc-muted: #6b6b66;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--byc-ink);
   background: var(--byc-cream);
   -webkit-font-smoothing: antialiased;
 }
 
 .byc .serif {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .byc a {

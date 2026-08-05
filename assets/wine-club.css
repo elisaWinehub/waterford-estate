@@ -8,14 +8,14 @@
   --wc-cream-2: #f2eee4;
   --wc-ink: #1a1a1a;
   --wc-muted: #6b6b66;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--wc-ink);
   background: var(--wc-cream);
   -webkit-font-smoothing: antialiased;
 }
 
 .wine-club .serif {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .wine-club a {

@@ -8,14 +8,14 @@
   --ms-cream-2: #f2eee4;
   --ms-ink: #1a1a1a;
   --ms-muted: #6b6b66;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--ms-ink);
   background: var(--ms-cream);
   -webkit-font-smoothing: antialiased;
 }
 
 .membership .serif {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .membership a {

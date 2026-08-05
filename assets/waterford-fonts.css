@@ -1,0 +1,22 @@
+﻿/* Waterford default typeface */
+:root {
+  --font-body--family: "Roboto", sans-serif;
+  --font-heading--family: "Roboto", sans-serif;
+  --font-subheading--family: "Roboto", sans-serif;
+  --font-accent--family: "Roboto", sans-serif;
+  --font-paragraph--family: "Roboto", sans-serif;
+}
+body,
+.wf-pdp,
+.wf-collection,
+.wine-club,
+.membership,
+.byc,
+.wf-pdp .serif,
+.wf-collection .serif,
+.wine-club .serif,
+.membership .serif,
+.byc .serif,
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Roboto", sans-serif;
+}
