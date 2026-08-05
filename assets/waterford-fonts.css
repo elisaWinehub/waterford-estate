@@ -1,22 +1,93 @@
-﻿/* Waterford default typeface */
+﻿/* Waterford default typeface — Roboto for all copy, headings, eyebrows, lists */
 :root {
   --font-body--family: "Roboto", sans-serif;
   --font-heading--family: "Roboto", sans-serif;
   --font-subheading--family: "Roboto", sans-serif;
   --font-accent--family: "Roboto", sans-serif;
   --font-paragraph--family: "Roboto", sans-serif;
+  --font-h1--family: "Roboto", sans-serif;
+  --font-h2--family: "Roboto", sans-serif;
+  --font-h3--family: "Roboto", sans-serif;
+  --font-h4--family: "Roboto", sans-serif;
+  --font-h5--family: "Roboto", sans-serif;
+  --font-h6--family: "Roboto", sans-serif;
+  --button-font-family-primary: "Roboto", sans-serif;
+  --button-font-family-secondary: "Roboto", sans-serif;
+  --cart-primary-font-family: "Roboto", sans-serif;
+  --cart-secondary-font-family: "Roboto", sans-serif;
 }
+
+html,
 body,
+body *:not(script):not(style):not(svg):not(path):not(circle):not(rect):not(line):not(polyline):not(polygon),
+.wf-chrome,
+.wf-chrome *,
 .wf-pdp,
+.wf-pdp *,
 .wf-collection,
+.wf-collection *,
 .wine-club,
+.wine-club *,
 .membership,
+.membership *,
 .byc,
-.wf-pdp .serif,
-.wf-collection .serif,
-.wine-club .serif,
-.membership .serif,
-.byc .serif,
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Roboto", sans-serif;
+.byc *,
+.serif,
+.wf-hero__eyebrow,
+.wf-hero__title,
+.wf-hero__blurb,
+.wf-card-range,
+.wf-card-name,
+.wf-card-style,
+.wf-card-price,
+.media-eyebrow,
+.media-title,
+.media-desc,
+.media-cta,
+.qf,
+.qf b,
+.qf span,
+.acc-item,
+.acc-item summary,
+.acc-body,
+.acc-sub,
+.factsheet-list,
+.utility-line,
+.po-wrap,
+.po-label,
+.po-text,
+.po-price,
+.price,
+.pdp-title,
+.pdp-tagline,
+.section-title,
+button,
+input,
+select,
+textarea,
+label,
+a,
+p,
+span,
+div,
+li,
+ul,
+ol,
+dl,
+dt,
+dd,
+th,
+td,
+small,
+strong,
+em,
+b,
+i,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Roboto", sans-serif !important;
 }
