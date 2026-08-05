@@ -30,10 +30,15 @@
     assign range_label = product.collections.first.title
   endif
 
-  assign style_label = product.type
-  if style_label == blank and product.metafields.custom.style != blank
-    assign style_label = product.metafields.custom.style.value | default: product.metafields.custom.style
-  endif
+  capture display_title
+    render 'wf-product-display-title', product: product
+  endcapture
+  assign display_title = display_title | strip
+
+  capture style_label
+    render 'wf-product-format-label', product: product
+  endcapture
+  assign style_label = style_label | strip
 
   assign price_varies = false
   if product.price_varies
@@ -83,7 +88,7 @@
       {%- if range_label != blank -%}
         <div class="wf-card-range">{{ range_label }}</div>
       {%- endif -%}
-      <a class="wf-card-name" href="{{ product.url }}">{{ product.title }}</a>
+      <a class="wf-card-name" href="{{ product.url }}">{{ display_title }}</a>
       <div class="wf-card-style">{% if style_label != blank %}{{ style_label }}{% endif %}</div>
       <div class="wf-card-price">
         {%- if price_varies -%}

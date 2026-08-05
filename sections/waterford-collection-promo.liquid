@@ -1,0 +1,54 @@
+{%- comment -%}
+  Simple promo / CTA strip for Gifting (vouchers, didn’t find what you’re looking for, etc.).
+{%- endcomment -%}
+
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="wf-collection-promo wf-collection-promo--{{ section.settings.style }}"
+  id="{{ section.settings.anchor_id | default: section.id | handle }}"
+  {{ section.shopify_attributes }}
+>
+  <div class="wf-wrap wf-collection-promo__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="wf-collection-promo__eyebrow">{{ section.settings.eyebrow }}</div>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="wf-collection-promo__title serif">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.body != blank -%}
+      <div class="wf-collection-promo__body">{{ section.settings.body }}</div>
+    {%- endif -%}
+    {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
+      <a class="wf-collection-promo__btn" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "WF Collection promo",
+  "tag": "section",
+  "class": "section-waterford-collection-promo",
+  "enabled_on": { "templates": ["collection", "page"] },
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "band", "label": "Band" },
+        { "value": "card", "label": "Card" }
+      ],
+      "default": "band"
+    },
+    { "type": "text", "id": "anchor_id", "label": "Anchor id", "info": "e.g. vouchers — used for in-page links" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Didn't find exactly what you're looking for?" },
+    { "type": "richtext", "id": "body", "label": "Body" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Get in touch" },
+    { "type": "text", "id": "cta_link", "label": "Button link", "info": "Page URL or mailto: address." }
+  ],
+  "presets": [{ "name": "WF Collection promo" }]
+}
+{% endschema %}

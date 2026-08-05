@@ -1,0 +1,50 @@
+{%- doc -%}
+  Bottle format / volume label for product cards.
+  Keeps named formats (Magnum, Jeroboam…) and appends volume; maps bare "Wine" → 750ml.
+
+  @param {product} product
+{%- enddoc -%}
+{%- liquid
+  assign format_label = product.metafields.custom.bottle_format.value | default: product.metafields.custom.bottle_format
+  if format_label == blank
+    assign format_label = product.metafields.custom.format.value | default: product.metafields.custom.format
+  endif
+  if format_label == blank
+    assign format_label = product.type
+  endif
+
+  assign volume_label = product.metafields.custom.volume.value | default: product.metafields.custom.volume
+  if volume_label == blank
+    assign volume_label = product.metafields.custom.bottle_volume.value | default: product.metafields.custom.bottle_volume
+  endif
+
+  assign format_down = format_label | downcase | strip
+  assign style_label = ''
+
+  if format_down == blank or format_down == 'wine' or format_down == 'red wine' or format_down == 'white wine' or format_down == 'rosé' or format_down == 'rose' or format_down == 'sparkling'
+    if volume_label != blank
+      assign style_label = volume_label
+    else
+      assign style_label = '750ml'
+    endif
+  elsif volume_label != blank
+    assign style_label = format_label | append: ' / ' | append: volume_label
+  else
+    case format_down
+      when 'magnum'
+        assign style_label = 'Magnum / 1.5L'
+      when 'jeroboam'
+        assign style_label = 'Jeroboam / 3L'
+      when 'bordeaux jeroboam', 'bordeaux'
+        assign style_label = format_label | append: ' / 5L'
+      when 'imperial'
+        assign style_label = 'Imperial / 6L'
+      when 'methuselah'
+        assign style_label = 'Methuselah / 6L'
+      else
+        assign style_label = format_label
+    endcase
+  endif
+
+  echo style_label
+-%}

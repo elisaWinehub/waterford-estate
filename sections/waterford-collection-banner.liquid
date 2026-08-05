@@ -10,7 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 {%- liquid
-  assign hero_image = collection.image
+  assign hero_image = section.settings.hero_image
+  if hero_image == blank
+    assign hero_image = collection.image
+  endif
   if hero_image == blank
     assign hero_image = collection.featured_image
   endif
@@ -24,6 +27,7 @@
   if hero_image != blank
     assign has_hero_image = true
   endif
+  assign intro_blurb = section.settings.intro_blurb
 -%}
 
 <section
@@ -54,6 +58,9 @@
       <div class="wf-hero__eyebrow">{{ eyebrow }}</div>
     {%- endif -%}
     <h1 class="wf-hero__title serif">{{ collection.title }}</h1>
+    {%- if intro_blurb != blank -%}
+      <div class="wf-hero__blurb">{{ intro_blurb }}</div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -75,9 +82,21 @@
     },
     {
       "type": "image_picker",
+      "id": "hero_image",
+      "label": "Header image",
+      "info": "Overrides the collection featured image when set. Easy to swap in the theme editor."
+    },
+    {
+      "type": "image_picker",
       "id": "fallback_image",
       "label": "Fallback hero image",
-      "info": "Used when the collection has no featured image in Admin"
+      "info": "Used when neither a header image nor a collection featured image is set"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_blurb",
+      "label": "Intro blurb",
+      "info": "Short editable copy shown under the collection title (also falls back to the collection description in the grid section)."
     }
   ],
   "presets": [

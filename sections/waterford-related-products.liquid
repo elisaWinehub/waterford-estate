@@ -11,7 +11,10 @@
   assign max_items = section.settings.max_products | default: 3
   assign heading = section.settings.heading | default: 'You may also like'
   assign use_manual = false
+  assign related_mf = product.metafields.custom.related_products.value
   if section.settings.product_list != blank and section.settings.product_list.size > 0
+    assign use_manual = true
+  elsif related_mf != blank and related_mf.size > 0
     assign use_manual = true
   endif
 -%}
@@ -31,8 +34,12 @@
       data-limit="{{ max_items }}"
       data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ max_items }}&intent=related"
     >
-      {%- if use_manual -%}
+      {%- if section.settings.product_list != blank and section.settings.product_list.size > 0 -%}
         {%- for related_product in section.settings.product_list limit: max_items -%}
+          {% render 'waterford-product-card', product: related_product, index: forloop.index0 %}
+        {%- endfor -%}
+      {%- elsif related_mf != blank and related_mf.size > 0 -%}
+        {%- for related_product in related_mf limit: max_items -%}
           {% render 'waterford-product-card', product: related_product, index: forloop.index0 %}
         {%- endfor -%}
       {%- elsif recommendations.performed and recommendations.products_count > 0 -%}
@@ -93,7 +100,7 @@
       "id": "product_list",
       "label": "Manual product list (optional)",
       "limit": 6,
-      "info": "If empty, related product recommendations load automatically."
+      "info": "Preferred order control. Falls back to product metafield custom.related_products, then automatic recommendations."
     }
   ],
   "presets": [

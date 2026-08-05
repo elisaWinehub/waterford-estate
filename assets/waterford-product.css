@@ -73,8 +73,8 @@
 
 .pdp-photo {
   position: relative;
-  background: #fff;
-  border: 1px solid #eee2d0;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,7 +89,7 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -772,6 +772,24 @@ body.wf-zoom-open {
   font-size: 15px;
   color: var(--muted);
   margin: 6px 0 0;
+}
+
+.media-head__pdf {
+  margin-top: 10px !important;
+}
+
+.media-head__pdf a {
+  color: var(--olive-dark);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.media-head__pdf a:hover {
+  color: var(--ink);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .factsheet-list {

@@ -90,6 +90,20 @@
   font-weight: 500;
   margin: 0;
   line-height: 1.15;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+.wf-hero__blurb {
+  max-width: 52ch;
+  margin-top: 14px;
+  color: rgba(250, 247, 242, 0.92);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.wf-hero__blurb :is(p, div) {
+  margin: 0;
 }
 
 /* ---------- Body wrap ---------- */
@@ -117,10 +131,11 @@
   max-width: 640px;
   margin: 28px auto 8px;
   text-align: center;
+  font-family: 'Inter', -apple-system, sans-serif;
 }
 
 .wf-page-head :is(p, div) {
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.7;
   color: #555;
   margin: 0;
@@ -397,8 +412,8 @@
 }
 
 .wf-card-photo {
-  background: #fff;
-  border: 1px solid #eee2d0;
+  background: transparent;
+  border: none;
   aspect-ratio: 4 / 5;
   display: flex;
   align-items: stretch;
@@ -419,7 +434,7 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -763,4 +778,166 @@
 .product-recommendations .wf-card-controls,
 .resource-list__item .wf-card-controls {
   width: 100%;
+}
+
+/* ---------- Explore exclusive wines CTA ---------- */
+.wf-explore-cta {
+  position: relative;
+  min-height: 280px;
+  margin-top: 48px;
+  overflow: hidden;
+  background: linear-gradient(120deg, #3a3320, #1c1912);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: "Inter", -apple-system, sans-serif;
+}
+
+.wf-explore-cta__media {
+  position: absolute;
+  inset: 0;
+}
+
+.wf-explore-cta__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wf-explore-cta__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 11, 11, 0.25), rgba(11, 11, 11, 0.55));
+}
+
+.wf-explore-cta__content {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  padding: 48px 32px;
+}
+
+.wf-explore-cta__title {
+  margin: 0;
+  color: #fff;
+  font-size: 36px;
+  font-weight: 500;
+  font-family: "Cormorant Garamond", serif;
+  line-height: 1.2;
+}
+
+.wf-explore-cta__text {
+  margin: 12px 0 0;
+  color: rgba(250, 247, 242, 0.9);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.wf-explore-cta__btn {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 12px 22px;
+  background: var(--wf-olive);
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+.wf-explore-cta__btn:hover {
+  background: var(--wf-olive-dark);
+  color: #fff;
+}
+
+/* ---------- Range groups ---------- */
+.wf-range-group {
+  padding: 40px 0 12px;
+  border-top: 1px solid #e6ddc9;
+}
+
+.wf-range-group:first-child {
+  border-top: 0;
+  padding-top: 12px;
+}
+
+.wf-range-group__title {
+  margin: 0 0 8px;
+  font-size: 32px;
+  font-weight: 500;
+  font-family: "Cormorant Garamond", serif;
+  color: var(--wf-ink);
+}
+
+.wf-range-group__blurb {
+  max-width: 62ch;
+  margin: 0 0 24px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+  font-family: "Inter", -apple-system, sans-serif;
+}
+
+.wf-range-group__blurb :is(p, div) {
+  margin: 0;
+}
+
+/* ---------- Collection promo (gifting vouchers / CTA) ---------- */
+.wf-collection-promo {
+  font-family: "Inter", -apple-system, sans-serif;
+  margin: 40px 0 56px;
+}
+
+.wf-collection-promo--band {
+  background: var(--wf-cream-2);
+  border-top: 1px solid #e6ddc9;
+  border-bottom: 1px solid #e6ddc9;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.wf-collection-promo--card .wf-collection-promo__inner {
+  border: 1px solid #e6ddc9;
+  background: #fff;
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.wf-collection-promo__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wf-olive);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.wf-collection-promo__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 500;
+  font-family: "Cormorant Garamond", serif;
+  color: var(--wf-ink);
+}
+
+.wf-collection-promo__body {
+  max-width: 52ch;
+  margin: 12px auto 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #555;
+}
+
+.wf-collection-promo__btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 22px;
+  background: var(--wf-olive);
+  color: #fff;
+  font-size: 14px;
+}
+
+.wf-collection-promo__btn:hover {
+  background: var(--wf-olive-dark);
+  color: #fff;
 }

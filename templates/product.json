@@ -125,16 +125,16 @@
           "settings": {
             "prefix": "Have a question about this wine?",
             "ask_label": "Ask us",
-            "ask_url": "/pages/contact",
+            "ask_url": "mailto:shop@waterfordestate.co.za",
             "review_label": "Write a review",
-            "review_url": ""
+            "review_url": "#wf-wine-story"
           }
         },
         "media_cards": {
           "type": "media_cards",
           "settings": {
             "heading": "Watch, read and buy near you",
-            "subheading": "Every wine has a story, a video and a place to find it outside South Africa.",
+            "subheading": "Every wine has its own story. Discover that story below.",
             "video_eyebrow": "Cellarmaster insights",
             "video_title": "Behind the wine",
             "video_desc": "",

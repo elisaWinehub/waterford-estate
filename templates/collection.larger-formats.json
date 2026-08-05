@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * Larger Formats — group by bottle format size.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "waterford_banner": {
+      "type": "waterford-collection-banner",
+      "settings": {
+        "eyebrow_label": "Wine collection",
+        "intro_blurb": "<p>Magnums, Jeroboams and other large formats.</p>"
+      }
+    },
+    "waterford_formats": {
+      "type": "waterford-range-groups",
+      "blocks": {
+        "magnum": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Magnum / 1.5L",
+            "blurb": "<p>Ideal for celebrations and longer ageing.</p>"
+          }
+        },
+        "jeroboam": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Jeroboam / 3L",
+            "blurb": "<p>Statement formats for the cellar and the table.</p>"
+          }
+        },
+        "bordeaux": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Bordeaux Jeroboam / 5L",
+            "blurb": "<p>Larger Bordeaux-style formats.</p>"
+          }
+        }
+      },
+      "block_order": ["magnum", "jeroboam", "bordeaux"]
+    }
+  },
+  "order": ["waterford_banner", "waterford_formats"]
+}

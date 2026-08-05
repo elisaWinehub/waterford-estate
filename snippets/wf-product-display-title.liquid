@@ -1,0 +1,17 @@
+{%- doc -%}
+  Short display title for cards/PDP.
+  Prefers custom.display_title / custom.card_title, else soft-cleans "Waterford Estate ".
+
+  @param {product} product
+  @param {boolean} [echo] - when true, prints the title (default true)
+{%- enddoc -%}
+{%- liquid
+  assign display_title = product.metafields.custom.display_title.value | default: product.metafields.custom.display_title
+  if display_title == blank
+    assign display_title = product.metafields.custom.card_title.value | default: product.metafields.custom.card_title
+  endif
+  if display_title == blank
+    assign display_title = product.title | replace_first: 'Waterford Estate ', 'Waterford '
+  endif
+  echo display_title
+-%}

@@ -56,7 +56,7 @@
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when 'title' -%}
-              <h1 class="serif pdp-title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+              <h1 class="serif pdp-title" {{ block.shopify_attributes }}>{% render 'wf-product-display-title', product: product %}</h1>
 
             {%- when 'tagline' -%}
               {%- liquid
@@ -196,8 +196,20 @@
             {%- when 'price' -%}
               {%- liquid
                 assign unit_label = block.settings.unit_label | strip
-                if current_variant.weight > 0
-                  assign unit_label = current_variant.weight | append: ' ' | append: current_variant.weight_unit | strip
+                assign volume_mf = product.metafields.custom.volume.value | default: product.metafields.custom.volume
+                if volume_mf == blank
+                  assign volume_mf = product.metafields.custom.bottle_volume.value | default: product.metafields.custom.bottle_volume
+                endif
+                if volume_mf != blank
+                  assign unit_label = volume_mf
+                elsif current_variant.weight > 0
+                  assign wu = current_variant.weight_unit | downcase
+                  unless wu == 'kg' or wu == 'g' or wu == 'lb' or wu == 'oz'
+                    assign unit_label = current_variant.weight | append: ' ' | append: current_variant.weight_unit | strip
+                  endunless
+                endif
+                if unit_label == blank
+                  assign unit_label = '750 ml'
                 endif
                 assign unit_label = unit_label | remove_first: '/' | strip
               -%}
@@ -425,20 +437,21 @@
             {%- when 'quick_facts' -%}
               {%- liquid
                 assign f1_value = product.metafields.custom.vintage.value | default: product.metafields.custom.fact_1.value | default: block.settings.fact_1_value
-                assign f2_value = product.metafields.custom.alcohol.value | default: product.metafields.custom.fact_2.value | default: block.settings.fact_2_value
-                assign f3_value = product.metafields.custom.blend_summary.value | default: product.metafields.custom.blend.value | default: product.metafields.custom.fact_3.value | default: block.settings.fact_3_value
-                assign f4_value = product.metafields.custom.new_oak.value | default: product.metafields.custom.oak.value | default: product.metafields.custom.fact_4.value | default: block.settings.fact_4_value
+                assign f2_value = product.metafields.custom.blend_summary.value | default: product.metafields.custom.blend.value | default: product.metafields.custom.cultivars.value | default: product.metafields.custom.fact_3.value | default: block.settings.fact_2_value
+                assign f3_value = product.metafields.custom.alcohol.value | default: product.metafields.custom.fact_2.value | default: block.settings.fact_3_value
+                assign f1_label = block.settings.fact_1_label | default: 'Vintage'
+                assign f2_label = block.settings.fact_2_label | default: 'Cultivar or Blend'
+                assign f3_label = block.settings.fact_3_label | default: 'Alcohol'
                 assign has_facts = false
-                if f1_value != blank or f2_value != blank or f3_value != blank or f4_value != blank
+                if f1_value != blank or f2_value != blank or f3_value != blank
                   assign has_facts = true
                 endif
               -%}
               {%- if has_facts -%}
                 <div class="quickfacts" {{ block.shopify_attributes }}>
-                  {%- if f1_value != blank -%}<div class="qf"><b>{{ f1_value }}</b><span>{{ block.settings.fact_1_label | default: 'Vintage' }}</span></div>{%- endif -%}
-                  {%- if f2_value != blank -%}<div class="qf"><b>{{ f2_value }}</b><span>{{ block.settings.fact_2_label | default: 'Alcohol' }}</span></div>{%- endif -%}
-                  {%- if f3_value != blank -%}<div class="qf"><b>{{ f3_value }}</b><span>{{ block.settings.fact_3_label | default: 'Blend' }}</span></div>{%- endif -%}
-                  {%- if f4_value != blank -%}<div class="qf"><b>{{ f4_value }}</b><span>{{ block.settings.fact_4_label | default: 'New oak' }}</span></div>{%- endif -%}
+                  {%- if f1_value != blank -%}<div class="qf"><b>{{ f1_value }}</b><span>{{ f1_label }}</span></div>{%- endif -%}
+                  {%- if f2_value != blank -%}<div class="qf"><b>{{ f2_value }}</b><span>{{ f2_label }}</span></div>{%- endif -%}
+                  {%- if f3_value != blank -%}<div class="qf"><b>{{ f3_value }}</b><span>{{ f3_label }}</span></div>{%- endif -%}
                 </div>
               {%- endif -%}
 
@@ -523,13 +536,21 @@
               {%- comment -%} Legacy blocks kept for editor compatibility; Details now render from product metafields. {%- endcomment -%}
 
             {%- when 'utility_line' -%}
+              {%- liquid
+                assign ask_href = block.settings.ask_url | strip
+                if ask_href == blank
+                  assign ask_href = 'mailto:shop@waterfordestate.co.za'
+                endif
+                assign review_href = block.settings.review_url | strip
+                if review_href == blank
+                  assign review_href = '#wf-wine-story'
+                endif
+              -%}
               <div class="utility-line" {{ block.shopify_attributes }}>
                 {{ block.settings.prefix }}
-                {%- if block.settings.ask_url != blank -%}
-                  <a href="{{ block.settings.ask_url }}">{{ block.settings.ask_label }}</a>
-                {%- endif -%}
+                <a href="{{ ask_href }}">{{ block.settings.ask_label }}</a>
                 <span class="sep">·</span>
-                <a href="{{ block.settings.review_url | default: product.url | append: '#reviews' }}">{{ block.settings.review_label }}</a>
+                <a href="{{ review_href }}">{{ block.settings.review_label }}</a>
               </div>
 
             {%- when 'media_cards' -%}
@@ -607,10 +628,21 @@
         {%- if show_video or show_journal or show_dist -%}
           <div {{ block.shopify_attributes }}>
             {%- if block.settings.heading != blank -%}
-              <div class="media-head">
+              <div class="media-head" id="wf-wine-story">
                 <h2 class="serif">{{ block.settings.heading }}</h2>
                 {%- if block.settings.subheading != blank -%}
                   <p>{{ block.settings.subheading }}</p>
+                {%- endif -%}
+                {%- liquid
+                  assign tasting_pdf = product.metafields.custom.tasting_notes_pdf.value | default: product.metafields.custom.tasting_notes_pdf
+                  if tasting_pdf == blank
+                    assign tasting_pdf = product.metafields.custom.fact_sheet_pdf.value | default: product.metafields.custom.fact_sheet_pdf
+                  endif
+                -%}
+                {%- if tasting_pdf != blank -%}
+                  <p class="media-head__pdf">
+                    <a href="{{ tasting_pdf }}" target="_blank" rel="noopener">View tasting notes PDF →</a>
+                  </p>
                 {%- endif -%}
               </div>
             {%- endif -%}
@@ -857,14 +889,13 @@
       "type": "quick_facts",
       "name": "Quick facts",
       "settings": [
+        { "type": "paragraph", "content": "Displays Vintage | Cultivar or Blend | Alcohol from product metafields (custom.vintage, custom.blend_summary / cultivars, custom.alcohol)." },
         { "type": "text", "id": "fact_1_label", "label": "Fact 1 label", "default": "Vintage" },
         { "type": "text", "id": "fact_1_value", "label": "Fact 1 fallback" },
-        { "type": "text", "id": "fact_2_label", "label": "Fact 2 label", "default": "Alcohol" },
+        { "type": "text", "id": "fact_2_label", "label": "Fact 2 label", "default": "Cultivar or Blend" },
         { "type": "text", "id": "fact_2_value", "label": "Fact 2 fallback" },
-        { "type": "text", "id": "fact_3_label", "label": "Fact 3 label", "default": "Blend" },
-        { "type": "text", "id": "fact_3_value", "label": "Fact 3 fallback" },
-        { "type": "text", "id": "fact_4_label", "label": "Fact 4 label", "default": "New oak" },
-        { "type": "text", "id": "fact_4_value", "label": "Fact 4 fallback" }
+        { "type": "text", "id": "fact_3_label", "label": "Fact 3 label", "default": "Alcohol" },
+        { "type": "text", "id": "fact_3_value", "label": "Fact 3 fallback" }
       ]
     },
     {
@@ -933,9 +964,9 @@
       "settings": [
         { "type": "text", "id": "prefix", "label": "Prefix", "default": "Have a question about this wine?" },
         { "type": "text", "id": "ask_label", "label": "Ask label", "default": "Ask us" },
-        { "type": "url", "id": "ask_url", "label": "Ask URL" },
+        { "type": "text", "id": "ask_url", "label": "Ask URL", "default": "mailto:shop@waterfordestate.co.za", "info": "Page URL or mailto: address." },
         { "type": "text", "id": "review_label", "label": "Review label", "default": "Write a review" },
-        { "type": "url", "id": "review_url", "label": "Review URL" }
+        { "type": "text", "id": "review_url", "label": "Review URL", "default": "#wf-wine-story", "info": "Defaults to the media/story section anchor on this page." }
       ]
     },
     {
@@ -944,7 +975,7 @@
       "limit": 1,
       "settings": [
         { "type": "text", "id": "heading", "label": "Heading", "default": "Watch, read and buy near you" },
-        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Every wine has a story, a video and a place to find it outside South Africa." },
+        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Every wine has its own story. Discover that story below." },
         { "type": "header", "content": "Video" },
         { "type": "text", "id": "video_eyebrow", "label": "Eyebrow", "default": "Cellarmaster insights" },
         { "type": "text", "id": "video_title", "label": "Title", "default": "Behind the wine" },

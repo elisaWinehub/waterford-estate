@@ -27,9 +27,15 @@
       <span class="wf-breadcrumb__current">{{ collection.title }}</span>
     </nav>
 
-    {%- if collection.description != blank -%}
+    {%- liquid
+      assign page_blurb = section.settings.intro_blurb
+      if page_blurb == blank
+        assign page_blurb = collection.description
+      endif
+    -%}
+    {%- if page_blurb != blank -%}
       <div class="wf-page-head rte">
-        {{ collection.description }}
+        {{ page_blurb }}
       </div>
     {%- endif -%}
 
@@ -286,6 +292,16 @@
     "templates": ["collection"]
   },
   "settings": [
+    {
+      "type": "richtext",
+      "id": "intro_blurb",
+      "label": "Intro blurb",
+      "info": "Shown above the product grid. Leave blank to use the collection description from Admin."
+    },
+    {
+      "type": "paragraph",
+      "content": "Product order: set the collection to Manual order in Admin (Products → Collections → [collection] → Products) and drag to reorder. Shoppers can still use the Sort dropdown."
+    },
     {
       "type": "range",
       "id": "products_per_page",

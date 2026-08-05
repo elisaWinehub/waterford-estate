@@ -13,19 +13,31 @@
       "type": "waterford-collection-banner",
       "settings": {
         "eyebrow_label": "Wine collection",
-        "fallback_image": ""
+        "fallback_image": "",
+        "intro_blurb": ""
       }
     },
     "waterford_grid": {
       "type": "waterford-collection-grid",
       "settings": {
+        "intro_blurb": "",
         "products_per_page": 24,
         "show_filter_counts": false
+      }
+    },
+    "waterford_explore": {
+      "type": "waterford-explore-cta",
+      "settings": {
+        "heading": "Explore exclusive wines",
+        "subheading": "Discover older vintages and library releases.",
+        "cta_label": "Explore now",
+        "cta_link": "/collections/library-collection"
       }
     }
   },
   "order": [
     "waterford_banner",
-    "waterford_grid"
+    "waterford_grid",
+    "waterford_explore"
   ]
 }

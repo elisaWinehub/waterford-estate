@@ -1,0 +1,37 @@
+/*
+ * ------------------------------------------------------------
+ * Ranges collection — products grouped under editable range headings.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "waterford_banner": {
+      "type": "waterford-collection-banner",
+      "settings": {
+        "eyebrow_label": "Wine collection",
+        "intro_blurb": "<p>Explore Waterford Estate wines by range.</p>"
+      }
+    },
+    "waterford_ranges": {
+      "type": "waterford-range-groups",
+      "blocks": {
+        "estate": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Estate",
+            "blurb": "<p>Flagship estate-grown expressions from Waterford.</p>"
+          }
+        },
+        "waterford_range": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Waterford Range",
+            "blurb": "<p>Approachable Waterford blends and varietals.</p>"
+          }
+        }
+      },
+      "block_order": ["estate", "waterford_range"]
+    }
+  },
+  "order": ["waterford_banner", "waterford_ranges"]
+}
