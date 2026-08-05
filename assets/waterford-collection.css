@@ -29,7 +29,8 @@
 /* ---------- Hero ---------- */
 .wf-hero {
   position: relative;
-  height: 280px;
+  min-height: 280px;
+  height: auto;
   overflow: hidden;
   background: linear-gradient(120deg, #3a3320, #1c1912);
   background-size: cover;
@@ -69,8 +70,8 @@
   z-index: 2;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 32px;
-  height: 100%;
+  padding: 48px 32px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -104,6 +105,12 @@
 
 .wf-hero__blurb :is(p, div) {
   margin: 0;
+}
+
+.wf-hero__blurb a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* ---------- Body wrap ---------- */
@@ -765,7 +772,7 @@
   }
 
   .wf-hero {
-    height: 220px;
+    min-height: 220px;
   }
 }
 

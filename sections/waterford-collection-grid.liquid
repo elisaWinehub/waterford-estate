@@ -29,9 +29,6 @@
 
     {%- liquid
       assign page_blurb = section.settings.intro_blurb
-      if page_blurb == blank
-        assign page_blurb = collection.description
-      endif
     -%}
     {%- if page_blurb != blank -%}
       <div class="wf-page-head rte">
@@ -295,8 +292,8 @@
     {
       "type": "richtext",
       "id": "intro_blurb",
-      "label": "Intro blurb",
-      "info": "Shown above the product grid. Leave blank to use the collection description from Admin."
+      "label": "Extra intro below toolbar",
+      "info": "Optional. Collection description now shows in the hero under the title."
     },
     {
       "type": "paragraph",

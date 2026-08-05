@@ -27,7 +27,15 @@
   if hero_image != blank
     assign has_hero_image = true
   endif
-  assign intro_blurb = section.settings.intro_blurb
+
+  comment
+    Prefer Shopify Admin collection description under the title.
+    Theme-editor intro_blurb can override when set.
+  endcomment
+  assign intro_blurb = collection.description
+  if section.settings.intro_blurb != blank
+    assign intro_blurb = section.settings.intro_blurb
+  endif
 -%}
 
 <section
@@ -59,7 +67,7 @@
     {%- endif -%}
     <h1 class="wf-hero__title serif">{{ collection.title }}</h1>
     {%- if intro_blurb != blank -%}
-      <div class="wf-hero__blurb">{{ intro_blurb }}</div>
+      <div class="wf-hero__blurb rte">{{ intro_blurb }}</div>
     {%- endif -%}
   </div>
 </section>
@@ -95,8 +103,8 @@
     {
       "type": "richtext",
       "id": "intro_blurb",
-      "label": "Intro blurb",
-      "info": "Short editable copy shown under the collection title (also falls back to the collection description in the grid section)."
+      "label": "Intro blurb override",
+      "info": "Leave empty to use the collection description from Admin (Products → Collections). Set this only to override that description in the hero."
     }
   ],
   "presets": [
