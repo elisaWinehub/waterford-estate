@@ -948,3 +948,137 @@
   background: var(--wf-olive-dark);
   color: #fff;
 }
+
+/* Optional short inclusions on product cards (mixed cases / gifts) */
+.wf-card-inclusions {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--wf-muted);
+  margin-top: 6px;
+}
+
+/* Voucher page grid — collection-like cards, Theme Editor blocks */
+.wf-voucher-grid {
+  padding: 40px 0 64px;
+}
+
+.wf-voucher-grid__heading {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.wf-voucher-grid .wf-page-head {
+  max-width: 720px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.wf-voucher-grid__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+.wf-voucher-grid__list--cols-3 {
+  grid-template-columns: 1fr;
+}
+
+.wf-voucher-grid__list--cols-4 {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 601px) {
+  .wf-voucher-grid__list--cols-3,
+  .wf-voucher-grid__list--cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 901px) {
+  .wf-voucher-grid__list--cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .wf-voucher-grid__list--cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.wf-voucher-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e6ddc9;
+  height: 100%;
+}
+
+.wf-voucher-card__photo {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f7f4ec;
+}
+
+.wf-voucher-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wf-voucher-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px 16px 18px;
+  gap: 8px;
+}
+
+.wf-voucher-card__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-ink);
+  font-family: 'Roboto', sans-serif;
+}
+
+.wf-voucher-card__blurb {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--wf-muted);
+  flex: 1;
+}
+
+.wf-voucher-card__price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 4px;
+}
+
+.wf-voucher-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--wf-olive);
+  color: #fff;
+  font-size: 12.5px;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.wf-voucher-card__btn:hover {
+  background: var(--wf-olive-dark);
+  color: #fff;
+}
+

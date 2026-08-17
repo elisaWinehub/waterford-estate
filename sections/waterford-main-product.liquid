@@ -234,6 +234,10 @@
                 if show_po == nil
                   assign show_po = true
                 endif
+                # Only show when real selling plans exist — no static Subscribe placeholder
+                unless has_selling_plans
+                  assign show_po = false
+                endunless
                 assign d1 = block.settings.discount_1 | default: 10
                 assign d2 = block.settings.discount_2 | default: 15
                 assign d3 = block.settings.discount_3 | default: 20
@@ -326,56 +330,6 @@
                         </div>
                       </div>
                     {%- endfor -%}
-                  {%- else -%}
-                    {%- comment -%} Demo static subscribe UI with dropdown + live discount pricing {%- endcomment -%}
-                    <div class="po-card" data-wf-po-card data-po-type="subscribe" data-po-static="true">
-                      <label class="po-card__row">
-                        <input
-                          type="radio"
-                          name="purchase_option"
-                          value="subscribe"
-                          data-po-type="subscribe"
-                          data-selling-plan=""
-                          data-po-static="true"
-                          data-discount="{{ d1 }}"
-                        >
-                        <span class="po-card__label">
-                          {{ block.settings.subscribe_label | default: 'Subscribe & Save' }}
-                          <span class="po-save-badge" data-po-save-badge>{{ d1 }}% off</span>
-                        </span>
-                        <span class="po-card__price" data-po-card-price>
-                          <s class="po-compare">{{ price_cents | money }}</s>
-                          <span class="po-sale">{{ sale1 | money }}</span>
-                        </span>
-                      </label>
-                      <div class="po-frequency">
-                        <label class="po-freq-label" for="po-freq-{{ block.id }}">Delivery frequency</label>
-                        <select class="po-freq-select" id="po-freq-{{ block.id }}" data-po-freq-select disabled>
-                          <option
-                            value="freq-1"
-                            data-discount="{{ d1 }}"
-                            data-sale-cents="{{ sale1 }}"
-                            selected
-                          >
-                            {{ block.settings.freq_1 | default: 'Every month' }} — {{ d1 }}% off
-                          </option>
-                          <option
-                            value="freq-2"
-                            data-discount="{{ d2 }}"
-                            data-sale-cents="{{ sale2 }}"
-                          >
-                            {{ block.settings.freq_2 | default: 'Every 2 months' }} — {{ d2 }}% off
-                          </option>
-                          <option
-                            value="freq-3"
-                            data-discount="{{ d3 }}"
-                            data-sale-cents="{{ sale3 }}"
-                          >
-                            {{ block.settings.freq_3 | default: 'Every 3 months' }} — {{ d3 }}% off
-                          </option>
-                        </select>
-                      </div>
-                    </div>
                   {%- endif -%}
                 </div>
               {%- endif -%}

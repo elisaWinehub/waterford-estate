@@ -1,0 +1,34 @@
+{%- doc -%}
+  Renders product inclusions / gift contents from metafield or section fallback.
+  Prefers custom.inclusions (rich text or multi-line).
+  @param {product} product
+  @param {string} [heading]
+  @param {string} [fallback_html]
+{%- enddoc -%}
+{%- liquid
+  assign inclusions_mf = product.metafields.custom.inclusions
+  assign inclusions_html = blank
+  if inclusions_mf != blank
+    if inclusions_mf.type == 'rich_text_field'
+      assign inclusions_html = inclusions_mf | metafield_tag
+    else
+      assign inclusions_html = inclusions_mf.value | default: inclusions_mf
+    endif
+  endif
+  if inclusions_html == blank and fallback_html != blank
+    assign inclusions_html = fallback_html
+  endif
+  assign heading_label = heading | default: 'Inclusions'
+-%}
+{%- if inclusions_html != blank -%}
+  <div class="wf-inclusions">
+    <h2 class="serif wf-inclusions__title">{{ heading_label }}</h2>
+    <div class="wf-inclusions__body rte">
+      {%- if inclusions_html contains '<' -%}
+        {{ inclusions_html }}
+      {%- else -%}
+        {{ inclusions_html | newline_to_br }}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

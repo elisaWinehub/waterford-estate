@@ -97,6 +97,12 @@
           {{ variant.price | money }}
         {%- endif -%}
       </div>
+      {%- liquid
+        assign card_inclusions = product.metafields.custom.card_inclusions.value | default: product.metafields.custom.card_inclusions
+      -%}
+      {%- if card_inclusions != blank -%}
+        <div class="wf-card-inclusions">{{ card_inclusions }}</div>
+      {%- endif -%}
     </div>
 
     <div class="wf-card-controls">

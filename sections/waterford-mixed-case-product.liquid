@@ -1,0 +1,121 @@
+{%- comment -%}
+  Mixed case / bundle PDP — gallery, title, description, price, one-time ATC, inclusions.
+  No Subscribe & Save / wine specs / storytelling.
+{%- endcomment -%}
+
+{{ 'waterford-product.css' | asset_url | stylesheet_tag }}
+{{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'waterford-product.js' | asset_url }}"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign inclusions_heading = section.settings.inclusions_heading | default: 'Inclusions'
+-%}
+
+<div class="wf-pdp wf-pdp--mixed-case" data-wf-pdp {{ section.shopify_attributes }}>
+  <div class="wrap">
+    <div class="breadcrumb">
+      <a href="{{ routes.all_products_collection_url }}">Shop</a>
+      &nbsp;&rsaquo;&nbsp;
+      <a href="/collections/mixed-cases">Mixed Cases</a>
+      &nbsp;&rsaquo;&nbsp;
+      <span>{{ product.title }}</span>
+    </div>
+
+    <section class="pdp-top">
+      {% render 'wf-pdp-gallery', product: product, block: section %}
+
+      <div class="pdp-info">
+        <h1 class="serif pdp-title">{% render 'wf-product-display-title', product: product %}</h1>
+
+        {%- if product.description != blank -%}
+          <div class="pdp-tagline wf-gift-description rte">{{ product.description }}</div>
+        {%- endif -%}
+
+        <div class="price-box" data-wf-price data-base-cents="{{ current_variant.price }}">
+          <div class="price">
+            <span data-wf-price-value>{{ current_variant.price | money }}</span>
+          </div>
+        </div>
+
+        {% form 'product', product, class: 'buy-actions', data-wf-buy-form: '' %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" value="1" data-wf-qty-input>
+
+          {%- unless product.has_only_default_variant -%}
+            <select class="variant-select" data-wf-variant-select aria-label="{{ 'products.product.product_variants' | t }}">
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.id }}"
+                  data-available="{{ variant.available }}"
+                  {% if variant == current_variant %}selected{% endif %}
+                >
+                  {{ variant.title }} — {{ variant.price | money }}
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endunless -%}
+
+          {%- if current_variant.available -%}
+            <div class="qty" data-wf-qty>
+              <button type="button" data-qty-dec aria-label="{{ 'accessibility.decrease_quantity' | t }}">–</button>
+              <span id="qtyVal" data-qty-value aria-live="polite">1</span>
+              <button type="button" data-qty-inc aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+            </div>
+            <button
+              type="submit"
+              class="button buy-btn"
+              data-wf-buy-submit
+              data-label-add="{{ 'products.product.add_to_cart' | t | escape }}"
+              data-label-adding="{{ 'products.product.adding_to_cart' | t | escape }}"
+              data-label-added="{{ 'products.product.added_to_cart' | t | escape }}"
+              data-label-error="{{ 'products.product.add_to_cart_error' | t | escape }}"
+              data-label-sold="{{ 'products.product.sold_out' | t | escape }}"
+            >
+              {{ 'products.product.add_to_cart' | t }}
+            </button>
+          {%- else -%}
+            <button type="button" class="button buy-btn" disabled>{{ 'products.product.sold_out' | t }}</button>
+          {%- endif -%}
+        {% endform %}
+
+        {% render 'waterford-inclusions',
+          product: product,
+          heading: inclusions_heading,
+          fallback_html: section.settings.inclusions_fallback
+        %}
+      </div>
+    </section>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "WF Mixed case product",
+  "tag": "section",
+  "class": "section-waterford-mixed-case-product",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "One-time purchase only. Inclusions from product metafield custom.inclusions."
+    },
+    {
+      "type": "text",
+      "id": "inclusions_heading",
+      "label": "Inclusions heading",
+      "default": "Inclusions"
+    },
+    {
+      "type": "richtext",
+      "id": "inclusions_fallback",
+      "label": "Inclusions fallback",
+      "info": "Used only when the product has no custom.inclusions metafield."
+    }
+  ],
+  "presets": [{ "name": "WF Mixed case product" }]
+}
+{% endschema %}

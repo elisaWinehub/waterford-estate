@@ -35,7 +35,7 @@
         "purchase_option": {
           "type": "purchase_option",
           "settings": {
-            "enable_purchase_options": true,
+            "enable_purchase_options": false,
             "heading": "Choose your purchase option",
             "onetime_label": "One-time purchase",
             "subscribe_label": "Subscribe & Save",

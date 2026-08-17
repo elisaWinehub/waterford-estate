@@ -1,0 +1,62 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "waterford-page-hero",
+      "settings": {
+        "heading": "Vouchers",
+        "blurb": "<p>Give the gift of a Waterford Estate experience. Purchase vouchers securely via DinePlan.</p>"
+      }
+    },
+    "voucher_grid": {
+      "type": "waterford-voucher-grid",
+      "settings": {
+        "heading": "Gift vouchers",
+        "intro": "",
+        "columns": "3"
+      },
+      "blocks": {
+        "voucher_1": {
+          "type": "voucher",
+          "settings": {
+            "title": "Waterford Estate Gift Voucher",
+            "blurb": "The perfect gift for a memorable Waterford Estate experience.",
+            "price_display": "From R500",
+            "button_label": "Buy Voucher",
+            "button_url": ""
+          }
+        },
+        "voucher_2": {
+          "type": "voucher",
+          "settings": {
+            "title": "Tasting Experience Voucher",
+            "blurb": "Treat someone to a guided tasting at the estate.",
+            "price_display": "From R750",
+            "button_label": "Buy Voucher",
+            "button_url": ""
+          }
+        },
+        "voucher_3": {
+          "type": "voucher",
+          "settings": {
+            "title": "Dining Voucher",
+            "blurb": "Share a meal with views over the Waterford vineyards.",
+            "price_display": "Choose your value",
+            "button_label": "Buy Voucher",
+            "button_url": ""
+          }
+        }
+      },
+      "block_order": ["voucher_1", "voucher_2", "voucher_3"]
+    }
+  },
+  "order": ["hero", "voucher_grid"]
+}
