@@ -1,6 +1,10 @@
 /*
  * ------------------------------------------------------------
- * Larger Formats — group by bottle format size.
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
 {
@@ -9,7 +13,7 @@
       "type": "waterford-collection-banner",
       "settings": {
         "eyebrow_label": "Wine collection",
-        "intro_blurb": "<p>Magnums, Jeroboams and other large formats.</p>"
+        "intro_blurb": "<p>Discover the allure of larger format bottles - crafted to not only make a statement but to enhance the ageing potential and complexity of our wines. These larger vessels allow for a slower maturation process, resulting in refined flavours and a truly memorable experience. Perfect for collectors, celebrations, or sharing with friends, these grand bottles offer a unique way to enjoy our wines at their peak.<br/><br/></p>"
       }
     },
     "waterford_formats": {
@@ -19,26 +23,52 @@
           "type": "range_group",
           "settings": {
             "heading": "Magnum / 1.5L",
-            "blurb": "<p>Ideal for celebrations and longer ageing.</p>"
+            "blurb": "<p>Ideal for celebrations and longer ageing.</p>",
+            "products": [
+              "waterford-estate-cabernet-sauvignon-magnum-1-5l",
+              "waterford-estate-chardonnay-single-vineyard-magnum-1-5l",
+              "kevin-arnold-shiraz-magnum-1-5l",
+              "waterford-estate-the-jem-magnum",
+              "waterford-rose-mary-magnum-1-5-l"
+            ]
           }
         },
         "jeroboam": {
           "type": "range_group",
           "settings": {
             "heading": "Jeroboam / 3L",
-            "blurb": "<p>Statement formats for the cellar and the table.</p>"
+            "blurb": "<p>Statement formats for the cellar and the table.</p>",
+            "products": [
+              "estate-cabernet-sauvignon-bordeaux-jeroboam",
+              "kevin-arnold-shiraz-jeroboam-3l",
+              "the-jem-magnum-jeroboam",
+              "the-jem-magnum-bordeaux-jeroboam"
+            ]
           }
         },
         "bordeaux": {
           "type": "range_group",
           "settings": {
             "heading": "Bordeaux Jeroboam / 5L",
-            "blurb": "<p>Larger Bordeaux-style formats.</p>"
+            "blurb": "<p>Larger Bordeaux-style formats.</p>",
+            "products": [
+              "estate-cabernet-sauvignon-bordeaux-jeroboam-1",
+              "kevin-arnold-shiraz-bordeaux-jeroboam-5l",
+              "the-jem-magnum-jeroboam"
+            ]
           }
         }
       },
-      "block_order": ["magnum", "jeroboam", "bordeaux"]
+      "block_order": [
+        "magnum",
+        "jeroboam",
+        "bordeaux"
+      ],
+      "settings": {}
     }
   },
-  "order": ["waterford_banner", "waterford_formats"]
+  "order": [
+    "waterford_banner",
+    "waterford_formats"
+  ]
 }

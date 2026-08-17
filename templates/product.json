@@ -12,25 +12,25 @@
     "main": {
       "type": "waterford-main-product",
       "blocks": {
-        "gallery": { "type": "gallery", "settings": {} },
-        "title": { "type": "title", "settings": {} },
+        "gallery": {
+          "type": "gallery",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
         "tagline": {
           "type": "tagline",
           "settings": {
             "fallback_text": "A signature wine from Waterford Estate — crafted with precision, built to age gracefully."
           }
         },
-        "awards": {
-          "type": "awards",
-          "settings": {
-            "award_1_alt": "",
-            "award_2_alt": "",
-            "award_3_alt": ""
-          }
-        },
         "price": {
           "type": "price",
-          "settings": { "unit_label": "750 ml" }
+          "settings": {
+            "unit_label": "750 ml"
+          }
         },
         "purchase_option": {
           "type": "purchase_option",
@@ -47,7 +47,18 @@
             "discount_3": 20
           }
         },
-        "buy_buttons": { "type": "buy_buttons", "settings": {} },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {}
+        },
+        "awards": {
+          "type": "awards",
+          "settings": {
+            "award_1_alt": "",
+            "award_2_alt": "",
+            "award_3_alt": ""
+          }
+        },
         "shipping_note": {
           "type": "shipping_note",
           "settings": {
@@ -59,17 +70,17 @@
           "settings": {
             "fact_1_label": "Vintage",
             "fact_1_value": "",
-            "fact_2_label": "Alcohol",
+            "fact_2_label": "Blend",
             "fact_2_value": "",
-            "fact_3_label": "Blend",
-            "fact_3_value": "",
-            "fact_4_label": "New oak",
-            "fact_4_value": ""
+            "fact_3_label": "Alcohol",
+            "fact_3_value": ""
           }
         },
         "details_heading": {
           "type": "details_heading",
-          "settings": { "heading": "Details" }
+          "settings": {
+            "heading": "Details"
+          }
         },
         "accordion_tasting": {
           "type": "accordion_tasting",
@@ -133,8 +144,8 @@
         "media_cards": {
           "type": "media_cards",
           "settings": {
-            "heading": "Watch, read and buy near you",
-            "subheading": "Every wine has its own story. Discover that story below.",
+            "heading": "Discover our story below.",
+            "subheading": "",
             "video_eyebrow": "Cellarmaster insights",
             "video_title": "Behind the wine",
             "video_desc": "",
@@ -178,9 +189,13 @@
       "type": "waterford-related-products",
       "settings": {
         "heading": "You may also like",
-        "max_products": 3
+        "max_products": 3,
+        "product_list": []
       }
     }
   },
-  "order": ["main", "related"]
+  "order": [
+    "main",
+    "related"
+  ]
 }

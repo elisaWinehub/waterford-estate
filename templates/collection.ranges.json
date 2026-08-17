@@ -1,6 +1,10 @@
 /*
  * ------------------------------------------------------------
- * Ranges collection — products grouped under editable range headings.
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
 {
@@ -9,7 +13,7 @@
       "type": "waterford-collection-banner",
       "settings": {
         "eyebrow_label": "Wine collection",
-        "intro_blurb": "<p>Explore Waterford Estate wines by range.</p>"
+        "intro_blurb": "<p>Discover the distinct expressions of South Africa’s terroir through our Estate Wines, Waterford Wines, and Pecan Stream Range. Each collection is carefully crafted to highlight the unique qualities of our land and the artistry behind every bottle.<br/><br/></p>"
       }
     },
     "waterford_ranges": {
@@ -19,19 +23,53 @@
           "type": "range_group",
           "settings": {
             "heading": "Estate",
-            "blurb": "<p>Flagship estate-grown expressions from Waterford.</p>"
+            "blurb": "<p>Our Estate Range is the flagship collection of Waterford Estate, a testament to our meticulous viticulture and winemaking precision. Each wine reflects the unique character of our Helderberg vineyards, offering complexity and balance. This collection includes some of our most iconic wines, such as The Jem, which are celebrated for their elegance, depth, and exceptional ageing potential.<br/><br/></p>",
+            "products": [
+              "waterford-estate-the-jem",
+              "cabernet-sauvignon",
+              "waterford-estate-grenache-noir-single-vineyard",
+              "waterford-estate-chardonnay-single-vineyard"
+            ]
           }
         },
         "waterford_range": {
           "type": "range_group",
           "settings": {
             "heading": "Waterford Range",
-            "blurb": "<p>Approachable Waterford blends and varietals.</p>"
+            "blurb": "<p>The Waterford Range offers a curated selection of wines that reflect the diverse terroirs of South Africa. While some grapes are sourced from our Estate, others come from esteemed vineyards across the country, allowing us to showcase a broader expression of South African viticulture. These wines are known for their vibrant acidity, nuanced profiles, elegant tannins, and age-worthy potential - capturing the essence of our land in every bottle.<br/><br/></p>",
+            "products": [
+              "antigo",
+              "kevin-arnold-shiraz",
+              "waterford-rose-mary",
+              "old-vine-project-chenin-blanc-1",
+              "waterford-cap-classique",
+              "waterford-heatherleigh"
+            ]
+          }
+        },
+        "range_group_qXB9W9": {
+          "type": "range_group",
+          "settings": {
+            "heading": "Pecan Stream Range",
+            "blurb": "<p>The Pecan Stream Range is crafted for relaxed enjoyment, offering vibrant, fruit-forward wines that are as versatile as they are accessible. Named after the Pecan Stream running through the estate, these wines provide a perfect balance of quality and approachability - ideal for everyday enjoyment without compromising on character.<br/><br/></p>",
+            "products": [
+              "pecan-stream-pebble-hill",
+              "pecan-stream-chenin-blanc-1",
+              "pecan-stream-sauvignon-blanc"
+            ]
           }
         }
       },
-      "block_order": ["estate", "waterford_range"]
+      "block_order": [
+        "estate",
+        "waterford_range",
+        "range_group_qXB9W9"
+      ],
+      "settings": {}
     }
   },
-  "order": ["waterford_banner", "waterford_ranges"]
+  "order": [
+    "waterford_banner",
+    "waterford_ranges"
+  ]
 }

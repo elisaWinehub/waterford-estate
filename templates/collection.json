@@ -12,8 +12,7 @@
     "waterford_banner": {
       "type": "waterford-collection-banner",
       "settings": {
-        "eyebrow_label": "Wine collection",
-        "fallback_image": "",
+        "eyebrow_label": "{{ collection.title }}",
         "intro_blurb": ""
       }
     },
@@ -28,10 +27,11 @@
     "waterford_explore": {
       "type": "waterford-explore-cta",
       "settings": {
-        "heading": "Explore exclusive wines",
-        "subheading": "Discover older vintages and library releases.",
-        "cta_label": "Explore now",
-        "cta_link": "/collections/library-collection"
+        "image": "shopify://shop_images/WATERFORD-54.jpg",
+        "heading": "Would you like to explore exclusive wines or older vintages?",
+        "subheading": "Looking for something special? Discover some of our exclusive wines and rare aged vintages. Contact us to access limited releases and hidden gems from our cellar.",
+        "cta_label": "Contact us",
+        "cta_link": "mailto:cheers@waterfordestate.co.za?subject=I%20am%20interested%20in%20learning%20more%20about%20Waterford%20Estate's%20wines"
       }
     }
   },
