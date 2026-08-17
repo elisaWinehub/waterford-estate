@@ -12,7 +12,6 @@
     "waterford_banner": {
       "type": "waterford-collection-banner",
       "settings": {
-        "eyebrow_label": "{{ collection.title }}",
         "intro_blurb": ""
       }
     },

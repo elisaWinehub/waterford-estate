@@ -95,7 +95,7 @@
 }
 
 .wf-hero__blurb {
-  max-width: 52ch;
+  max-width: 900px;
   margin-top: 14px;
   color: rgba(250, 247, 242, 0.92);
   font-family: 'Roboto', sans-serif;

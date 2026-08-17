@@ -1,7 +1,11 @@
 {%- comment -%}
   Waterford Estate collection hero banner.
-  Uses the collection featured image from Admin (Products → Collections),
-  with an optional section fallback image.
+
+  Image priority (per collection first — section settings are shared across
+  every collection using this template, so they must NOT beat collection.image):
+  1. Collection image (Admin → Products → Collections) — per-collection only
+  2. Section "Default hero image" — template-wide default when a collection has no image
+  3. Section fallback image
 {%- endcomment -%}
 
 {{ 'waterford-collection.css' | asset_url | stylesheet_tag }}
@@ -10,28 +14,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 {%- liquid
-  assign hero_image = section.settings.hero_image
-  if hero_image == blank
-    assign hero_image = collection.image
-  endif
+  assign hero_image = collection.image
   if hero_image == blank
     assign hero_image = collection.featured_image
+  endif
+  if hero_image == blank
+    assign hero_image = section.settings.hero_image
   endif
   if hero_image == blank
     assign hero_image = section.settings.fallback_image
   endif
 
-  assign eyebrow = section.settings.eyebrow_label | default: 'Wine collection'
   assign hero_alt = collection.title | escape
   assign has_hero_image = false
   if hero_image != blank
     assign has_hero_image = true
   endif
 
-  comment
-    Prefer Shopify Admin collection description under the title.
-    Theme-editor intro_blurb can override when set.
-  endcomment
   assign intro_blurb = collection.description
   if section.settings.intro_blurb != blank
     assign intro_blurb = section.settings.intro_blurb
@@ -62,9 +61,6 @@
   {%- endif -%}
   <div class="wf-hero__overlay" aria-hidden="true"></div>
   <div class="wf-hero__content">
-    {%- if eyebrow != blank -%}
-      <div class="wf-hero__eyebrow">{{ eyebrow }}</div>
-    {%- endif -%}
     <h1 class="wf-hero__title serif">{{ collection.title }}</h1>
     {%- if intro_blurb != blank -%}
       <div class="wf-hero__blurb rte">{{ intro_blurb }}</div>
@@ -82,29 +78,26 @@
   },
   "settings": [
     {
-      "type": "text",
-      "id": "eyebrow_label",
-      "label": "Eyebrow label",
-      "default": "Wine collection",
-      "info": "Static label shown above the collection title"
+      "type": "paragraph",
+      "content": "Per-collection hero: set the image on that collection in Admin (Products → Collections). Theme default below only appears when a collection has no image of its own."
     },
     {
       "type": "image_picker",
       "id": "hero_image",
-      "label": "Header image",
-      "info": "Overrides the collection featured image when set. Easy to swap in the theme editor."
+      "label": "Default hero image",
+      "info": "Template-wide default used only when the collection has no Admin image. Does not replace images on collections that already have one."
     },
     {
       "type": "image_picker",
       "id": "fallback_image",
       "label": "Fallback hero image",
-      "info": "Used when neither a header image nor a collection featured image is set"
+      "info": "Last resort if neither the collection nor the default hero image is set"
     },
     {
       "type": "richtext",
       "id": "intro_blurb",
       "label": "Intro blurb override",
-      "info": "Leave empty to use the collection description from Admin (Products → Collections). Set this only to override that description in the hero."
+      "info": "Leave empty to use the collection description from Admin. Set this only to override that description in the hero."
     }
   ],
   "presets": [
