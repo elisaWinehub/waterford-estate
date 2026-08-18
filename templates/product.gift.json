@@ -12,8 +12,7 @@
     "main": {
       "type": "waterford-gift-product",
       "settings": {
-        "inclusions_heading": "Gift Contents",
-        "inclusions_fallback": ""
+        "inclusions_heading": "Gift Inclusions"
       }
     }
   },

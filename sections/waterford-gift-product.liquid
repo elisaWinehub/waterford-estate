@@ -1,5 +1,6 @@
 {%- comment -%}
-  Gift product PDP — informational only. No purchase forms, qty, ATC, or subscriptions.
+  Gift product PDP — gallery, title, description, price, qty, ATC, Gift Inclusions.
+  Inclusions only render when custom.inclusions has content (no empty heading).
 {%- endcomment -%}
 
 {{ 'waterford-product.css' | asset_url | stylesheet_tag }}
@@ -10,7 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 {%- liquid
-  assign inclusions_heading = section.settings.inclusions_heading | default: 'Gift Contents'
+  assign current_variant = product.selected_or_first_available_variant
+  assign inclusions_heading = section.settings.inclusions_heading | default: 'Gift Inclusions'
 -%}
 
 <div class="wf-pdp wf-pdp--gift" data-wf-pdp {{ section.shopify_attributes }}>
@@ -33,10 +35,56 @@
           <div class="pdp-tagline wf-gift-description rte">{{ product.description }}</div>
         {%- endif -%}
 
+        <div class="price-box" data-wf-price data-base-cents="{{ current_variant.price }}">
+          <div class="price">
+            <span data-wf-price-value>{{ current_variant.price | money }}</span>
+          </div>
+        </div>
+
+        {% form 'product', product, class: 'buy-actions', data-wf-buy-form: '' %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+          <input type="hidden" name="quantity" value="1" data-wf-qty-input>
+
+          {%- unless product.has_only_default_variant -%}
+            <select class="variant-select" data-wf-variant-select aria-label="{{ 'products.product.product_variants' | t }}">
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.id }}"
+                  data-available="{{ variant.available }}"
+                  {% if variant == current_variant %}selected{% endif %}
+                >
+                  {{ variant.title }} — {{ variant.price | money }}
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endunless -%}
+
+          {%- if current_variant.available -%}
+            <div class="qty" data-wf-qty>
+              <button type="button" data-qty-dec aria-label="{{ 'accessibility.decrease_quantity' | t }}">–</button>
+              <span id="qtyVal" data-qty-value aria-live="polite">1</span>
+              <button type="button" data-qty-inc aria-label="{{ 'accessibility.increase_quantity' | t }}">+</button>
+            </div>
+            <button
+              type="submit"
+              class="button buy-btn"
+              data-wf-buy-submit
+              data-label-add="{{ 'products.product.add_to_cart' | t | escape }}"
+              data-label-adding="{{ 'products.product.adding_to_cart' | t | escape }}"
+              data-label-added="{{ 'products.product.added_to_cart' | t | escape }}"
+              data-label-error="{{ 'products.product.add_to_cart_error' | t | escape }}"
+              data-label-sold="{{ 'products.product.sold_out' | t | escape }}"
+            >
+              {{ 'products.product.add_to_cart' | t }}
+            </button>
+          {%- else -%}
+            <button type="button" class="button buy-btn" disabled>{{ 'products.product.sold_out' | t }}</button>
+          {%- endif -%}
+        {% endform %}
+
         {% render 'waterford-inclusions',
           product: product,
-          heading: inclusions_heading,
-          fallback_html: section.settings.inclusions_fallback
+          heading: inclusions_heading
         %}
       </div>
     </section>
@@ -52,19 +100,13 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Informational gift page — no Add to Cart. Inclusions pull from product metafield custom.inclusions (rich text / multi-line)."
+      "content": "One-time purchase. Gift Inclusions only show when product metafield custom.inclusions has content."
     },
     {
       "type": "text",
       "id": "inclusions_heading",
-      "label": "Inclusions heading",
-      "default": "Gift Contents"
-    },
-    {
-      "type": "richtext",
-      "id": "inclusions_fallback",
-      "label": "Inclusions fallback",
-      "info": "Used only when the product has no custom.inclusions metafield."
+      "label": "Gift Inclusions heading",
+      "default": "Gift Inclusions"
     }
   ],
   "presets": [{ "name": "WF Gift product" }]
