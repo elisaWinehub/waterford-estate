@@ -15,7 +15,30 @@
         "inclusions_heading": "Wines Included",
         "inclusions_fallback": ""
       }
+    },
+    "wine_story": {
+      "type": "waterford-wine-story",
+      "settings": {
+        "heading": "Discover our story below.",
+        "subheading": "",
+        "video_eyebrow": "Cellarmaster insights",
+        "video_title": "Behind the wine",
+        "video_desc": "",
+        "video_url": "",
+        "video_cta": "Watch on YouTube →",
+        "journal_eyebrow": "Waterford journal",
+        "journal_title": "",
+        "journal_desc": "",
+        "journal_url": "",
+        "journal_cta": "Read the article →",
+        "dist_eyebrow": "International orders",
+        "dist_title": "International Distributors",
+        "dist_desc": "Available through select partners in the UK, USA and Europe. Other regions on request.",
+        "dist_flags": "UK, USA, Germany, Netherlands",
+        "dist_url": "mailto:werner@waterfordestate.co.za",
+        "dist_cta": "Contact us →"
+      }
     }
   },
-  "order": ["main"]
+  "order": ["main", "wine_story"]
 }

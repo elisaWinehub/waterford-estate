@@ -1,0 +1,70 @@
+{%- comment -%}
+  Standalone Discover Our Story / media cards section (anchor: #wf-wine-story).
+  Used on mixed-case PDP; optional on other product templates.
+{%- endcomment -%}
+
+{{ 'waterford-product.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'waterford-product.js' | asset_url }}"></script>
+
+<div class="wf-pdp" data-wf-pdp {{ section.shopify_attributes }}>
+  <div class="wrap">
+    {% render 'wf-wine-story', product: product, settings: section.settings %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "WF Wine story",
+  "tag": "section",
+  "class": "section-waterford-wine-story",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Discover our story below." },
+    { "type": "text", "id": "subheading", "label": "Subheading" },
+    { "type": "header", "content": "Video" },
+    { "type": "text", "id": "video_eyebrow", "label": "Eyebrow", "default": "Cellarmaster insights" },
+    { "type": "text", "id": "video_title", "label": "Title", "default": "Behind the wine" },
+    { "type": "textarea", "id": "video_desc", "label": "Description" },
+    { "type": "url", "id": "video_url", "label": "Video URL" },
+    { "type": "image_picker", "id": "video_image", "label": "Thumbnail" },
+    { "type": "text", "id": "video_cta", "label": "CTA", "default": "Watch on YouTube →" },
+    { "type": "header", "content": "Journal (use product metafields)" },
+    { "type": "text", "id": "journal_eyebrow", "label": "Eyebrow", "default": "Waterford journal" },
+    { "type": "text", "id": "journal_title", "label": "Title fallback" },
+    { "type": "textarea", "id": "journal_desc", "label": "Description" },
+    { "type": "url", "id": "journal_url", "label": "URL fallback" },
+    { "type": "image_picker", "id": "journal_image", "label": "Image fallback" },
+    { "type": "text", "id": "journal_cta", "label": "CTA", "default": "Read the article →" },
+    { "type": "header", "content": "Distributors" },
+    { "type": "text", "id": "dist_eyebrow", "label": "Eyebrow", "default": "International orders" },
+    { "type": "text", "id": "dist_title", "label": "Title", "default": "International Distributors" },
+    {
+      "type": "textarea",
+      "id": "dist_desc",
+      "label": "Description",
+      "default": "Available through select partners in the UK, USA and Europe. Other regions on request."
+    },
+    {
+      "type": "text",
+      "id": "dist_flags",
+      "label": "Flags (comma-separated)",
+      "default": "UK, USA, Germany, Netherlands"
+    },
+    {
+      "type": "image_picker",
+      "id": "dist_image",
+      "label": "Thumbnail override",
+      "info": "Leave empty to use the default international distributors photo."
+    },
+    {
+      "type": "text",
+      "id": "dist_url",
+      "label": "URL",
+      "default": "mailto:werner@waterfordestate.co.za",
+      "info": "Page URL or mailto: address."
+    },
+    { "type": "text", "id": "dist_cta", "label": "CTA", "default": "Contact us →" }
+  ],
+  "presets": [{ "name": "WF Wine story" }]
+}
+{% endschema %}

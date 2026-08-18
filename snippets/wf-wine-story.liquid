@@ -1,0 +1,179 @@
+{%- doc -%}
+  Discover-our-story media cards (video / journal / distributors).
+  Anchor id: wf-wine-story
+  @param {object} product
+  @param {object} settings - section or block settings
+{%- enddoc -%}
+{%- liquid
+  assign video_url = product.metafields.custom.video_url.value | default: settings.video_url
+  assign video_title = product.metafields.custom.video_title.value | default: settings.video_title
+  assign video_thumb = product.metafields.custom.video_thumbnail.value | default: settings.video_image
+
+  assign journal = product.metafields.custom.journal_article.value
+  assign journal_url = product.metafields.custom.journal_url.value | default: settings.journal_url
+  assign journal_title = product.metafields.custom.journal_title.value | default: settings.journal_title
+  assign journal_image = product.metafields.custom.journal_image.value | default: settings.journal_image
+  assign journal_external = false
+  if product.metafields.custom.journal_url.value != blank
+    assign journal_external = true
+  endif
+  if journal != blank
+    if journal_url == blank
+      assign journal_url = journal.url
+    endif
+    if journal_title == blank
+      assign journal_title = journal.title
+    endif
+    if journal_image == blank and journal.image != blank
+      assign journal_image = journal.image
+    endif
+  endif
+
+  assign dist_flags_raw = product.metafields.custom.distributors.value | default: settings.dist_flags
+  assign show_video = false
+  assign show_journal = false
+  assign show_dist = false
+  if video_url != blank
+    assign show_video = true
+  endif
+  if journal_url != blank
+    assign show_journal = true
+  endif
+  if dist_flags_raw != blank or settings.dist_url != blank
+    assign show_dist = true
+  endif
+
+  assign youtube_id = ''
+  assign youtube_thumb = ''
+  if video_url != blank and video_thumb == blank
+    if video_url contains 'youtu.be/'
+      assign youtube_id = video_url | split: 'youtu.be/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+    elsif video_url contains 'youtube.com/shorts/'
+      assign youtube_id = video_url | split: 'youtube.com/shorts/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+    elsif video_url contains 'youtube.com/embed/'
+      assign youtube_id = video_url | split: 'youtube.com/embed/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+    elsif video_url contains 'youtube.com/live/'
+      assign youtube_id = video_url | split: 'youtube.com/live/' | last | split: '?' | first | split: '&' | first | split: '/' | first
+    elsif video_url contains 'v='
+      assign youtube_id = video_url | split: 'v=' | last | split: '&' | first | split: '?' | first
+    endif
+    if youtube_id != blank
+      assign youtube_thumb = 'https://i.ytimg.com/vi/' | append: youtube_id | append: '/hqdefault.jpg'
+    endif
+  endif
+-%}
+{%- if show_video or show_journal or show_dist -%}
+  <div class="wf-wine-story" data-wf-wine-story>
+    {%- if settings.heading != blank -%}
+      <div class="media-head" id="wf-wine-story">
+        <h2 class="serif">{{ settings.heading }}</h2>
+        {%- if settings.subheading != blank -%}
+          <p>{{ settings.subheading }}</p>
+        {%- endif -%}
+        {%- liquid
+          assign tasting_pdf = product.metafields.custom.tasting_notes_pdf.value | default: product.metafields.custom.tasting_notes_pdf
+          if tasting_pdf == blank
+            assign tasting_pdf = product.metafields.custom.fact_sheet_pdf.value | default: product.metafields.custom.fact_sheet_pdf
+          endif
+        -%}
+        {%- if tasting_pdf != blank -%}
+          <p class="media-head__pdf">
+            <a href="{{ tasting_pdf }}" target="_blank" rel="noopener">View tasting notes PDF →</a>
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    <div class="media-grid">
+      {%- if show_video -%}
+        <a class="media-card" href="{{ video_url | default: '#' }}" {% if video_url != blank %}target="_blank" rel="noopener"{% endif %}>
+          <div class="media-thumb">
+            {%- if video_thumb != blank -%}
+              {{ video_thumb | image_url: width: 800 | image_tag: loading: 'lazy', alt: video_title }}
+            {%- elsif youtube_thumb != blank -%}
+              <img
+                src="{{ youtube_thumb }}"
+                alt="{{ video_title | escape }}"
+                loading="lazy"
+                width="480"
+                height="360"
+                data-wf-yt-thumb="{{ youtube_id | escape }}"
+              >
+            {%- endif -%}
+            <div class="play-btn" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="media-body">
+            <div class="media-eyebrow">{{ settings.video_eyebrow }}</div>
+            <div class="media-title">{{ video_title }}</div>
+            {%- if settings.video_desc != blank -%}<p class="media-desc">{{ settings.video_desc }}</p>{%- endif -%}
+            <span class="media-cta">{{ settings.video_cta }}</span>
+          </div>
+        </a>
+      {%- endif -%}
+
+      {%- if show_journal -%}
+        <a
+          class="media-card"
+          href="{{ journal_url | default: '#' }}"
+          {% if journal_external or journal_url contains 'http' %}target="_blank" rel="noopener"{% endif %}
+        >
+          <div
+            class="media-thumb{% if journal_image == blank %} is-loading-og{% endif %}"
+            {% if journal_image == blank and journal_url != blank %}
+              data-wf-og-url="{{ journal_url | escape }}"
+            {% endif %}
+          >
+            {%- if journal_image != blank -%}
+              {{ journal_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: journal_title }}
+            {%- else -%}
+              <img
+                class="media-thumb__og"
+                data-wf-og-target
+                alt="{{ journal_title | escape }}"
+                loading="lazy"
+                hidden
+              >
+            {%- endif -%}
+          </div>
+          <div class="media-body">
+            <div class="media-eyebrow">{{ settings.journal_eyebrow }}</div>
+            <div class="media-title media-title--journal" data-wf-og-title>{{ journal_title }}</div>
+            {%- if settings.journal_desc != blank -%}<p class="media-desc">{{ settings.journal_desc }}</p>{%- endif -%}
+            <span class="media-cta">{{ settings.journal_cta }}</span>
+          </div>
+        </a>
+      {%- endif -%}
+
+      {%- if show_dist -%}
+        {%- liquid
+          assign dist_href = settings.dist_url | strip
+          if dist_href == blank or dist_href == '#'
+            assign dist_href = 'mailto:werner@waterfordestate.co.za'
+          endif
+        -%}
+        <a class="media-card" href="{{ dist_href }}">
+          <div class="media-thumb">
+            {%- if settings.dist_image != blank -%}
+              {{ settings.dist_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: settings.dist_title }}
+            {%- else -%}
+              <img
+                src="{{ 'wf-media-international-distributors.png' | asset_url }}"
+                alt="{{ settings.dist_title | default: 'International Distributors' | escape }}"
+                loading="lazy"
+                width="800"
+                height="500"
+              >
+            {%- endif -%}
+          </div>
+          <div class="media-body">
+            <div class="media-eyebrow">{{ settings.dist_eyebrow }}</div>
+            <div class="media-title">{{ settings.dist_title }}</div>
+            {%- if settings.dist_desc != blank -%}<p class="media-desc">{{ settings.dist_desc }}</p>{%- endif -%}
+            <span class="media-cta">{{ settings.dist_cta | default: 'Contact us →' }}</span>
+          </div>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
