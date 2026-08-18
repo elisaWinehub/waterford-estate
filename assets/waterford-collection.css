@@ -810,6 +810,10 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.wf-explore-cta--has-image {
+  margin-top: 0;
+}
+
 .wf-explore-cta__media {
   position: absolute;
   inset: 0;
