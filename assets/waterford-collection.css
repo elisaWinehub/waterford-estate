@@ -446,6 +446,15 @@
   display: block;
 }
 
+/* Gifting (and similar lifestyle products): crop to a uniform frame so card rows align */
+.wf-collection--cover-cards .wf-card-photo {
+  background: #f4f1ea;
+}
+
+.wf-collection--cover-cards .wf-card-photo img {
+  object-fit: cover;
+}
+
 .wf-card-flag {
   position: absolute;
   top: 8px;

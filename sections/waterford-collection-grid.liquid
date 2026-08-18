@@ -10,10 +10,14 @@
   assign products_per_page = section.settings.products_per_page | default: 24
   assign sort_by = collection.sort_by | default: collection.default_sort_by
   assign results_url = collection.url
+  assign cover_card_images = false
+  if template.suffix == 'gifting' or collection.handle == 'gifting'
+    assign cover_card_images = true
+  endif
 -%}
 
 <div
-  class="wf-collection"
+  class="wf-collection{% if cover_card_images %} wf-collection--cover-cards{% endif %}"
   data-wf-collection
   data-section-id="{{ section.id }}"
   {{ section.shopify_attributes }}
