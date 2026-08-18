@@ -14,6 +14,9 @@
   if template.suffix == 'gifting' or collection.handle == 'gifting'
     assign show_card_description = true
   endif
+  if template.suffix == 'gift-sets' or collection.handle == 'gift-sets'
+    assign show_card_description = true
+  endif
 -%}
 
 <div
