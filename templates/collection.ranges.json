@@ -12,7 +12,6 @@
     "waterford_banner": {
       "type": "waterford-collection-banner",
       "settings": {
-        "eyebrow_label": "Wine collection",
         "intro_blurb": "<p>Discover the distinct expressions of South Africa’s terroir through our Estate Wines, Waterford Wines, and Pecan Stream Range. Each collection is carefully crafted to highlight the unique qualities of our land and the artistry behind every bottle.<br/><br/></p>"
       }
     },

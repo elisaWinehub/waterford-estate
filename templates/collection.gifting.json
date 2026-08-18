@@ -7,17 +7,11 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-/*
- * ------------------------------------------------------------
- * Gifting collection — products + vouchers anchor + fallback CTA.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "waterford_banner": {
       "type": "waterford-collection-banner",
       "settings": {
-        "eyebrow_label": "Gifting",
         "intro_blurb": "<p>Thoughtful Waterford gifts for every occasion.</p>"
       }
     },

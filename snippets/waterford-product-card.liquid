@@ -4,11 +4,13 @@
   @param {object} product - Product object
   @param {boolean} [lazy] - Lazy-load image (default true)
   @param {number} [index] - Card index in grid (first row can eager-load)
+  @param {boolean} [show_description] - Show product description (gifting collection only)
 {%- enddoc -%}
 
 {%- liquid
   assign lazy = lazy | default: true
   assign index = index | default: 99
+  assign show_description = show_description | default: false
   assign variant = product.selected_or_first_available_variant
   assign featured = product.featured_image
   if featured == blank and product.featured_media != blank
@@ -59,6 +61,11 @@
   if lazy == false or index < 3
     assign loading_attr = 'eager'
   endif
+
+  assign card_description = blank
+  if show_description and product.description != blank
+    assign card_description = product.description | strip_html | strip
+  endif
 -%}
 
 <article class="wf-card" data-wf-card data-product-id="{{ product.id }}">
@@ -90,6 +97,9 @@
       {%- endif -%}
       <a class="wf-card-name" href="{{ product.url }}">{{ display_title }}</a>
       <div class="wf-card-style">{% if style_label != blank %}{{ style_label }}{% endif %}</div>
+      {%- if card_description != blank -%}
+        <div class="wf-card-desc">{{ card_description }}</div>
+      {%- endif -%}
       <div class="wf-card-price">
         {%- if price_varies -%}
           {{ 'waterford.collection.from' | t }} {{ product.price_min | money }}

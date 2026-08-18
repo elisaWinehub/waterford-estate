@@ -10,6 +10,10 @@
   assign products_per_page = section.settings.products_per_page | default: 24
   assign sort_by = collection.sort_by | default: collection.default_sort_by
   assign results_url = collection.url
+  assign show_card_description = false
+  if template.suffix == 'gifting' or collection.handle == 'gifting'
+    assign show_card_description = true
+  endif
 -%}
 
 <div
@@ -241,7 +245,11 @@
         <ul class="wf-grid" id="ResultsList" data-wf-grid>
           {%- for product in collection.products -%}
             <li>
-              {% render 'waterford-product-card', product: product, index: forloop.index0 %}
+              {% render 'waterford-product-card',
+                product: product,
+                index: forloop.index0,
+                show_description: show_card_description
+              %}
             </li>
           {%- endfor -%}
         </ul>

@@ -510,6 +510,18 @@
   margin-bottom: 0;
 }
 
+.wf-card-desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--wf-muted);
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  overflow: hidden;
+}
+
 .wf-card-price {
   font-size: 13.5px;
   color: #333;

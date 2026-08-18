@@ -12,51 +12,110 @@
     "hero": {
       "type": "waterford-page-hero",
       "settings": {
+        "image": "shopify://shop_images/686257535421452f51412679_Gift_main_page.jpg",
         "heading": "Vouchers",
         "blurb": "<p>Give the gift of a Waterford Estate experience. Purchase vouchers securely via DinePlan.</p>"
       }
     },
     "voucher_grid": {
       "type": "waterford-voucher-grid",
-      "settings": {
-        "heading": "Gift vouchers",
-        "intro": "",
-        "columns": "3"
-      },
       "blocks": {
         "voucher_1": {
           "type": "voucher",
           "settings": {
-            "title": "Waterford Estate Gift Voucher",
-            "blurb": "The perfect gift for a memorable Waterford Estate experience.",
-            "price_display": "From R500",
+            "image": "shopify://shop_images/6979be4621339042b19f6f3b_WATERFORD_ESTATE00049.jpg",
+            "title": "Rand Value Gift Vouchers",
+            "blurb": "Waterford Estate rand-value vouchers offer the freedom to enjoy a range of experiences across the estate. Vouchers can be redeemed at the following experiences: SALT at Waterford Estate, Waterford Estate Experiences, and Waterford Estate Wine Tasting. Vouchers are valid Monday to Sunday, subject to availability and booking requirements for specific experiences.",
+            "price_display": "Cost per person / Subject to experience",
             "button_label": "Buy Voucher",
-            "button_url": ""
+            "button_url": "https://www.voucherplan.co.za/event/c8b3cef77a686170539c2985e75ce72d"
           }
         },
         "voucher_2": {
           "type": "voucher",
           "settings": {
-            "title": "Tasting Experience Voucher",
-            "blurb": "Treat someone to a guided tasting at the estate.",
-            "price_display": "From R750",
+            "image": "shopify://shop_images/67642eed3c541977b7d36caf_WATERFORD-281.avif",
+            "title": "Porcupine Trail Wine Walk",
+            "blurb": "The Porcupine Trail Wine Walk offers a unique opportunity to immerse yourself in the essence of South Africa. It goes beyond a simple wine tasting, allowing you to connect with nature, learn about the indigenous Fynbos, and explore its deep-rooted history. Enjoy a selection of three wines accompanied by a light lunch during the walk, concluding with our Wine & Chocolate Experience and a tasting of our flagship wine, The Jem.",
+            "price_display": "R895 per person / 3 Hour Duration",
             "button_label": "Buy Voucher",
-            "button_url": ""
+            "button_url": "https://www.voucherplan.co.za/event/18af56a7d736f9f7f409fe8ab6604489"
           }
         },
         "voucher_3": {
           "type": "voucher",
           "settings": {
-            "title": "Dining Voucher",
-            "blurb": "Share a meal with views over the Waterford vineyards.",
-            "price_display": "Choose your value",
+            "image": "shopify://shop_images/67c880f1fd9064bdf9ea7092_wine_drive_new_1.avif",
+            "title": "Wine Drive Safari",
+            "blurb": "Embark on a three-hour journey through our estate, starting with a white wine tasting in the historic 1988 Chardonnay block, followed by exquisite reds at the Red Wine Deck. Enjoy platters from SALT and indulge in our Wine & Chocolate experience, featuring handcrafted chocolates paired with our wines. The adventure culminates with a tasting of The Jem, showcasing the pinnacle of Waterford Estate's winemaking craftsmanship.",
+            "price_display": "R1950 per person / 3 Hour Duration",
             "button_label": "Buy Voucher",
-            "button_url": ""
+            "button_url": "https://www.voucherplan.co.za/event/1179ad73a00e90c7201c63687483c2b7"
+          }
+        },
+        "voucher_hLFynr": {
+          "type": "voucher",
+          "settings": {
+            "image": "shopify://shop_images/67c87e8fce0f3c05c325708f_The_Jem_1.avif",
+            "title": "The Jem Experience",
+            "blurb": "Experience a single tasting of Waterford Estate’s flagship red blend – a true testament to our winemaking philosophy. This wine masterfully combines tradition and innovation, offering an exquisite tasting experience that honours South Africa’s unique wine heritage. Immerse yourself in the craftsmanship, passion, and artistry that makes this wine an exceptional expression of our legacy.",
+            "price_display": "R195 per person / 15 - 30 Min Duration",
+            "button_label": "Buy Voucher",
+            "button_url": "https://www.voucherplan.co.za/event/6290200359f6e7bb0b68ae390cd6d999"
+          }
+        },
+        "voucher_WVFcnR": {
+          "type": "voucher",
+          "settings": {
+            "image": "shopify://shop_images/67c86f045410a3fdc477aa4c_WATERFORD-43.avif",
+            "title": "Wine & Chocolate Experience",
+            "blurb": "Our Wine & Chocolate experience, a beloved tradition since 2004, has seen 20,000 tastings annually. Crafted by Chocolatier Richard von Geusau, our cocoa tablets enhance wine flavours: Kevin Arnold Shiraz pairs with Masala Chai Dark chocolate, Cabernet Sauvignon with Rock Salt Dark chocolate, and Heatherleigh dessert wine with Rose Geranium Milk chocolate.",
+            "price_display": "R165 per person / 30 - 40 Min Duration",
+            "button_label": "Buy Voucher",
+            "button_url": "https://www.voucherplan.co.za/event/5f8903b3a87888dcdf3b4e521897f135"
+          }
+        },
+        "voucher_VBEdqH": {
+          "type": "voucher",
+          "settings": {
+            "image": "shopify://shop_images/67c86eb28ad53a236381809a_WATERFORD-27_1.avif",
+            "title": "Portfolio Experience",
+            "blurb": "A perfect combination of Waterford Estate white and red wines. Sample the fresh Rose-Mary Rosé, a creamy Old Vine Project Chenin blanc, a mineral Chardonnay, a light and rustic Grenache, the iconic Kevin Arnold Shiraz, and the classic Estate Cabernet Sauvignon.",
+            "price_display": "R185 per person / 45 - 60 Min Duration",
+            "button_label": "Buy Voucher",
+            "button_url": "https://www.voucherplan.co.za/event/1abc0b73aed11bc79f5b1bfd28ef4c7c"
+          }
+        },
+        "voucher_xBrYad": {
+          "type": "voucher",
+          "settings": {
+            "image": "shopify://shop_images/67c87cc74872932fec44c053_cellar_1.avif",
+            "title": "The Cellar Collection",
+            "blurb": "Experience a vertical tasting that highlights the longevity and excellence of Waterford wines. Compare our older and current vintages to discover the remarkable ageing potential and evolving character of our exceptional offerings. Explore the nuances that time imparts, showcasing the depth and complexity that make each vintage unique.",
+            "price_display": "R595 per person / 60 - 90 Min Duration",
+            "button_label": "Buy Voucher",
+            "button_url": "https://www.voucherplan.co.za/event/fce24d3bc9d18deca0569a7a138974a0"
           }
         }
       },
-      "block_order": ["voucher_1", "voucher_2", "voucher_3"]
+      "block_order": [
+        "voucher_1",
+        "voucher_2",
+        "voucher_3",
+        "voucher_hLFynr",
+        "voucher_WVFcnR",
+        "voucher_VBEdqH",
+        "voucher_xBrYad"
+      ],
+      "settings": {
+        "heading": "Gift vouchers",
+        "intro": "",
+        "columns": "3"
+      }
     }
   },
-  "order": ["hero", "voucher_grid"]
+  "order": [
+    "hero",
+    "voucher_grid"
+  ]
 }

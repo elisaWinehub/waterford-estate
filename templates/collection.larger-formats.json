@@ -12,7 +12,6 @@
     "waterford_banner": {
       "type": "waterford-collection-banner",
       "settings": {
-        "eyebrow_label": "Wine collection",
         "intro_blurb": "<p>Discover the allure of larger format bottles - crafted to not only make a statement but to enhance the ageing potential and complexity of our wines. These larger vessels allow for a slower maturation process, resulting in refined flavours and a truly memorable experience. Perfect for collectors, celebrations, or sharing with friends, these grand bottles offer a unique way to enjoy our wines at their peak.<br/><br/></p>"
       }
     },
