@@ -1058,3 +1058,8 @@ html {
   margin-top: 10px;
 }
 
+/* Gift PDP only */
+.shopify-section.section-waterford-gift-product {
+  padding-bottom: 64px;
+}
+
