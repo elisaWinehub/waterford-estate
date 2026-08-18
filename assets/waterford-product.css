@@ -1063,3 +1063,7 @@ html {
   padding-bottom: 64px;
 }
 
+#MainContent[data-template='product.gift'] {
+  background: #faf7f2;
+}
+
