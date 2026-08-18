@@ -73,11 +73,11 @@
 
 .pdp-photo {
   position: relative;
-  background: transparent;
+  background: #f4f1ea;
   border: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
+  justify-content: stretch;
   padding: 0;
   aspect-ratio: 4 / 5;
   overflow: hidden;
@@ -89,8 +89,9 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
+  display: block;
 }
 
 /* Click-to-zoom lightbox */
