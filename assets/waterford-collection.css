@@ -419,7 +419,7 @@
 }
 
 .wf-card-photo {
-  background: transparent;
+  background: #f4f1ea;
   border: none;
   aspect-ratio: 4 / 5;
   display: flex;
@@ -441,18 +441,9 @@
   height: 100%;
   max-width: none;
   max-height: none;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   display: block;
-}
-
-/* Gifting (and similar lifestyle products): crop to a uniform frame so card rows align */
-.wf-collection--cover-cards .wf-card-photo {
-  background: #f4f1ea;
-}
-
-.wf-collection--cover-cards .wf-card-photo img {
-  object-fit: cover;
 }
 
 .wf-card-flag {
