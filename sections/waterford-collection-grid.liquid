@@ -14,6 +14,9 @@
   if template.suffix == 'gifting' or collection.handle == 'gifting'
     assign cover_card_images = true
   endif
+  if template.suffix == 'mixed-case' or template.suffix == 'mixed-cases' or collection.handle == 'mixed-cases' or collection.handle == 'mixed-case'
+    assign cover_card_images = true
+  endif
 -%}
 
 <div
