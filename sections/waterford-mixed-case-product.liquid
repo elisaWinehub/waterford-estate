@@ -12,7 +12,11 @@
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
-  assign inclusions_heading = section.settings.inclusions_heading | default: 'Inclusions'
+  assign inclusions_heading = section.settings.inclusions_heading | default: 'Wines Included'
+  assign card_inclusions = product.metafields.custom.card_inclusions.value | default: product.metafields.custom.card_inclusions
+  if card_inclusions != blank
+    assign card_inclusions = card_inclusions | remove_first: '/' | strip
+  endif
 -%}
 
 <div class="wf-pdp wf-pdp--mixed-case" data-wf-pdp {{ section.shopify_attributes }}>
@@ -38,6 +42,9 @@
         <div class="price-box" data-wf-price data-base-cents="{{ current_variant.price }}">
           <div class="price">
             <span data-wf-price-value>{{ current_variant.price | money }}</span>
+            {%- if card_inclusions != blank -%}
+              <small>/ {{ card_inclusions }}</small>
+            {%- endif -%}
           </div>
         </div>
 
@@ -106,14 +113,14 @@
     {
       "type": "text",
       "id": "inclusions_heading",
-      "label": "Inclusions heading",
-      "default": "Inclusions"
+      "label": "Wines Included heading",
+      "default": "Wines Included"
     },
     {
       "type": "richtext",
       "id": "inclusions_fallback",
-      "label": "Inclusions fallback",
-      "info": "Used only when the product has no custom.inclusions metafield."
+      "label": "Wines Included fallback",
+      "info": "Used only when the product has no custom.inclusions metafield. Card summary after price uses custom.card_inclusions."
     }
   ],
   "presets": [{ "name": "WF Mixed case product" }]

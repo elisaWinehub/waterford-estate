@@ -12,7 +12,7 @@
     "main": {
       "type": "waterford-mixed-case-product",
       "settings": {
-        "inclusions_heading": "Inclusions",
+        "inclusions_heading": "Wines Included",
         "inclusions_fallback": ""
       }
     }
