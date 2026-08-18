@@ -760,6 +760,15 @@ body.wf-zoom-open {
   margin: 0 10px;
 }
 
+/* Mixed-case (and standalone) wine story section band */
+.shopify-section.section-waterford-wine-story {
+  background: #faf7f2;
+}
+
+.shopify-section.section-waterford-wine-story .wf-pdp {
+  padding-bottom: 48px;
+}
+
 .media-head {
   margin: 48px 0 20px;
 }
