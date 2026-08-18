@@ -394,7 +394,7 @@
                 assign f2_value = product.metafields.custom.blend_summary.value | default: product.metafields.custom.blend.value | default: product.metafields.custom.cultivars.value | default: product.metafields.custom.fact_3.value | default: block.settings.fact_2_value
                 assign f3_value = product.metafields.custom.alcohol.value | default: product.metafields.custom.fact_2.value | default: block.settings.fact_3_value
                 assign f1_label = block.settings.fact_1_label | default: 'Vintage'
-                assign f2_label = block.settings.fact_2_label | default: 'Cultivar or Blend'
+                assign f2_label = block.settings.fact_2_label | default: 'Style'
                 assign f3_label = block.settings.fact_3_label | default: 'Alcohol'
                 assign has_facts = false
                 if f1_value != blank or f2_value != blank or f3_value != blank
@@ -843,10 +843,10 @@
       "type": "quick_facts",
       "name": "Quick facts",
       "settings": [
-        { "type": "paragraph", "content": "Displays Vintage | Cultivar or Blend | Alcohol from product metafields (custom.vintage, custom.blend_summary / cultivars, custom.alcohol)." },
+        { "type": "paragraph", "content": "Displays Vintage | Style | Alcohol from product metafields (custom.vintage, custom.blend_summary / cultivars, custom.alcohol)." },
         { "type": "text", "id": "fact_1_label", "label": "Fact 1 label", "default": "Vintage" },
         { "type": "text", "id": "fact_1_value", "label": "Fact 1 fallback" },
-        { "type": "text", "id": "fact_2_label", "label": "Fact 2 label", "default": "Cultivar or Blend" },
+        { "type": "text", "id": "fact_2_label", "label": "Fact 2 label", "default": "Style" },
         { "type": "text", "id": "fact_2_value", "label": "Fact 2 fallback" },
         { "type": "text", "id": "fact_3_label", "label": "Fact 3 label", "default": "Alcohol" },
         { "type": "text", "id": "fact_3_value", "label": "Fact 3 fallback" }

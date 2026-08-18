@@ -582,8 +582,8 @@ body.wf-zoom-open {
 .qf span {
   font-size: 11px;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  text-transform: none;
+  letter-spacing: 0.02em;
 }
 
 .divider {
